@@ -1,0 +1,540 @@
+// Global State
+let hourlyData = null; // Contains metadata and raw orders list
+let selectedCoordinadores = new Set();
+let selectedSupervisores = new Set();
+let selectedAntiguedades = new Set();
+let selectedHours = new Set();
+
+// Initialize Application
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+  setupDropdownDismiss();
+});
+
+// Close dropdowns when clicking outside
+function setupDropdownDismiss() {
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".multiselect-dropdown")) {
+      document.querySelectorAll(".options-container").forEach(el => {
+        el.classList.add("hidden");
+        el.parentElement.classList.remove("active");
+      });
+    }
+  });
+}
+
+// Fetch data from processed JSON file
+async function loadData() {
+  try {
+    const cb = Date.now();
+    const res = await fetch(`data/hourly_metrics.json?v=${cb}`);
+    hourlyData = await res.json();
+    
+    initializeFilters();
+    renderHourlyDashboard();
+  } catch (error) {
+    console.error("Error loading JSON data:", error);
+    const badge = document.getElementById("last-update-time");
+    if (badge) {
+      badge.textContent = "Error al cargar datos localmente.";
+      badge.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+      badge.style.color = "var(--danger)";
+    }
+  }
+}
+
+// Toggle options display
+window.toggleDropdown = function(dropdownId) {
+  const dropdown = document.getElementById(dropdownId);
+  const container = dropdown.querySelector(".options-container");
+  const isHidden = container.classList.contains("hidden");
+  
+  // Close all other dropdowns
+  document.querySelectorAll(".options-container").forEach(el => {
+    el.classList.add("hidden");
+    el.parentElement.classList.remove("active");
+  });
+  
+  if (isHidden) {
+    container.classList.remove("hidden");
+    dropdown.classList.add("active");
+  }
+};
+
+// Populate multiselect filters dynamically from raw orders list
+function initializeFilters() {
+  if (!hourlyData || !hourlyData.orders) return;
+  
+  const orders = hourlyData.orders;
+  
+  // 1. Unique Coordinadores
+  const coords = [...new Set(orders.map(o => o.COORDINADOR))].filter(Boolean).sort();
+  selectedCoordinadores = new Set(coords);
+  populateDropdownOptions("coord", coords, selectedCoordinadores, updateCoordinadorSelection);
+  
+  // 2. Unique Supervisores
+  const sups = [...new Set(orders.map(o => o.SUPERVISOR))].filter(Boolean).sort();
+  selectedSupervisores = new Set(sups);
+  populateDropdownOptions("supervisor", sups, selectedSupervisores, updateSupervisorSelection);
+  
+  // 3. Unique Antigüedades
+  const ants = [...new Set(orders.map(o => o.ANTIGÜEDAD))].filter(Boolean).sort();
+  selectedAntiguedades = new Set(ants);
+  populateDropdownOptions("antiguedad", ants, selectedAntiguedades, updateAntiguedadSelection);
+  
+  // 4. Hours (9 to 23 as options)
+  const availableHours = [...new Set(orders.map(o => o.Hora))].filter(h => h >= 9 && h <= 23).sort((a,b) => a-b);
+  
+  // Determine default selected hours: by default, check all hours up to the latest hour with data in HOY
+  let latestHour = 13; // default fallback
+  const hoyStr = hourlyData.metadata.hoy_date;
+  const hoyOrders = orders.filter(o => o.Fecha_Creacion === hoyStr);
+  if (hoyOrders.length > 0) {
+    const maxHourInHoy = Math.max(...hoyOrders.map(o => o.Hora));
+    if (maxHourInHoy >= 9 && maxHourInHoy <= 23) {
+      latestHour = maxHourInHoy;
+    }
+  }
+  
+  // Check hours up to the latestHour by default
+  selectedHours = new Set();
+  availableHours.forEach(h => {
+    if (h <= latestHour) {
+      selectedHours.add(h);
+    }
+  });
+  
+  populateDropdownOptions("hour", availableHours, selectedHours, updateHourSelection, h => `${h.toString().padStart(2, '0')}:00 hrs`);
+}
+
+// Generate checkbox elements inside option container
+function populateDropdownOptions(type, items, selectedSet, callback, labelFormatter = (val) => val) {
+  const container = document.getElementById(`${type}-options`);
+  if (!container) return;
+  
+  container.innerHTML = "";
+  
+  // "Seleccionar Todos" option
+  const allItem = document.createElement("div");
+  allItem.className = "option-item";
+  const allChecked = selectedSet.size === items.length;
+  allItem.innerHTML = `
+    <input type="checkbox" id="all-${type}" ${allChecked ? 'checked' : ''}>
+    <label for="all-${type}"><em>Seleccionar Todos</em></label>
+  `;
+  allItem.querySelector("input").addEventListener("change", (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      items.forEach(item => selectedSet.add(item));
+    } else {
+      selectedSet.clear();
+    }
+    
+    // Update individual checkboxes
+    container.querySelectorAll(".individual-option").forEach(chk => {
+      chk.checked = checked;
+      if (checked) {
+        chk.closest(".option-item").classList.add("selected");
+      } else {
+        chk.closest(".option-item").classList.remove("selected");
+      }
+    });
+    
+    callback();
+  });
+  container.appendChild(allItem);
+  
+  // Individual options
+  items.forEach(item => {
+    const isSelected = selectedSet.has(item);
+    const optionDiv = document.createElement("div");
+    optionDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+    
+    const optionId = `opt-${type}-${item.toString().replace(/\s+/g, '_')}`;
+    optionDiv.innerHTML = `
+      <input type="checkbox" class="individual-option" id="${optionId}" value="${item}" ${isSelected ? 'checked' : ''}>
+      <label for="${optionId}">${labelFormatter(item)}</label>
+    `;
+    
+    optionDiv.querySelector("input").addEventListener("change", (e) => {
+      const val = e.target.value;
+      // Convert to number if it's hour type
+      const parsedVal = type === "hour" ? parseInt(val) : val;
+      
+      if (e.target.checked) {
+        selectedSet.add(parsedVal);
+        optionDiv.classList.add("selected");
+      } else {
+        selectedSet.delete(parsedVal);
+        optionDiv.classList.remove("selected");
+      }
+      
+      // Update the "Seleccionar Todos" checkbox
+      const allChk = container.querySelector(`#all-${type}`);
+      if (allChk) {
+        allChk.checked = selectedSet.size === items.length;
+      }
+      
+      callback();
+    });
+    
+    container.appendChild(optionDiv);
+  });
+  
+  updateDropdownLabel(type, selectedSet, items.length);
+}
+
+// Update the label text displayed on the closed select boxes
+function updateDropdownLabel(type, selectedSet, totalCount) {
+  const label = document.getElementById(`${type}-selected-label`);
+  if (!label) return;
+  
+  if (selectedSet.size === 0) {
+    label.textContent = "Ninguno seleccionado";
+    label.style.color = "var(--danger)";
+  } else if (selectedSet.size === totalCount) {
+    if (type === "coord") label.textContent = "Todos los Líderes";
+    else if (type === "hour") label.textContent = "Todas las Horas";
+    else if (type === "supervisor") label.textContent = "Todos los Supervisores";
+    else if (type === "antiguedad") label.textContent = "Todas las Antigüedades";
+    label.style.color = "var(--text-main)";
+  } else {
+    let suffix = "seleccionado(s)";
+    if (type === "coord") suffix = "Líder(es)";
+    else if (type === "hour") suffix = "Hora(s)";
+    else if (type === "supervisor") suffix = "Sup(s)";
+    else if (type === "antiguedad") suffix = "Antig.";
+    
+    label.textContent = `${selectedSet.size} ${suffix}`;
+    label.style.color = "var(--accent-cyan)";
+  }
+}
+
+// Callback functions for selection changes
+function updateCoordinadorSelection() {
+  updateDropdownLabel("coord", selectedCoordinadores, [...new Set(hourlyData.orders.map(o => o.COORDINADOR))].filter(Boolean).length);
+  renderHourlyDashboard();
+}
+
+function updateSupervisorSelection() {
+  updateDropdownLabel("supervisor", selectedSupervisores, [...new Set(hourlyData.orders.map(o => o.SUPERVISOR))].filter(Boolean).length);
+  renderHourlyDashboard();
+}
+
+function updateAntiguedadSelection() {
+  updateDropdownLabel("antiguedad", selectedAntiguedades, [...new Set(hourlyData.orders.map(o => o.ANTIGÜEDAD))].filter(Boolean).length);
+  renderHourlyDashboard();
+}
+
+function updateHourSelection() {
+  const allHours = [...new Set(hourlyData.orders.map(o => o.Hora))].filter(h => h >= 9 && h <= 23);
+  updateDropdownLabel("hour", selectedHours, allHours.length);
+  renderHourlyDashboard();
+}
+
+// Trend formatting helpers
+function formatVariation(hoy, prev) {
+  if (prev === 0) {
+    if (hoy === 0) {
+      return `<div class="trend-container"><span class="trend-dot flat"></span><span class="trend-pct flat">0%</span></div>`;
+    } else {
+      return `<div class="trend-container"><span class="trend-dot up"></span><span class="trend-pct up">+100%</span></div>`;
+    }
+  }
+  const diff = hoy - prev;
+  const pct = (diff / prev) * 100;
+  const sign = pct > 0 ? "+" : "";
+  const colorClass = pct > 0 ? "up" : (pct < 0 ? "down" : "flat");
+  const dotHtml = `<span class="trend-dot ${colorClass}"></span>`;
+  return `<div class="trend-container">${dotHtml}<span class="trend-pct ${colorClass}">${sign}${pct.toFixed(0)}%</span></div>`;
+}
+
+function formatPercent(val, total) {
+  if (total === 0) return "0.00%";
+  const pct = (val / total) * 100;
+  return `${pct.toFixed(2)}%`;
+}
+
+// Filter and Aggregate Data dynamically
+function renderHourlyDashboard() {
+  if (!hourlyData || !hourlyData.orders) return;
+  
+  const orders = hourlyData.orders;
+  const meta = hourlyData.metadata;
+  
+  // 1. Get current filter parameters
+  // If hours is empty, we show 0. To make it cumulative, we filter where Hora <= max(selectedHours)
+  const maxSelectedHour = selectedHours.size > 0 ? Math.max(...selectedHours) : -1;
+  
+  // Update Last Update Badge
+  const updateBadge = document.getElementById("last-update-time");
+  if (updateBadge) {
+    updateBadge.textContent = maxSelectedHour >= 9 ? `Corte Acumulado: ${maxSelectedHour.toString().padStart(2, '0')}:00 hrs | Actualizado: ${meta.last_update}` : "Ninguna hora de corte seleccionada";
+  }
+  
+  // 2. Perform Filtering
+  const filteredOrders = orders.filter(o => {
+    // Cumulative hours filter
+    if (o.Hora > maxSelectedHour) return false;
+    
+    // Coordinador filter
+    if (!selectedCoordinadores.has(o.COORDINADOR)) return false;
+    
+    // Supervisor filter
+    if (!selectedSupervisores.has(o.SUPERVISOR)) return false;
+    
+    // Antigüedad filter
+    if (!selectedAntiguedades.has(o.ANTIGÜEDAD)) return false;
+    
+    return true;
+  });
+  
+  // 3. Compute KPI Summary Cards
+  const kpis = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+  filteredOrders.forEach(o => {
+    if (o.Fecha_Creacion === meta.hoy_date) kpis.hoy++;
+    else if (o.Fecha_Creacion === meta.d1_date) kpis.d1++;
+    else if (o.Fecha_Creacion === meta.d7_date) kpis.d7++;
+    else if (o.Fecha_Creacion === meta.d14_date) kpis.d14++;
+    else if (o.Fecha_Creacion === meta.d21_date) kpis.d21++;
+  });
+  
+  document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
+  document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
+  
+  document.getElementById("kpi-d1").textContent = kpis.d1.toLocaleString();
+  document.getElementById("kpi-var-d1").innerHTML = formatVariation(kpis.hoy, kpis.d1);
+  document.getElementById("kpi-date-d1").textContent = `Fecha: ${meta.d1_date}`;
+  
+  document.getElementById("kpi-d7").textContent = kpis.d7.toLocaleString();
+  document.getElementById("kpi-var-d7").innerHTML = formatVariation(kpis.hoy, kpis.d7);
+  document.getElementById("kpi-date-d7").textContent = `Fecha: ${meta.d7_date}`;
+  
+  document.getElementById("kpi-d14").textContent = kpis.d14.toLocaleString();
+  document.getElementById("kpi-var-d14").innerHTML = formatVariation(kpis.hoy, kpis.d14);
+  document.getElementById("kpi-date-d14").textContent = `Fecha: ${meta.d14_date}`;
+  
+  document.getElementById("kpi-d21").textContent = kpis.d21.toLocaleString();
+  document.getElementById("kpi-var-d21").innerHTML = formatVariation(kpis.hoy, kpis.d21);
+  document.getElementById("kpi-date-d21").textContent = `Fecha: ${meta.d21_date}`;
+  
+  // 4. Render Table 1: Cuartil
+  const ccTbody = document.getElementById("hourly-cuartil-table-body");
+  ccTbody.innerHTML = "";
+  
+  // Extract visible coordinators in selection
+  const coordinatorsList = [...selectedCoordinadores].sort();
+  
+  coordinatorsList.forEach(coord => {
+    const coordOrders = filteredOrders.filter(o => o.COORDINADOR === coord);
+    if (coordOrders.length === 0 && selectedCoordinadores.size > 1) return; // skip if no data and showing all
+    
+    // Aggregates for bold row
+    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    coordOrders.forEach(o => {
+      if (o.Fecha_Creacion === meta.hoy_date) coordSums.hoy++;
+      else if (o.Fecha_Creacion === meta.d1_date) coordSums.d1++;
+      else if (o.Fecha_Creacion === meta.d7_date) coordSums.d7++;
+      else if (o.Fecha_Creacion === meta.d14_date) coordSums.d14++;
+      else if (o.Fecha_Creacion === meta.d21_date) coordSums.d21++;
+    });
+    
+    const groupId = `group-cc-${coord.replace(/\s+/g, '_')}`;
+    const boldRow = document.createElement("tr");
+    boldRow.className = "bold-row";
+    boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+    boldRow.innerHTML = `
+      <td><span class="toggle-icon">▼</span>${coord}</td>
+      <td>${coordSums.hoy}</td>
+      <td style="color:var(--text-muted);">${coordSums.d1}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d1)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d7}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d7)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d14}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d14)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d21}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d21)}</td>
+    `;
+    ccTbody.appendChild(boldRow);
+    
+    // Sub-quartiles
+    const quartils = ['Q1', 'Q2', 'Q3', 'Q4'];
+    quartils.forEach(q => {
+      const qOrders = coordOrders.filter(o => o.CUARTIL === q);
+      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      qOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
+      });
+      
+      const subRow = document.createElement("tr");
+      subRow.className = groupId;
+      subRow.innerHTML = `
+        <td style="padding-left: 2rem;">${q}</td>
+        <td>${qSums.hoy}</td>
+        <td style="color:var(--text-muted);">${qSums.d1}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
+        <td style="color:var(--text-muted);">${qSums.d7}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d7)}</td>
+        <td style="color:var(--text-muted);">${qSums.d14}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
+        <td style="color:var(--text-muted);">${qSums.d21}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
+      `;
+      ccTbody.appendChild(subRow);
+    });
+  });
+  
+  // 5. Render Table 2: Supervisor
+  const csTbody = document.getElementById("hourly-supervisor-table-body");
+  csTbody.innerHTML = "";
+  
+  coordinatorsList.forEach(coord => {
+    const coordOrders = filteredOrders.filter(o => o.COORDINADOR === coord);
+    if (coordOrders.length === 0 && selectedCoordinadores.size > 1) return;
+    
+    // Aggregates for bold row
+    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    coordOrders.forEach(o => {
+      if (o.Fecha_Creacion === meta.hoy_date) coordSums.hoy++;
+      else if (o.Fecha_Creacion === meta.d1_date) coordSums.d1++;
+      else if (o.Fecha_Creacion === meta.d7_date) coordSums.d7++;
+      else if (o.Fecha_Creacion === meta.d14_date) coordSums.d14++;
+      else if (o.Fecha_Creacion === meta.d21_date) coordSums.d21++;
+    });
+    
+    const groupId = `group-cs-${coord.replace(/\s+/g, '_')}`;
+    const boldRow = document.createElement("tr");
+    boldRow.className = "bold-row";
+    boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+    boldRow.innerHTML = `
+      <td><span class="toggle-icon">▼</span>${coord}</td>
+      <td>${coordSums.hoy}</td>
+      <td style="color:var(--text-muted);">${coordSums.d1}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d1)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d7}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d7)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d14}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d14)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d21}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d21)}</td>
+    `;
+    csTbody.appendChild(boldRow);
+    
+    // Get supervisors for this coordinator that are checked
+    const supsInCoord = [...new Set(coordOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
+    
+    // Calculate and sort supervisors by HOY DESC
+    const supRows = supsInCoord.map(sup => {
+      const supOrders = coordOrders.filter(o => o.SUPERVISOR === sup);
+      const supSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      supOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) supSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) supSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) supSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) supSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) supSums.d21++;
+      });
+      return { sup, ...supSums };
+    }).sort((a, b) => b.hoy - a.hoy || a.sup.localeCompare(b.sup));
+    
+    supRows.forEach(item => {
+      const subRow = document.createElement("tr");
+      subRow.className = groupId;
+      subRow.innerHTML = `
+        <td style="padding-left: 2rem;">${item.sup}</td>
+        <td>${item.hoy}</td>
+        <td style="color:var(--text-muted);">${item.d1}</td>
+        <td>${formatVariation(item.hoy, item.d1)}</td>
+        <td style="color:var(--text-muted);">${item.d7}</td>
+        <td>${formatVariation(item.hoy, item.d7)}</td>
+        <td style="color:var(--text-muted);">${item.d14}</td>
+        <td>${formatVariation(item.hoy, item.d14)}</td>
+        <td style="color:var(--text-muted);">${item.d21}</td>
+        <td>${formatVariation(item.hoy, item.d21)}</td>
+      `;
+      csTbody.appendChild(subRow);
+    });
+  });
+  
+  // 6. Render Table 3: Participation (Hoy)
+  const partTbody = document.getElementById("hourly-participation-table-body");
+  partTbody.innerHTML = "";
+  
+  coordinatorsList.forEach(coord => {
+    // Only compile participation for HOY orders
+    const coordHoyOrders = filteredOrders.filter(o => o.COORDINADOR === coord && o.Fecha_Creacion === meta.hoy_date);
+    if (coordHoyOrders.length === 0 && selectedCoordinadores.size > 1) return;
+    
+    // Aggregates for coordinator
+    let cExpress = 0, cProg = 0, cRetiro = 0;
+    coordHoyOrders.forEach(o => {
+      const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+      if (type === 'EXPRESS') cExpress++;
+      else if (type === 'PROGRAMADO') cProg++;
+      else if (type === 'RETIRO EN TIENDA') cRetiro++;
+    });
+    const cTotal = cExpress + cProg + cRetiro;
+    
+    const groupId = `group-part-${coord.replace(/\s+/g, '_')}`;
+    const boldRow = document.createElement("tr");
+    boldRow.className = "bold-row";
+    boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+    boldRow.innerHTML = `
+      <td><span class="toggle-icon">▼</span>${coord}</td>
+      <td>${formatPercent(cExpress, cTotal)}</td>
+      <td>${formatPercent(cProg, cTotal)}</td>
+      <td>${formatPercent(cRetiro, cTotal)}</td>
+    `;
+    partTbody.appendChild(boldRow);
+    
+    // Supervisors participation
+    const supsInCoord = [...new Set(coordHoyOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
+    
+    const supPartRows = supsInCoord.map(sup => {
+      const supHoyOrders = coordHoyOrders.filter(o => o.SUPERVISOR === sup);
+      let express = 0, programado = 0, retiro = 0;
+      supHoyOrders.forEach(o => {
+        const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+        if (type === 'EXPRESS') express++;
+        else if (type === 'PROGRAMADO') programado++;
+        else if (type === 'RETIRO EN TIENDA') retiro++;
+      });
+      const total = express + programado + retiro;
+      return { sup, express, programado, retiro, total };
+    }).sort((a, b) => b.total - a.total || a.sup.localeCompare(b.sup));
+    
+    supPartRows.forEach(item => {
+      const subRow = document.createElement("tr");
+      subRow.className = groupId;
+      subRow.innerHTML = `
+        <td style="padding-left: 2rem;">${item.sup}</td>
+        <td>${formatPercent(item.express, item.total)}</td>
+        <td>${formatPercent(item.programado, item.total)}</td>
+        <td>${formatPercent(item.retiro, item.total)}</td>
+      `;
+      partTbody.appendChild(subRow);
+    });
+  });
+}
+
+// Collapsible groups function
+window.toggleTableGroup = function(groupId, event) {
+  const boldRow = event.currentTarget;
+  const isCollapsed = boldRow.classList.contains("collapsed");
+  const subRows = document.querySelectorAll(`.${groupId}`);
+  
+  if (isCollapsed) {
+    boldRow.classList.remove("collapsed");
+    subRows.forEach(row => row.classList.remove("hidden-row"));
+    boldRow.querySelector(".toggle-icon").textContent = "▼";
+  } else {
+    boldRow.classList.add("collapsed");
+    subRows.forEach(row => row.classList.add("hidden-row"));
+    boldRow.querySelector(".toggle-icon").textContent = "▶";
+  }
+};
+

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netcall - Dashboard de Métricas Horarias (Gerencia)</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  
+  <div class="dashboard-container">
+    
+    <!-- Top Executive Header -->
+    <header class="dashboard-header">
+      <div class="header-brand">
+        <div class="logo-circle">NC</div>
+        <div class="brand-info">
+          <h1>Netcall Gerencia</h1>
+          <p class="subtitle">Monitoreo Estratégico de Ventas y Variación de Cortes</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="update-badge" id="last-update-time">Actualizando datos...</div>
+      </div>
+    </header>
+    
+    <!-- Top Filter Controls Bar -->
+    <section class="controls-bar card">
+      <div class="control-item">
+        <label>Líder / Coordinador</label>
+        <div class="multiselect-dropdown" id="dropdown-coord">
+          <div class="select-box" onclick="toggleDropdown('dropdown-coord')">
+            <span class="selected-text" id="coord-selected-label">Cargando...</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="options-container hidden" id="coord-options">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+      
+      <div class="control-item">
+        <label>Hora de Corte</label>
+        <div class="multiselect-dropdown" id="dropdown-hour">
+          <div class="select-box" onclick="toggleDropdown('dropdown-hour')">
+            <span class="selected-text" id="hour-selected-label">Cargando...</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="options-container hidden" id="hour-options">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="control-item">
+        <label>Supervisor</label>
+        <div class="multiselect-dropdown" id="dropdown-supervisor">
+          <div class="select-box" onclick="toggleDropdown('dropdown-supervisor')">
+            <span class="selected-text" id="supervisor-selected-label">Cargando...</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="options-container hidden" id="supervisor-options">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="control-item">
+        <label>Antigüedad</label>
+        <div class="multiselect-dropdown" id="dropdown-antiguedad">
+          <div class="select-box" onclick="toggleDropdown('dropdown-antiguedad')">
+            <span class="selected-text" id="antiguedad-selected-label">Cargando...</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="options-container hidden" id="antiguedad-options">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI Summary Row -->
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">HOY</div>
+        <div class="kpi-value" id="kpi-hoy">0</div>
+        <div class="kpi-trend-row" style="margin-top:0.25rem;">
+          <div class="kpi-date" id="kpi-date-hoy" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">D-1 (Día Anterior)</div>
+        <div class="kpi-value" id="kpi-d1">0</div>
+        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+          <div class="kpi-trend" id="kpi-var-d1">-</div>
+          <div class="kpi-date" id="kpi-date-d1" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">D-7 (Semana Anterior)</div>
+        <div class="kpi-value" id="kpi-d7">0</div>
+        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+          <div class="kpi-trend" id="kpi-var-d7">-</div>
+          <div class="kpi-date" id="kpi-date-d7" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">D-14 (2 Semanas Antes)</div>
+        <div class="kpi-value" id="kpi-d14">0</div>
+        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+          <div class="kpi-trend" id="kpi-var-d14">-</div>
+          <div class="kpi-date" id="kpi-date-d14" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">D-21 (3 Semanas Antes)</div>
+        <div class="kpi-value" id="kpi-d21">0</div>
+        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
+          <div class="kpi-trend" id="kpi-var-d21">-</div>
+          <div class="kpi-date" id="kpi-date-d21" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Main Dashboard Body -->
+    <main class="dashboard-body">
+      
+      <!-- Side-by-Side Tables Layout -->
+      <div class="tables-grid">
+        
+        <!-- Table 1: Avance por Coordinador / Cuartil -->
+        <section class="table-section card">
+          <div class="table-header">
+            <div class="table-icon">🏆</div>
+            <h2>Avance por Coordinador / Cuartil</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="executive-table">
+              <thead>
+                <tr>
+                  <th>Líder / Cuartil</th>
+                  <th style="text-align:right;">Hoy</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                  <th style="text-align:center;">D-1 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                  <th style="text-align:center;">D-7 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                  <th style="text-align:center;">D-14 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                  <th style="text-align:center;">D-21 (%)</th>
+                </tr>
+              </thead>
+              <tbody id="hourly-cuartil-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+        
+        <!-- Table 2: Avance por Coordinador / Supervisor -->
+        <section class="table-section card">
+          <div class="table-header">
+            <div class="table-icon">👥</div>
+            <h2>Avance por Coordinador / Supervisor</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="executive-table">
+              <thead>
+                <tr>
+                  <th>Líder / Supervisor</th>
+                  <th style="text-align:right;">Hoy</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                  <th style="text-align:center;">D-1 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                  <th style="text-align:center;">D-7 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                  <th style="text-align:center;">D-14 (%)</th>
+                  <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                  <th style="text-align:center;">D-21 (%)</th>
+                </tr>
+              </thead>
+              <tbody id="hourly-supervisor-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Table 3: Participación de Tipos de Despacho (Hoy) -->
+      <section class="table-section card">
+        <div class="table-header">
+          <div class="table-icon">📦</div>
+          <h2>Participación de Tipos de Despacho (Hoy)</h2>
+        </div>
+        <div class="table-wrapper">
+          <table class="executive-table">
+            <thead>
+              <tr>
+                <th>Líder / Supervisor</th>
+                <th style="text-align:right;">EXPRESS</th>
+                <th style="text-align:right;">PROGRAMADO</th>
+                <th style="text-align:right;">RETIRO EN TIENDA</th>
+              </tr>
+            </thead>
+            <tbody id="hourly-participation-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+    </main>
+    
+  </div>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+</body>
+</html>

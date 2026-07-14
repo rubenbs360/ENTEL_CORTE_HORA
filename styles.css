@@ -1,19 +1,22 @@
 /* Clean Executive Theme Variables */
 :root {
-  --bg-main: #090e1a;
-  --bg-card: rgba(17, 24, 39, 0.6);
-  --border-color: rgba(255, 255, 255, 0.07);
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --accent-cyan: #00f2fe;
-  --accent-purple: #8b5cf6;
-  --success: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
+  --bg-main: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-table-header: #f8fafc;
+  --bg-bold-row: rgba(8, 145, 178, 0.05);
+  --border-color: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --accent-cyan: #0891b2;
+  --accent-purple: #6d28d9;
+  --success: #059669;
+  --danger: #dc2626;
+  --warning: #d97706;
   --font-family: 'Outfit', sans-serif;
   --transition-fast: 0.2s ease;
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-premium: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
 }
 
 /* Global Reset */
@@ -150,7 +153,7 @@ body {
 }
 
 .select-box {
-  background: #0d1323;
+  background: var(--bg-input);
   color: var(--text-main);
   border: 1px solid var(--border-color);
   padding: 0.6rem 1rem;
@@ -165,7 +168,7 @@ body {
 }
 
 .select-box:hover {
-  border-color: rgba(0, 242, 254, 0.5);
+  border-color: rgba(8, 145, 178, 0.5);
 }
 
 .select-box .arrow {
@@ -176,7 +179,7 @@ body {
 
 .multiselect-dropdown.active .select-box {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+  box-shadow: 0 0 10px rgba(8, 145, 178, 0.15);
 }
 
 .multiselect-dropdown.active .arrow {
@@ -188,13 +191,13 @@ body {
   top: 108%;
   left: 0;
   right: 0;
-  background: #0d1323;
+  background: var(--bg-input);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   max-height: 250px;
   overflow-y: auto;
   z-index: 1000;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -329,7 +332,7 @@ body {
 }
 
 .executive-table th {
-  background: rgba(13, 19, 37, 0.75);
+  background: var(--bg-table-header);
   border-bottom: 2px solid var(--border-color);
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -361,17 +364,17 @@ body {
 }
 
 .executive-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(15, 23, 42, 0.02);
 }
 
 /* Bold/Total rows */
 .bold-row {
   font-weight: 700;
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: var(--bg-bold-row);
 }
 
 .bold-row td {
-  border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 
 .bold-row td:first-child {

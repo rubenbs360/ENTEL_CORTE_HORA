@@ -492,13 +492,13 @@ function renderHourlyDashboard() {
 
   // Heatmap function for RETIRO EN TIENDA (red shading)
   function getRetiroStyle(retiroCount, totalCount) {
-    if (totalCount === 0) return "";
+    if (totalCount === 0) return 'style="text-align:center;"';
     const pct = (retiroCount / totalCount) * 100;
     if (pct > 0) {
       const opacity = Math.min(0.32, (pct / 35) * 0.32);
-      return `style="background-color: rgba(220, 38, 38, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
+      return `style="text-align:center; background-color: rgba(220, 38, 38, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
     }
-    return "";
+    return 'style="text-align:center;"';
   }
   
   coordinatorsList.forEach(coord => {
@@ -522,8 +522,8 @@ function renderHourlyDashboard() {
     boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
     boldRow.innerHTML = `
       <td><span class="toggle-icon">▼</span>${coord}</td>
-      <td>${formatPercent(cExpress, cTotal)}</td>
-      <td>${formatPercent(cProg, cTotal)}</td>
+      <td style="text-align:center;">${formatPercent(cExpress, cTotal)}</td>
+      <td style="text-align:center;">${formatPercent(cProg, cTotal)}</td>
       <td ${getRetiroStyle(cRetiro, cTotal)}>${formatPercent(cRetiro, cTotal)}</td>
     `;
     partTbody.appendChild(boldRow);
@@ -549,9 +549,9 @@ function renderHourlyDashboard() {
       subRow.className = groupId;
       const arrow = getExpressArrow(item.express, item.total);
       subRow.innerHTML = `
-        <td style="padding-left: 2rem; white-space: nowrap;">${arrow}${item.sup}</td>
-        <td>${formatPercent(item.express, item.total)}</td>
-        <td>${formatPercent(item.programado, item.total)}</td>
+        <td style="padding-left: 2rem; white-space: nowrap;">${item.sup}</td>
+        <td style="text-align:center; white-space:nowrap;">${arrow} ${formatPercent(item.express, item.total)}</td>
+        <td style="text-align:center;">${formatPercent(item.programado, item.total)}</td>
         <td ${getRetiroStyle(item.retiro, item.total)}>${formatPercent(item.retiro, item.total)}</td>
       `;
       partTbody.appendChild(subRow);

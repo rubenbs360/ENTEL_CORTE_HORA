@@ -133,88 +133,94 @@
       <!-- Side-by-Side Tables Layout -->
       <div class="tables-grid">
         
-        <!-- Table 1: Avance por Coordinador / Cuartil -->
-        <section class="table-section card">
-          <div class="table-header">
-            <div class="table-icon">🏆</div>
-            <h2>Avance por Coordinador / Cuartil</h2>
-          </div>
-          <div class="table-wrapper">
-            <table class="executive-table">
-              <thead>
-                <tr>
-                  <th>Líder / Cuartil</th>
-                  <th style="text-align:right;">Hoy</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
-                  <th style="text-align:center;">D-1 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
-                  <th style="text-align:center;">D-7 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
-                  <th style="text-align:center;">D-14 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
-                  <th style="text-align:center;">D-21 (%)</th>
-                </tr>
-              </thead>
-              <tbody id="hourly-cuartil-table-body">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
-          </div>
-        </section>
-        
-        <!-- Table 2: Avance por Coordinador / Supervisor -->
-        <section class="table-section card">
-          <div class="table-header">
-            <div class="table-icon">👥</div>
-            <h2>Avance por Coordinador / Supervisor</h2>
-          </div>
-          <div class="table-wrapper">
-            <table class="executive-table">
-              <thead>
-                <tr>
-                  <th>Líder / Supervisor</th>
-                  <th style="text-align:right;">Hoy</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
-                  <th style="text-align:center;">D-1 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
-                  <th style="text-align:center;">D-7 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
-                  <th style="text-align:center;">D-14 (%)</th>
-                  <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
-                  <th style="text-align:center;">D-21 (%)</th>
-                </tr>
-              </thead>
-              <tbody id="hourly-supervisor-table-body">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <!-- Left Column -->
+        <div class="tables-column">
+          <!-- Table 1: Avance por Coordinador / Cuartil -->
+          <section class="table-section card">
+            <div class="table-header">
+              <div class="table-icon">🏆</div>
+              <h2>Avance por Coordinador / Cuartil</h2>
+            </div>
+            <div class="table-wrapper">
+              <table class="executive-table">
+                <thead>
+                  <tr>
+                    <th>Líder / Cuartil</th>
+                    <th style="text-align:right;">Hoy</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                    <th style="text-align:center;">D-1 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                    <th style="text-align:center;">D-7 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                    <th style="text-align:center;">D-14 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                    <th style="text-align:center;">D-21 (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="hourly-cuartil-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Table 3: Participación de Tipos de Despacho (Hoy) -->
+          <section class="table-section card">
+            <div class="table-header">
+              <div class="table-icon">📦</div>
+              <h2>Participación de Tipos de Despacho (Hoy)</h2>
+            </div>
+            <div class="table-wrapper">
+              <table class="executive-table">
+                <thead>
+                  <tr>
+                    <th>Líder / Supervisor</th>
+                    <th style="text-align:right;">EXPRESS</th>
+                    <th style="text-align:right;">PROGRAMADO</th>
+                    <th style="text-align:right;">RETIRO EN TIENDA</th>
+                  </tr>
+                </thead>
+                <tbody id="hourly-participation-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="tables-column">
+          <!-- Table 2: Avance por Coordinador / Supervisor -->
+          <section class="table-section card">
+            <div class="table-header">
+              <div class="table-icon">👥</div>
+              <h2>Avance por Coordinador / Supervisor</h2>
+            </div>
+            <div class="table-wrapper">
+              <table class="executive-table">
+                <thead>
+                  <tr>
+                    <th>Líder / Supervisor</th>
+                    <th style="text-align:right;">Hoy</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                    <th style="text-align:center;">D-1 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                    <th style="text-align:center;">D-7 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                    <th style="text-align:center;">D-14 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                    <th style="text-align:center;">D-21 (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="hourly-supervisor-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
 
       </div>
-
-      <!-- Table 3: Participación de Tipos de Despacho (Hoy) -->
-      <section class="table-section card">
-        <div class="table-header">
-          <div class="table-icon">📦</div>
-          <h2>Participación de Tipos de Despacho (Hoy)</h2>
-        </div>
-        <div class="table-wrapper">
-          <table class="executive-table">
-            <thead>
-              <tr>
-                <th>Líder / Supervisor</th>
-                <th style="text-align:right;">EXPRESS</th>
-                <th style="text-align:right;">PROGRAMADO</th>
-                <th style="text-align:right;">RETIRO EN TIENDA</th>
-              </tr>
-            </thead>
-            <tbody id="hourly-participation-table-body">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </section>
       
     </main>
     

@@ -321,7 +321,7 @@ body {
   overflow-x: auto;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  background: rgba(10, 15, 30, 0.3);
+  background: var(--bg-card);
 }
 
 .executive-table {
@@ -427,6 +427,12 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: start;
+}
+
+.tables-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 @media (max-width: 1024px) {

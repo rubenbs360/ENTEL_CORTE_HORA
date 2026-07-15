@@ -464,6 +464,43 @@ function renderHourlyDashboard() {
   const partTbody = document.getElementById("hourly-participation-table-body");
   partTbody.innerHTML = "";
   
+  // Compute overall campaign averages for Hoy for semaphoring
+  let overallExpress = 0, overallProg = 0, overallRetiro = 0;
+  filteredOrders.forEach(o => {
+    if (o.Fecha_Creacion === meta.hoy_date) {
+      const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+      if (type === 'EXPRESS') overallExpress++;
+      else if (type === 'PROGRAMADO') overallProg++;
+      else if (type === 'RETIRO EN TIENDA') overallRetiro++;
+    }
+  });
+  const overallTotal = overallExpress + overallProg + overallRetiro;
+  const overallExpressAvg = overallTotal > 0 ? (overallExpress / overallTotal) * 100 : 0;
+
+  // Semaphoring function for EXPRESS (arrows)
+  function getExpressArrow(expressCount, totalCount) {
+    if (totalCount === 0) return "";
+    const pct = (expressCount / totalCount) * 100;
+    if (pct > overallExpressAvg + 1.5) {
+      return `<span style="color:var(--success); font-weight:bold; margin-right:6px; font-size:0.95rem; display:inline-block; width:12px;">▲</span>`;
+    } else if (pct < overallExpressAvg - 1.5) {
+      return `<span style="color:var(--danger); font-weight:bold; margin-right:6px; font-size:0.95rem; display:inline-block; width:12px;">▼</span>`;
+    } else {
+      return `<span style="color:var(--warning); font-weight:bold; margin-right:6px; font-size:0.95rem; display:inline-block; width:12px;">▶</span>`;
+    }
+  }
+
+  // Heatmap function for RETIRO EN TIENDA (red shading)
+  function getRetiroStyle(retiroCount, totalCount) {
+    if (totalCount === 0) return "";
+    const pct = (retiroCount / totalCount) * 100;
+    if (pct > 0) {
+      const opacity = Math.min(0.32, (pct / 35) * 0.32);
+      return `style="background-color: rgba(220, 38, 38, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
+    }
+    return "";
+  }
+  
   coordinatorsList.forEach(coord => {
     // Only compile participation for HOY orders
     const coordHoyOrders = filteredOrders.filter(o => o.COORDINADOR === coord && o.Fecha_Creacion === meta.hoy_date);
@@ -487,7 +524,7 @@ function renderHourlyDashboard() {
       <td><span class="toggle-icon">▼</span>${coord}</td>
       <td>${formatPercent(cExpress, cTotal)}</td>
       <td>${formatPercent(cProg, cTotal)}</td>
-      <td>${formatPercent(cRetiro, cTotal)}</td>
+      <td ${getRetiroStyle(cRetiro, cTotal)}>${formatPercent(cRetiro, cTotal)}</td>
     `;
     partTbody.appendChild(boldRow);
     
@@ -510,11 +547,12 @@ function renderHourlyDashboard() {
     supPartRows.forEach(item => {
       const subRow = document.createElement("tr");
       subRow.className = groupId;
+      const arrow = getExpressArrow(item.express, item.total);
       subRow.innerHTML = `
-        <td style="padding-left: 2rem;">${item.sup}</td>
+        <td style="padding-left: 2rem; white-space: nowrap;">${arrow}${item.sup}</td>
         <td>${formatPercent(item.express, item.total)}</td>
         <td>${formatPercent(item.programado, item.total)}</td>
-        <td>${formatPercent(item.retiro, item.total)}</td>
+        <td ${getRetiroStyle(item.retiro, item.total)}>${formatPercent(item.retiro, item.total)}</td>
       `;
       partTbody.appendChild(subRow);
     });

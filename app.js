@@ -82,8 +82,8 @@ function initializeFilters() {
   selectedAntiguedades = new Set(ants);
   populateDropdownOptions("antiguedad", ants, selectedAntiguedades, updateAntiguedadSelection);
   
-  // 4. Hours (9 to 23 as options)
-  const availableHours = [...new Set(orders.map(o => o.Hora))].filter(h => h >= 9 && h <= 23).sort((a,b) => a-b);
+  // 4. Hours (0 to 23 as options)
+  const availableHours = [...new Set(orders.map(o => o.Hora))].filter(h => h >= 0 && h <= 23).sort((a,b) => a-b);
   
   // Determine default selected hours: by default, check all hours up to the latest hour with data in HOY
   let latestHour = 13; // default fallback
@@ -91,7 +91,7 @@ function initializeFilters() {
   const hoyOrders = orders.filter(o => o.Fecha_Creacion === hoyStr);
   if (hoyOrders.length > 0) {
     const maxHourInHoy = Math.max(...hoyOrders.map(o => o.Hora));
-    if (maxHourInHoy >= 9 && maxHourInHoy <= 23) {
+    if (maxHourInHoy >= 0 && maxHourInHoy <= 23) {
       latestHour = maxHourInHoy;
     }
   }

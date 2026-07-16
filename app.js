@@ -66,19 +66,21 @@ function initializeFilters() {
   if (!hourlyData || !hourlyData.orders) return;
   
   const orders = hourlyData.orders;
+  const campaignCoords = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA'];
+  const campaignOrders = orders.filter(o => campaignCoords.includes(o.COORDINADOR));
   
   // 1. Unique Coordinadores
-  const coords = [...new Set(orders.map(o => o.COORDINADOR))].filter(Boolean).sort();
+  const coords = [...new Set(campaignOrders.map(o => o.COORDINADOR))].filter(Boolean).sort();
   selectedCoordinadores = new Set(coords);
   populateDropdownOptions("coord", coords, selectedCoordinadores, updateCoordinadorSelection);
   
   // 2. Unique Supervisores
-  const sups = [...new Set(orders.map(o => o.SUPERVISOR))].filter(Boolean).sort();
+  const sups = [...new Set(campaignOrders.map(o => o.SUPERVISOR))].filter(Boolean).sort();
   selectedSupervisores = new Set(sups);
   populateDropdownOptions("supervisor", sups, selectedSupervisores, updateSupervisorSelection);
   
   // 3. Unique Antigüedades
-  const ants = [...new Set(orders.map(o => o.ANTIGÜEDAD))].filter(Boolean).sort();
+  const ants = [...new Set(campaignOrders.map(o => o.ANTIGÜEDAD))].filter(Boolean).sort();
   selectedAntiguedades = new Set(ants);
   populateDropdownOptions("antiguedad", ants, selectedAntiguedades, updateAntiguedadSelection);
   
@@ -295,9 +297,10 @@ function renderHourlyDashboard() {
     return true;
   });
   
-  // 3. Compute KPI Summary Cards
+  // 3. Compute KPI Summary Cards (based on ALL orders in CSV up to the selected hour)
   const kpis = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
-  filteredOrders.forEach(o => {
+  orders.forEach(o => {
+    if (o.Hora > maxSelectedHour) return;
     if (o.Fecha_Creacion === meta.hoy_date) kpis.hoy++;
     else if (o.Fecha_Creacion === meta.d1_date) kpis.d1++;
     else if (o.Fecha_Creacion === meta.d7_date) kpis.d7++;
@@ -305,6 +308,16 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d21_date) kpis.d21++;
   });
   
+  // Compute Table Totals (the campaign coordinators subtotal)
+  const tableTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+  filteredOrders.forEach(o => {
+    if (o.Fecha_Creacion === meta.hoy_date) tableTotals.hoy++;
+    else if (o.Fecha_Creacion === meta.d1_date) tableTotals.d1++;
+    else if (o.Fecha_Creacion === meta.d7_date) tableTotals.d7++;
+    else if (o.Fecha_Creacion === meta.d14_date) tableTotals.d14++;
+    else if (o.Fecha_Creacion === meta.d21_date) tableTotals.d21++;
+  });
+
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
   document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
   
@@ -394,6 +407,25 @@ function renderHourlyDashboard() {
     });
   });
   
+  // Append TOTAL OPERACIÓN row for Table 1
+  const ccTotalRow = document.createElement("tr");
+  ccTotalRow.className = "bold-row";
+  ccTotalRow.style.borderTop = "2px solid var(--text-main)";
+  ccTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+  ccTotalRow.innerHTML = `
+    <td>TOTAL OPERACIÓN</td>
+    <td>${tableTotals.hoy}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d1}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d1)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d7}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d7)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d14}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d21}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+  `;
+  ccTbody.appendChild(ccTotalRow);
+  
   // 5. Render Table 2: Supervisor
   const csTbody = document.getElementById("hourly-supervisor-table-body");
   csTbody.innerHTML = "";
@@ -465,6 +497,25 @@ function renderHourlyDashboard() {
       csTbody.appendChild(subRow);
     });
   });
+  
+  // Append TOTAL OPERACIÓN row for Table 2
+  const csTotalRow = document.createElement("tr");
+  csTotalRow.className = "bold-row";
+  csTotalRow.style.borderTop = "2px solid var(--text-main)";
+  csTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+  csTotalRow.innerHTML = `
+    <td>TOTAL OPERACIÓN</td>
+    <td>${tableTotals.hoy}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d1}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d1)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d7}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d7)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d14}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d21}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+  `;
+  csTbody.appendChild(csTotalRow);
   
   // 6. Render Table 3: Participation (Hoy)
   const partTbody = document.getElementById("hourly-participation-table-body");
@@ -563,6 +614,31 @@ function renderHourlyDashboard() {
       partTbody.appendChild(subRow);
     });
   });
+
+  // Append TOTAL OPERACIÓN row for Table 3
+  const tTotalRow = document.createElement("tr");
+  tTotalRow.className = "bold-row";
+  tTotalRow.style.borderTop = "2px solid var(--text-main)";
+  tTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+  
+  let tExpress = 0, tProg = 0, tRetiro = 0;
+  filteredOrders.forEach(o => {
+    if (o.Fecha_Creacion === meta.hoy_date) {
+      const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+      if (type === 'EXPRESS') tExpress++;
+      else if (type === 'PROGRAMADO') tProg++;
+      else if (type === 'RETIRO EN TIENDA') tRetiro++;
+    }
+  });
+  const tTotal = tExpress + tProg + tRetiro;
+  
+  tTotalRow.innerHTML = `
+    <td>TOTAL OPERACIÓN</td>
+    <td style="text-align:center;">${formatPercent(tExpress, tTotal)}</td>
+    <td style="text-align:center;">${formatPercent(tProg, tTotal)}</td>
+    <td ${getRetiroStyle(tRetiro, tTotal)}>${formatPercent(tRetiro, tTotal)}</td>
+  `;
+  partTbody.appendChild(tTotalRow);
 }
 
 // Collapsible groups function

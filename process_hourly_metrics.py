@@ -102,20 +102,19 @@ def main():
     df_all['CUARTIL'] = quartils
     df_all['ANTIGÜEDAD'] = antiguedades
     
-    # Filter to keep only orders that have coordinators/supervisors mapped
-    df_all = df_all.dropna(subset=['COORDINADOR', 'SUPERVISOR'])
-    
-    # Clean coordinator names to avoid encoding issues
+    # Clean coordinator names and fill NaNs to keep all records (operation, backs, trainers, etc.)
     def clean_coordinator_name(name):
+        if pd.isna(name):
+            return 'OTROS'
         name = str(name).strip()
         if 'SOLORZANO' in name:
             return 'JOSÉ SOLORZANO'
         return name
     df_all['COORDINADOR'] = df_all['COORDINADOR'].apply(clean_coordinator_name)
     
-    # Filter to keep only the campaign coordinators
-    campaign_coordinators = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA']
-    df_all = df_all[df_all['COORDINADOR'].isin(campaign_coordinators)]
+    df_all['SUPERVISOR'] = df_all['SUPERVISOR'].fillna("OTROS")
+    df_all['CUARTIL'] = df_all['CUARTIL'].fillna("OTROS")
+    df_all['ANTIGÜEDAD'] = df_all['ANTIGÜEDAD'].fillna("OTROS")
     
     # Find key dates
     print("Calculando fechas relativas (HOY, D-1, D-7, D-14, D-21)...")

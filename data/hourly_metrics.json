@@ -5,7 +5,7 @@
     "d7_date": "9 jul 2026",
     "d14_date": "2 jul 2026",
     "d21_date": "25 jun 2026",
-    "last_update": "2026-07-16 12:50:05"
+    "last_update": "2026-07-16 13:05:57"
   },
   "orders": [
     {
@@ -280,6 +280,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 18,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
@@ -801,6 +810,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 18,
       "COORDINADOR": "PIERO MEDINA",
@@ -963,6 +981,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 0,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 15,
       "COORDINADOR": "PIERO MEDINA",
@@ -1051,6 +1078,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -1269,6 +1305,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 20,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 16,
       "COORDINADOR": "PIERO MEDINA",
@@ -1384,6 +1429,15 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "CHRISTIAN MAS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "16 jul 2026",
@@ -1595,6 +1649,24 @@
     {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
       "CUARTIL": "Q1",
@@ -1609,6 +1681,24 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -1663,6 +1753,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -1779,6 +1878,15 @@
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -1899,6 +2007,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 16,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -1924,6 +2041,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -1980,6 +2106,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 14,
       "COORDINADOR": "PIERO MEDINA",
@@ -2004,6 +2139,24 @@
       "SUPERVISOR": "FIORELLA QUISPE",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -2178,6 +2331,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 20,
       "COORDINADOR": "EVER MALCA",
@@ -2221,6 +2383,15 @@
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -2491,6 +2662,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 23,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -3204,6 +3384,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 14,
       "COORDINADOR": "PIERO MEDINA",
@@ -3367,11 +3556,29 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 9,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -3483,6 +3690,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 18,
       "COORDINADOR": "EVER MALCA",
@@ -3526,6 +3742,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -3579,6 +3804,15 @@
       "SUPERVISOR": "OLENKA LAVADO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -3924,6 +4158,24 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
@@ -4101,6 +4353,24 @@
       "SUPERVISOR": "RIVALDO DONAYRE",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -4375,12 +4645,30 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 10,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "FRANCO GRIMALDO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -4453,6 +4741,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">3 meses",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -4687,6 +4984,42 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -5058,6 +5391,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
@@ -5373,6 +5715,24 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
@@ -5414,6 +5774,15 @@
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JEAN ELIAS",
       "CUARTIL": "Q2",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
@@ -5635,6 +6004,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 17,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "FRANCO GRIMALDO",
@@ -5811,6 +6189,15 @@
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -6228,6 +6615,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
@@ -6318,6 +6714,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 9,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -7209,6 +7614,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 13,
       "COORDINADOR": "EVER MALCA",
@@ -7261,6 +7675,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -7380,12 +7803,30 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KIARA RUIZ",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -7479,6 +7920,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 11,
       "COORDINADOR": "EVER MALCA",
@@ -7512,6 +7962,15 @@
       "SUPERVISOR": "FRANCO GRIMALDO",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 8,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -7776,6 +8235,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 17,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -7801,6 +8269,15 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -7936,6 +8413,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -8181,6 +8667,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
@@ -8442,6 +8937,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
@@ -8532,6 +9036,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
@@ -8555,6 +9068,15 @@
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
@@ -8703,6 +9225,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
@@ -8758,6 +9289,15 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 18,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "RIVALDO DONAYRE",
@@ -8782,6 +9322,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 20,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -8865,6 +9414,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 18,
       "COORDINADOR": "EVER MALCA",
@@ -8910,6 +9468,24 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 14,
       "COORDINADOR": "EVER MALCA",
@@ -8917,6 +9493,24 @@
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -8965,6 +9559,15 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 14,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JORDAN CASTILLO",
@@ -8992,6 +9595,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 13,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANDREA YAURI",
@@ -9015,6 +9627,15 @@
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9082,12 +9703,39 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 16,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -9105,6 +9753,15 @@
       "SUPERVISOR": "ANDREA YAURI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9199,12 +9856,30 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 11,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KRISTYNA QUISPE",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -9216,12 +9891,30 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 11,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "MARCELO DIAZ",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9240,6 +9933,15 @@
       "SUPERVISOR": "JACKELINE GUEVARA",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9306,6 +10008,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 14,
       "COORDINADOR": "EVER MALCA",
@@ -9315,12 +10026,30 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 15,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANDREA YAURI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -9387,6 +10116,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
@@ -9402,6 +10140,15 @@
       "SUPERVISOR": "BRAYAN OLAYA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -9576,6 +10323,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 11,
       "COORDINADOR": "EVER MALCA",
@@ -9675,6 +10431,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 9,
       "COORDINADOR": "EVER MALCA",
@@ -9712,6 +10477,15 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 10,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KATIUSKA PAJUELO",
@@ -9726,6 +10500,15 @@
       "SUPERVISOR": "SHARON ZAVALA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9744,6 +10527,15 @@
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -9871,6 +10663,33 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -10455,6 +11274,15 @@
       "SUPERVISOR": "CINTHIA BIELICH",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -10927,6 +11755,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "MARCELO DIAZ",
@@ -11022,6 +11859,15 @@
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -11394,6 +12240,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 15,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -11445,6 +12300,15 @@
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -12150,6 +13014,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
@@ -12192,6 +13065,15 @@
       "SUPERVISOR": "FRANCO GRIMALDO",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -12312,6 +13194,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
@@ -12358,6 +13249,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 8,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "OLENKA LAVADO",
@@ -12381,6 +13281,15 @@
       "SUPERVISOR": "JEAN ELIAS",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -12555,6 +13464,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 15,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -12652,6 +13570,24 @@
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -12790,6 +13726,24 @@
     },
     {
       "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KATIUSKA PAJUELO",
@@ -12969,6 +13923,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 17,
       "COORDINADOR": "PIERO MEDINA",
@@ -13003,6 +13966,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -13185,6 +14157,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 13,
       "COORDINADOR": "PIERO MEDINA",
@@ -13303,6 +14284,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "JUAN IYASHAMA",
@@ -13327,6 +14317,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -13447,6 +14446,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 18,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KATIUSKA PAJUELO",
@@ -13561,6 +14569,33 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -13896,6 +14931,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 9,
       "COORDINADOR": "EVER MALCA",
@@ -14248,6 +15292,15 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 11,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "OLENKA LAVADO",
@@ -14436,6 +15489,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 14,
       "COORDINADOR": "EVER MALCA",
@@ -14505,6 +15567,15 @@
       "SUPERVISOR": "JORDAN CASTILLO",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -14760,6 +15831,24 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
@@ -14823,6 +15912,24 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
@@ -14838,6 +15945,15 @@
       "SUPERVISOR": "JEAN ELIAS",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -14902,6 +16018,15 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -14974,6 +16099,15 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -15126,6 +16260,15 @@
       "SUPERVISOR": "VICTORIA CARRILLO",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -15199,6 +16342,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -15310,6 +16462,24 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "MILUSKA CASABONA",
@@ -15387,6 +16557,15 @@
       "SUPERVISOR": "NICOLLE MATIAS",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -15606,6 +16785,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
@@ -15635,6 +16823,15 @@
     {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JORGE JUSTO",
       "CUARTIL": "Q4",
@@ -15647,6 +16844,15 @@
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q3",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
@@ -15765,6 +16971,15 @@
       "SUPERVISOR": "KRISTYNA QUISPE",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -16215,6 +17430,15 @@
       "SUPERVISOR": "VICTORIA CARRILLO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -16650,12 +17874,30 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 9,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -16720,6 +17962,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -16810,6 +18061,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -17007,6 +18267,15 @@
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -17516,11 +18785,29 @@
     {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 12,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KATIUSKA PAJUELO",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -17632,6 +18919,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 14,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "JUAN IYASHAMA",
@@ -17901,6 +19197,24 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 11,
       "COORDINADOR": "PIERO MEDINA",
@@ -17943,6 +19257,15 @@
       "SUPERVISOR": "NICOLLE MATIAS",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -18052,6 +19375,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -18136,6 +19468,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 11,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JACKELINE GUEVARA",
@@ -18487,11 +19828,29 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 9,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "SHARON ZAVALA",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -18594,6 +19953,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
@@ -18610,6 +19978,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -18801,6 +20178,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 10,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -18834,6 +20220,15 @@
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -19135,6 +20530,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 11,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "OLENKA LAVADO",
@@ -19216,6 +20620,15 @@
     },
     {
       "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
       "Hora": 16,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "CINTHIA BIELICH",
@@ -19267,6 +20680,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "16 jul 2026",
@@ -19584,6 +21006,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 10,
       "COORDINADOR": "PIERO MEDINA",
@@ -19783,6 +21214,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KIARA RUIZ",
@@ -19860,6 +21300,15 @@
       "SUPERVISOR": "ANA LUJAN",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -20034,6 +21483,15 @@
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 11,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -20178,6 +21636,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
@@ -20260,6 +21727,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANA LUJAN",
@@ -20274,6 +21750,15 @@
       "SUPERVISOR": "VICTORIA CARRILLO",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -20527,6 +22012,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "16 jul 2026",
@@ -20752,6 +22246,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -21223,6 +22726,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 19,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "JUAN IYASHAMA",
@@ -21285,6 +22797,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 13,
       "COORDINADOR": "EVER MALCA",
@@ -21328,6 +22849,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 12,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -21400,6 +22930,24 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -21510,6 +23058,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 10,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -21589,6 +23146,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -21773,6 +23339,15 @@
     {
       "Fecha_Creacion": "16 jul 2026",
       "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANDREA YAURI",
       "CUARTIL": "Q3",
@@ -21807,12 +23382,30 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 14,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JEAN ELIAS",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -21898,6 +23491,15 @@
     },
     {
       "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
       "Hora": 17,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
@@ -21921,6 +23523,15 @@
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -22131,6 +23742,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 8,
       "COORDINADOR": "EVER MALCA",
@@ -22347,6 +23967,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 17,
       "COORDINADOR": "EVER MALCA",
@@ -22371,6 +24000,15 @@
       "SUPERVISOR": "FIORELLA QUISPE",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">6 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -22623,6 +24261,15 @@
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -22653,6 +24300,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 16,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -22735,6 +24391,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JORGE JUSTO",
@@ -22758,6 +24423,24 @@
       "SUPERVISOR": "RIVALDO DONAYRE",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -22797,6 +24480,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
@@ -22860,6 +24552,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
       "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -22879,11 +24580,29 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 10,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANA LUJAN",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -22905,6 +24624,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 13,
       "COORDINADOR": "EVER MALCA",
@@ -22912,6 +24640,15 @@
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "9 jul 2026",
@@ -22947,6 +24684,15 @@
       "SUPERVISOR": "ANA LUJAN",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -22996,6 +24742,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 12,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "MILUSKA CASABONA",
@@ -23010,6 +24765,15 @@
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -23175,6 +24939,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "2 jul 2026",
       "Hora": 12,
       "COORDINADOR": "JOSÉ SOLORZANO",
@@ -23191,6 +24964,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 19,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "15 jul 2026",
@@ -23643,6 +25425,15 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 12,
       "COORDINADOR": "PIERO MEDINA",
@@ -23722,6 +25513,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 18,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G32 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
       "Fecha_Creacion": "2 jul 2026",
@@ -24004,6 +25804,15 @@
     },
     {
       "Fecha_Creacion": "15 jul 2026",
+      "Hora": 9,
+      "COORDINADOR": "OTROS",
+      "SUPERVISOR": "OTROS",
+      "CUARTIL": "OTROS",
+      "ANTIGÜEDAD": "OTROS",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
       "Hora": 8,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANDREA YAURI",
@@ -24099,6 +25908,15 @@
       "SUPERVISOR": "ANDREA YAURI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -24333,6 +26151,15 @@
       "SUPERVISOR": "FRANCO GRIMALDO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -25020,6 +26847,15 @@
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 16,
       "COORDINADOR": "PIERO MEDINA",
@@ -25749,12 +27585,30 @@
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
+      "Fecha_Creacion": "15 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 12,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "NICOLLE MATIAS",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "16 jul 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -25769,10 +27623,28 @@
     {
       "Fecha_Creacion": "9 jul 2026",
       "Hora": 17,
+      "COORDINADOR": "OPERACIONES",
+      "SUPERVISOR": "PENDIENTE",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "-",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "9 jul 2026",
+      "Hora": 17,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "VICTORIA CARRILLO",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": ">6 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "2 jul 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -26254,11 +28126,29 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 13,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -26272,6 +28162,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 18,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JORGE JUSTO",
@@ -26377,6 +28276,15 @@
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -27136,6 +29044,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 18,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "RENY BARRAZA",
@@ -27294,6 +29211,15 @@
       "SUPERVISOR": "JEAN ELIAS",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "CHRISTIAN MAS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -27694,6 +29620,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 17,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 16,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KIARA RUIZ",
@@ -27798,6 +29733,15 @@
       "SUPERVISOR": "JORGE JUSTO",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 17,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -28162,6 +30106,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 18,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 13,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
@@ -28248,6 +30201,15 @@
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -28355,6 +30317,15 @@
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q1",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
@@ -28514,6 +30485,15 @@
     {
       "Fecha_Creacion": "25 jun 2026",
       "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "CINTHIA BIELICH",
       "CUARTIL": "Q2",
@@ -28591,6 +30571,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -28792,6 +30781,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 19,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "EVER MALCA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 14,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "OLENKA LAVADO",
@@ -28905,6 +30903,33 @@
       "SUPERVISOR": "JORDAN CASTILLO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 20,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 19,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G30 OUT",
+      "CUARTIL": "Q4",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 20,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -29656,6 +31681,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 12,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "SHARON ZAVALA",
@@ -29706,6 +31740,15 @@
       "SUPERVISOR": "JUAN IYASHAMA",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
@@ -30106,6 +32149,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 15,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "FRANCO GRIMALDO",
@@ -30178,11 +32230,29 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 18,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 16,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
       "CUARTIL": "Q4",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 14,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
     {
@@ -30389,6 +32459,15 @@
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "RIVALDO DONAYRE",
       "CUARTIL": "Q1",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
     },
@@ -30592,6 +32671,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 13,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 15,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "JHERICCO MAYTAHUARI",
@@ -30763,6 +32851,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 9,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "FIORELLA QUISPE",
@@ -30777,6 +32874,15 @@
       "SUPERVISOR": "RENY BARRAZA",
       "CUARTIL": "Q3",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "WALTER VILLARREAL",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -30935,6 +33041,15 @@
     {
       "Fecha_Creacion": "25 jun 2026",
       "Hora": 15,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G30 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "ANDREA YAURI",
       "CUARTIL": "Q1",
@@ -30948,6 +33063,24 @@
       "SUPERVISOR": "MILUSKA CASABONA",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G30 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "OJT",
+      "SUPERVISOR": "OJT G30 OUT",
+      "CUARTIL": "OJT",
+      "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -31141,6 +33274,24 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 10,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KATIUSKA PAJUELO",
@@ -31268,6 +33419,15 @@
     {
       "Fecha_Creacion": "25 jun 2026",
       "Hora": 16,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 16,
       "COORDINADOR": "PIERO MEDINA",
       "SUPERVISOR": "KRISTYNA QUISPE",
       "CUARTIL": "Q4",
@@ -31282,6 +33442,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 10,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -31879,6 +34048,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 19,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 15,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JACKELINE GUEVARA",
@@ -31948,6 +34126,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">3 meses",
       "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -32501,6 +34688,15 @@
     {
       "Fecha_Creacion": "25 jun 2026",
       "Hora": 12,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "BRAYAN OLAYA",
       "CUARTIL": "Q1",
@@ -32662,6 +34858,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "KARLA LAMA",
+      "SUPERVISOR": "KARLA LAMA",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 9,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "VICTORIA CARRILLO",
@@ -32766,6 +34971,15 @@
       "SUPERVISOR": "FRANCO GRIMALDO",
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": "0 a 3 meses",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 15,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
     },
     {
@@ -33041,11 +35255,29 @@
     {
       "Fecha_Creacion": "25 jun 2026",
       "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 11,
       "COORDINADOR": "EVER MALCA",
       "SUPERVISOR": "JORDAN CASTILLO",
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": "0 a 3 meses",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 11,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -33118,6 +35350,15 @@
       "CUARTIL": "Q1",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "PROGRAMADO"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 16,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "25 jun 2026",
@@ -33769,6 +36010,15 @@
     },
     {
       "Fecha_Creacion": "25 jun 2026",
+      "Hora": 12,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "JOSÉ SOLORZANO",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
       "Hora": 9,
       "COORDINADOR": "JOSÉ SOLORZANO",
       "SUPERVISOR": "RENY BARRAZA",
@@ -34135,6 +36385,15 @@
       "CUARTIL": "Q2",
       "ANTIGÜEDAD": ">1 año",
       "Tipo_Despacho_Detalle": "EXPRESS"
+    },
+    {
+      "Fecha_Creacion": "25 jun 2026",
+      "Hora": 17,
+      "COORDINADOR": "JONATHAN CONTRERAS",
+      "SUPERVISOR": "ALESSANDRA CARLOS",
+      "CUARTIL": "N/C",
+      "ANTIGÜEDAD": ">1 año",
+      "Tipo_Despacho_Detalle": "RETIRO EN TIENDA"
     },
     {
       "Fecha_Creacion": "25 jun 2026",

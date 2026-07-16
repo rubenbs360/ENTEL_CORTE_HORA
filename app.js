@@ -639,6 +639,123 @@ function renderHourlyDashboard() {
     <td ${getRetiroStyle(tRetiro, tTotal)}>${formatPercent(tRetiro, tTotal)}</td>
   `;
   partTbody.appendChild(tTotalRow);
+
+  // 7. Render Table 4: Avance por Cuartil (Solo Cuartiles)
+  const quartilsList = ['Q1', 'Q2', 'Q3', 'Q4'];
+  const qTbody = document.getElementById("hourly-only-cuartiles-table-body");
+  if (qTbody) {
+    qTbody.innerHTML = "";
+    quartilsList.forEach(q => {
+      const qOrders = filteredOrders.filter(o => o.CUARTIL === q);
+      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      qOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
+      });
+      
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td style="font-weight: 600; padding-left: 1rem;">${q}</td>
+        <td>${qSums.hoy}</td>
+        <td style="color:var(--text-muted);">${qSums.d1}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
+        <td style="color:var(--text-muted);">${qSums.d7}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d7)}</td>
+        <td style="color:var(--text-muted);">${qSums.d14}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
+        <td style="color:var(--text-muted);">${qSums.d21}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
+      `;
+      qTbody.appendChild(row);
+    });
+    
+    // Append TOTAL OPERACIÓN row for Table 4
+    const qTotalRow = document.createElement("tr");
+    qTotalRow.className = "bold-row";
+    qTotalRow.style.borderTop = "2px solid var(--text-main)";
+    qTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    qTotalRow.innerHTML = `
+      <td>TOTAL OPERACIÓN</td>
+      <td>${tableTotals.hoy}</td>
+      <td style="color:var(--text-muted);">${tableTotals.d1}</td>
+      <td>${formatVariation(tableTotals.hoy, tableTotals.d1)}</td>
+      <td style="color:var(--text-muted);">${tableTotals.d7}</td>
+      <td>${formatVariation(tableTotals.hoy, tableTotals.d7)}</td>
+      <td style="color:var(--text-muted);">${tableTotals.d14}</td>
+      <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
+      <td style="color:var(--text-muted);">${tableTotals.d21}</td>
+      <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+    `;
+    qTbody.appendChild(qTotalRow);
+  }
+
+  // 8. Render Table 5: Ingreso por Hora (Detalle)
+  const ingTbody = document.getElementById("hourly-ingresos-table-body");
+  if (ingTbody) {
+    ingTbody.innerHTML = "";
+    const hourlyTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    
+    for (let h = 0; h <= 23; h++) {
+      const hOrders = filteredOrders.filter(o => o.Hora === h);
+      const hSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      hOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) hSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) hSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) hSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) hSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) hSums.d21++;
+      });
+      
+      // Add to total sums
+      hourlyTotals.hoy += hSums.hoy;
+      hourlyTotals.d1 += hSums.d1;
+      hourlyTotals.d7 += hSums.d7;
+      hourlyTotals.d14 += hSums.d14;
+      hourlyTotals.d21 += hSums.d21;
+      
+      // Skip empty hours across all dates to keep table readable
+      if (hSums.hoy === 0 && hSums.d1 === 0 && hSums.d7 === 0 && hSums.d14 === 0 && hSums.d21 === 0) {
+        continue;
+      }
+      
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td style="font-weight: 600; padding-left: 1rem;">${h.toString().padStart(2, '0')}:00 hrs</td>
+        <td>${hSums.hoy}</td>
+        <td style="color:var(--text-muted);">${hSums.d1}</td>
+        <td>${formatVariation(hSums.hoy, hSums.d1)}</td>
+        <td style="color:var(--text-muted);">${hSums.d7}</td>
+        <td>${formatVariation(hSums.hoy, hSums.d7)}</td>
+        <td style="color:var(--text-muted);">${hSums.d14}</td>
+        <td>${formatVariation(hSums.hoy, hSums.d14)}</td>
+        <td style="color:var(--text-muted);">${hSums.d21}</td>
+        <td>${formatVariation(hSums.hoy, hSums.d21)}</td>
+      `;
+      ingTbody.appendChild(row);
+    }
+    
+    // Append TOTAL OPERACIÓN row for Table 5
+    const ingTotalRow = document.createElement("tr");
+    ingTotalRow.className = "bold-row";
+    ingTotalRow.style.borderTop = "2px solid var(--text-main)";
+    ingTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    ingTotalRow.innerHTML = `
+      <td>TOTAL OPERACIÓN</td>
+      <td>${hourlyTotals.hoy}</td>
+      <td style="color:var(--text-muted);">${hourlyTotals.d1}</td>
+      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d1)}</td>
+      <td style="color:var(--text-muted);">${hourlyTotals.d7}</td>
+      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d7)}</td>
+      <td style="color:var(--text-muted);">${hourlyTotals.d14}</td>
+      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d14)}</td>
+      <td style="color:var(--text-muted);">${hourlyTotals.d21}</td>
+      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d21)}</td>
+    `;
+    ingTbody.appendChild(ingTotalRow);
+  }
 }
 
 // Collapsible groups function

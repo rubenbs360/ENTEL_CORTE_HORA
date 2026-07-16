@@ -92,9 +92,9 @@ function initializeFilters() {
   if (hoyOrders.length > 0) {
     const maxHourInHoy = Math.max(...hoyOrders.map(o => o.Hora));
     if (maxHourInHoy >= 0 && maxHourInHoy <= 23) {
-      // Check if this latest hour is ongoing (very few orders, e.g. < 15)
+      // Check if this latest hour is ongoing (very few orders, e.g. < 50)
       const latestHourOrdersCount = hoyOrders.filter(o => o.Hora === maxHourInHoy).length;
-      if (latestHourOrdersCount < 15 && maxHourInHoy > 0) {
+      if (latestHourOrdersCount < 50 && maxHourInHoy > 0) {
         latestHour = maxHourInHoy - 1;
       } else {
         latestHour = maxHourInHoy;

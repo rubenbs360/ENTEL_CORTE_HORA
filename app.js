@@ -696,65 +696,89 @@ function renderHourlyDashboard() {
   const ingTbody = document.getElementById("hourly-ingresos-table-body");
   if (ingTbody) {
     ingTbody.innerHTML = "";
-    const hourlyTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
     
-    for (let h = 0; h <= 23; h++) {
-      const hOrders = filteredOrders.filter(o => o.Hora === h);
-      const hSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
-      hOrders.forEach(o => {
-        if (o.Fecha_Creacion === meta.hoy_date) hSums.hoy++;
-        else if (o.Fecha_Creacion === meta.d1_date) hSums.d1++;
-        else if (o.Fecha_Creacion === meta.d7_date) hSums.d7++;
-        else if (o.Fecha_Creacion === meta.d14_date) hSums.d14++;
-        else if (o.Fecha_Creacion === meta.d21_date) hSums.d21++;
-      });
+    // Group definitions:
+    // - 00:00 - 08:00 hrs
+    // - 09:00 to 20:00 (individual)
+    // - 21:00 - 23:00 hrs
+    const rowsConfig = [
+      { label: "00:00 - 08:00 hrs", hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+      { label: "09:00 hrs", hours: [9] },
+      { label: "10:00 hrs", hours: [10] },
+      { label: "11:00 hrs", hours: [11] },
+      { label: "12:00 hrs", hours: [12] },
+      { label: "13:00 hrs", hours: [13] },
+      { label: "14:00 hrs", hours: [14] },
+      { label: "15:00 hrs", hours: [15] },
+      { label: "16:00 hrs", hours: [16] },
+      { label: "17:00 hrs", hours: [17] },
+      { label: "18:00 hrs", hours: [18] },
+      { label: "19:00 hrs", hours: [19] },
+      { label: "20:00 hrs", hours: [20] },
+      { label: "21:00 - 23:00 hrs", hours: [21, 22, 23] }
+    ];
+    
+    const globalTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    
+    rowsConfig.forEach(rowConf => {
+      // Filter hours by current checkbox selection
+      const activeHours = rowConf.hours.filter(h => selectedHours.has(h));
+      const rSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
       
-      // Add to total sums
-      hourlyTotals.hoy += hSums.hoy;
-      hourlyTotals.d1 += hSums.d1;
-      hourlyTotals.d7 += hSums.d7;
-      hourlyTotals.d14 += hSums.d14;
-      hourlyTotals.d21 += hSums.d21;
-      
-      // Skip empty hours across all dates to keep table readable
-      if (hSums.hoy === 0 && hSums.d1 === 0 && hSums.d7 === 0 && hSums.d14 === 0 && hSums.d21 === 0) {
-        continue;
+      if (activeHours.length > 0) {
+        // Use orders (unfiltered global orders) instead of filteredOrders
+        const hOrders = orders.filter(o => activeHours.includes(o.Hora));
+        hOrders.forEach(o => {
+          if (o.Fecha_Creacion === meta.hoy_date) rSums.hoy++;
+          else if (o.Fecha_Creacion === meta.d1_date) rSums.d1++;
+          else if (o.Fecha_Creacion === meta.d7_date) rSums.d7++;
+          else if (o.Fecha_Creacion === meta.d14_date) rSums.d14++;
+          else if (o.Fecha_Creacion === meta.d21_date) rSums.d21++;
+        });
       }
       
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td style="font-weight: 600; padding-left: 1rem;">${h.toString().padStart(2, '0')}:00 hrs</td>
-        <td>${hSums.hoy}</td>
-        <td style="color:var(--text-muted);">${hSums.d1}</td>
-        <td>${formatVariation(hSums.hoy, hSums.d1)}</td>
-        <td style="color:var(--text-muted);">${hSums.d7}</td>
-        <td>${formatVariation(hSums.hoy, hSums.d7)}</td>
-        <td style="color:var(--text-muted);">${hSums.d14}</td>
-        <td>${formatVariation(hSums.hoy, hSums.d14)}</td>
-        <td style="color:var(--text-muted);">${hSums.d21}</td>
-        <td>${formatVariation(hSums.hoy, hSums.d21)}</td>
+      // Accumulate totals
+      globalTotals.hoy += rSums.hoy;
+      globalTotals.d1 += rSums.d1;
+      globalTotals.d7 += rSums.d7;
+      globalTotals.d14 += rSums.d14;
+      globalTotals.d21 += rSums.d21;
+      
+      // Render row
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="font-weight: 600; padding-left: 1rem;">${rowConf.label}</td>
+        <td>${rSums.hoy}</td>
+        <td style="color:var(--text-muted);">${rSums.d1}</td>
+        <td>${formatVariation(rSums.hoy, rSums.d1)}</td>
+        <td style="color:var(--text-muted);">${rSums.d7}</td>
+        <td>${formatVariation(rSums.hoy, rSums.d7)}</td>
+        <td style="color:var(--text-muted);">${rSums.d14}</td>
+        <td>${formatVariation(rSums.hoy, rSums.d14)}</td>
+        <td style="color:var(--text-muted);">${rSums.d21}</td>
+        <td>${formatVariation(rSums.hoy, rSums.d21)}</td>
       `;
-      ingTbody.appendChild(row);
-    }
+      ingTbody.appendChild(tr);
+    });
     
-    // Append TOTAL OPERACIÓN row for Table 5
-    const ingTotalRow = document.createElement("tr");
-    ingTotalRow.className = "bold-row";
-    ingTotalRow.style.borderTop = "2px solid var(--text-main)";
-    ingTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
-    ingTotalRow.innerHTML = `
-      <td>TOTAL OPERACIÓN</td>
-      <td>${hourlyTotals.hoy}</td>
-      <td style="color:var(--text-muted);">${hourlyTotals.d1}</td>
-      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d1)}</td>
-      <td style="color:var(--text-muted);">${hourlyTotals.d7}</td>
-      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d7)}</td>
-      <td style="color:var(--text-muted);">${hourlyTotals.d14}</td>
-      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d14)}</td>
-      <td style="color:var(--text-muted);">${hourlyTotals.d21}</td>
-      <td>${formatVariation(hourlyTotals.hoy, hourlyTotals.d21)}</td>
+    // Append TOTAL GLOBAL row for Table 5
+    const globalTotalRow = document.createElement("tr");
+    globalTotalRow.className = "bold-row";
+    globalTotalRow.style.borderTop = "2px solid var(--text-main)";
+    globalTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    globalTotalRow.innerHTML = `
+      <td>TOTAL GLOBAL</td>
+      <td>${globalTotals.hoy}</td>
+      <td style="color:var(--text-muted);">${globalTotals.d1}</td>
+      <td>${formatVariation(globalTotals.hoy, globalTotals.d1)}</td>
+      <td style="color:var(--text-muted);">${globalTotals.d7}</td>
+      <td>${formatVariation(globalTotals.hoy, globalTotals.d7)}</td>
+      <td style="color:var(--text-muted);">${globalTotals.d14}</td>
+      <td>${formatVariation(globalTotals.hoy, globalTotals.d14)}</td>
+      <td style="color:var(--text-muted);">${globalTotals.d21}</td>
+      <td>${formatVariation(globalTotals.hoy, globalTotals.d21)}</td>
     `;
-    ingTbody.appendChild(ingTotalRow);
+    ingTbody.appendChild(globalTotalRow);
   }
 }
 

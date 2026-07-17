@@ -139,10 +139,10 @@ function updateRelativeDates(dateStr) {
   const dt = parseSpanishDateJS(dateStr);
   if (!dt) return;
   
-  const d1 = new Date(dt.getTime() - 1 * 24 * 60 * 60 * 1000);
-  const d7 = new Date(dt.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const d14 = new Date(dt.getTime() - 14 * 24 * 60 * 60 * 1000);
-  const d21 = new Date(dt.getTime() - 21 * 24 * 60 * 60 * 1000);
+  const d1 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1);
+  const d7 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 7);
+  const d14 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 14);
+  const d21 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 21);
   
   relativeDates.hoy = dateStr;
   relativeDates.d1 = formatSpanishDateJS(d1);

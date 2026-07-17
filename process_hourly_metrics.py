@@ -127,30 +127,23 @@ def main():
             
     if not parsed_dates:
         raise ValueError("No se pudieron parsear las fechas de la columna Fecha_Creacion.")
-        
     max_dt = max(parsed_dates.keys())
     
-    dt_hoy = max_dt
-    dt_d1 = max_dt - datetime.timedelta(days=1)
-    dt_d7 = max_dt - datetime.timedelta(days=7)
-    dt_d14 = max_dt - datetime.timedelta(days=14)
-    dt_d21 = max_dt - datetime.timedelta(days=21)
+    # Keep all dates within 52 days of max_dt to support D-21 for any "HOY" selected in the last 30 days
+    limit_dt = max_dt - datetime.timedelta(days=52)
+    allowed_date_strings = [str_val for dt, str_val in parsed_dates.items() if dt >= limit_dt]
     
-    str_hoy = parsed_dates.get(dt_hoy, format_spanish_date(dt_hoy))
-    str_d1 = parsed_dates.get(dt_d1, format_spanish_date(dt_d1))
-    str_d7 = parsed_dates.get(dt_d7, format_spanish_date(dt_d7))
-    str_d14 = parsed_dates.get(dt_d14, format_spanish_date(dt_d14))
-    str_d21 = parsed_dates.get(dt_d21, format_spanish_date(dt_d21))
+    str_hoy = parsed_dates.get(max_dt, format_spanish_date(max_dt))
+    str_d1 = parsed_dates.get(max_dt - datetime.timedelta(days=1), format_spanish_date(max_dt - datetime.timedelta(days=1)))
+    str_d7 = parsed_dates.get(max_dt - datetime.timedelta(days=7), format_spanish_date(max_dt - datetime.timedelta(days=7)))
+    str_d14 = parsed_dates.get(max_dt - datetime.timedelta(days=14), format_spanish_date(max_dt - datetime.timedelta(days=14)))
+    str_d21 = parsed_dates.get(max_dt - datetime.timedelta(days=21), format_spanish_date(max_dt - datetime.timedelta(days=21)))
     
-    print(f"  HOY (D-0): {str_hoy}")
-    print(f"  D-1:       {str_d1}")
-    print(f"  D-7:       {str_d7}")
-    print(f"  D-14:      {str_d14}")
-    print(f"  D-21:      {str_d21}")
+    print(f"  Max/Latest Date (D-0): {str_hoy}")
+    print(f"  Allowed data range: {len(allowed_date_strings)} dates (from {limit_dt} to {max_dt})")
     
-    # Filter only orders belonging to these 5 dates
-    target_dates = [str_hoy, str_d1, str_d7, str_d14, str_d21]
-    df_filtered = df_all[df_all['Fecha_Creacion'].isin(target_dates)].copy()
+    # Filter only orders belonging to allowed range
+    df_filtered = df_all[df_all['Fecha_Creacion'].isin(allowed_date_strings)].copy()
     
     # Keep only necessary columns for the front-end to save bandwidth and speed up load times
     cols_to_keep = [

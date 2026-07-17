@@ -645,8 +645,11 @@ function renderHourlyDashboard() {
   const qTbody = document.getElementById("hourly-only-cuartiles-table-body");
   if (qTbody) {
     qTbody.innerHTML = "";
+    const table4Totals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    
+    // Q1 to Q4 rows
     quartilsList.forEach(q => {
-      const qOrders = filteredOrders.filter(o => o.CUARTIL === q);
+      const qOrders = orders.filter(o => o.Hora <= maxSelectedHour && o.CUARTIL === q);
       const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
       qOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
@@ -655,6 +658,12 @@ function renderHourlyDashboard() {
         else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
         else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
       });
+      
+      table4Totals.hoy += qSums.hoy;
+      table4Totals.d1 += qSums.d1;
+      table4Totals.d7 += qSums.d7;
+      table4Totals.d14 += qSums.d14;
+      table4Totals.d21 += qSums.d21;
       
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -672,22 +681,54 @@ function renderHourlyDashboard() {
       qTbody.appendChild(row);
     });
     
-    // Append TOTAL OPERACIÓN row for Table 4
+    // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4)
+    const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && !quartilsList.includes(o.CUARTIL));
+    const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    platOrders.forEach(o => {
+      if (o.Fecha_Creacion === meta.hoy_date) platSums.hoy++;
+      else if (o.Fecha_Creacion === meta.d1_date) platSums.d1++;
+      else if (o.Fecha_Creacion === meta.d7_date) platSums.d7++;
+      else if (o.Fecha_Creacion === meta.d14_date) platSums.d14++;
+      else if (o.Fecha_Creacion === meta.d21_date) platSums.d21++;
+    });
+    
+    table4Totals.hoy += platSums.hoy;
+    table4Totals.d1 += platSums.d1;
+    table4Totals.d7 += platSums.d7;
+    table4Totals.d14 += platSums.d14;
+    table4Totals.d21 += platSums.d21;
+    
+    const platRow = document.createElement("tr");
+    platRow.innerHTML = `
+      <td style="font-weight: 600; padding-left: 1rem;">PLATAFORMA</td>
+      <td>${platSums.hoy}</td>
+      <td style="color:var(--text-muted);">${platSums.d1}</td>
+      <td>${formatVariation(platSums.hoy, platSums.d1)}</td>
+      <td style="color:var(--text-muted);">${platSums.d7}</td>
+      <td>${formatVariation(platSums.hoy, platSums.d7)}</td>
+      <td style="color:var(--text-muted);">${platSums.d14}</td>
+      <td>${formatVariation(platSums.hoy, platSums.d14)}</td>
+      <td style="color:var(--text-muted);">${platSums.d21}</td>
+      <td>${formatVariation(platSums.hoy, platSums.d21)}</td>
+    `;
+    qTbody.appendChild(platRow);
+    
+    // Append TOTAL GLOBAL row for Table 4 (matching global card totals)
     const qTotalRow = document.createElement("tr");
     qTotalRow.className = "bold-row";
     qTotalRow.style.borderTop = "2px solid var(--text-main)";
     qTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
     qTotalRow.innerHTML = `
-      <td>TOTAL OPERACIÓN</td>
-      <td>${tableTotals.hoy}</td>
-      <td style="color:var(--text-muted);">${tableTotals.d1}</td>
-      <td>${formatVariation(tableTotals.hoy, tableTotals.d1)}</td>
-      <td style="color:var(--text-muted);">${tableTotals.d7}</td>
-      <td>${formatVariation(tableTotals.hoy, tableTotals.d7)}</td>
-      <td style="color:var(--text-muted);">${tableTotals.d14}</td>
-      <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
-      <td style="color:var(--text-muted);">${tableTotals.d21}</td>
-      <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+      <td>TOTAL GLOBAL</td>
+      <td>${table4Totals.hoy}</td>
+      <td style="color:var(--text-muted);">${table4Totals.d1}</td>
+      <td>${formatVariation(table4Totals.hoy, table4Totals.d1)}</td>
+      <td style="color:var(--text-muted);">${table4Totals.d7}</td>
+      <td>${formatVariation(table4Totals.hoy, table4Totals.d7)}</td>
+      <td style="color:var(--text-muted);">${table4Totals.d14}</td>
+      <td>${formatVariation(table4Totals.hoy, table4Totals.d14)}</td>
+      <td style="color:var(--text-muted);">${table4Totals.d21}</td>
+      <td>${formatVariation(table4Totals.hoy, table4Totals.d21)}</td>
     `;
     qTbody.appendChild(qTotalRow);
   }

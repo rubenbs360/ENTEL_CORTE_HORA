@@ -412,10 +412,11 @@ function renderHourlyDashboard() {
   // If hours is empty, we show 0. To make it cumulative, we filter where Hora <= max(selectedHours)
   const maxSelectedHour = selectedHours.size > 0 ? Math.max(...selectedHours) : -1;
   
-  // Update Last Update Badge
+  // Update Last Update Badge (shows maxSelectedHour + 1 to display the end of the hour range, e.g. 17:00 for hour 16)
   const updateBadge = document.getElementById("last-update-time");
   if (updateBadge) {
-    updateBadge.textContent = maxSelectedHour >= 9 ? `Corte Acumulado: ${maxSelectedHour.toString().padStart(2, '0')}:00 hrs | Actualizado: ${meta.last_update}` : "Ninguna hora de corte seleccionada";
+    const displayHour = maxSelectedHour >= 0 ? maxSelectedHour + 1 : -1;
+    updateBadge.textContent = displayHour >= 0 ? `Corte Acumulado: ${displayHour.toString().padStart(2, '0')}:00 hrs | Actualizado: ${meta.last_update}` : "Ninguna hora de corte seleccionada";
   }
   
   // 2. Perform Filtering

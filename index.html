@@ -32,6 +32,19 @@
     <!-- Top Filter Controls Bar -->
     <section class="controls-bar card">
       <div class="control-item">
+        <label>Fecha de Corte (Hoy)</label>
+        <div class="multiselect-dropdown" id="dropdown-date">
+          <div class="select-box" onclick="toggleDropdown('dropdown-date')">
+            <span class="selected-text" id="date-selected-label">Cargando...</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="options-container hidden" id="date-options">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="control-item">
         <label>Líder / Coordinador</label>
         <div class="multiselect-dropdown" id="dropdown-coord">
           <div class="select-box" onclick="toggleDropdown('dropdown-coord')">

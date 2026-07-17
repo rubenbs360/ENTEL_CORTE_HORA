@@ -4,6 +4,38 @@ let selectedCoordinadores = new Set();
 let selectedSupervisores = new Set();
 let selectedAntiguedades = new Set();
 let selectedHours = new Set();
+let selectedDate = ""; // Stores currently selected HOY date
+let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "" }; // Stores dynamic relative dates
+
+// Date parser helper (Spanish date string -> Date object)
+function parseSpanishDateJS(dateStr) {
+  if (!dateStr) return null;
+  const cleanStr = dateStr.trim().toLowerCase();
+  const months = {
+    'ene': 0, 'feb': 1, 'mar': 2, 'abr': 3, 'may': 4, 'jun': 5,
+    'jul': 6, 'ago': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dic': 11
+  };
+  const parts = cleanStr.replace(/[-/]/g, ' ').split(/\s+/);
+  if (parts.length >= 3) {
+    const day = parseInt(parts[0], 10);
+    const monthStr = parts[1].substring(0, 3);
+    const month = months[monthStr];
+    if (month === undefined) return null;
+    let year = parseInt(parts[2], 10);
+    if (year < 100) year += 2000;
+    return new Date(year, month, day);
+  }
+  return null;
+}
+
+// Date formatter helper (Date object -> Spanish date string)
+function formatSpanishDateJS(date) {
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const month = monthNames[date.getMonth()];
+  return `${day} ${month} ${year}`;
+}
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
@@ -61,6 +93,91 @@ window.toggleDropdown = function(dropdownId) {
   }
 };
 
+// Populate single-select date dropdown
+function populateDateDropdownOptions(dateStrings, activeDateStr) {
+  const container = document.getElementById("date-options");
+  const label = document.getElementById("date-selected-label");
+  if (!container || !label) return;
+  
+  container.innerHTML = "";
+  label.textContent = activeDateStr;
+  
+  dateStrings.forEach(dStr => {
+    const item = document.createElement("div");
+    item.className = `option-item ${dStr === activeDateStr ? 'active' : ''}`;
+    item.style.padding = "8px 12px";
+    item.style.cursor = "pointer";
+    item.style.color = "var(--text-main)";
+    item.style.fontWeight = dStr === activeDateStr ? "700" : "500";
+    item.style.backgroundColor = dStr === activeDateStr ? "rgba(8, 145, 178, 0.08)" : "transparent";
+    item.textContent = dStr;
+    
+    item.onclick = () => {
+      selectedDate = dStr;
+      label.textContent = dStr;
+      updateRelativeDates(dStr);
+      
+      container.querySelectorAll(".option-item").forEach(child => {
+        child.style.backgroundColor = "transparent";
+        child.style.fontWeight = "500";
+      });
+      item.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+      item.style.fontWeight = "700";
+      
+      reinitializeHoursForNewDate();
+      renderHourlyDashboard();
+      
+      container.classList.add("hidden");
+      container.parentElement.classList.remove("active");
+    };
+    
+    container.appendChild(item);
+  });
+}
+
+function updateRelativeDates(dateStr) {
+  const dt = parseSpanishDateJS(dateStr);
+  if (!dt) return;
+  
+  const d1 = new Date(dt.getTime() - 1 * 24 * 60 * 60 * 1000);
+  const d7 = new Date(dt.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const d14 = new Date(dt.getTime() - 14 * 24 * 60 * 60 * 1000);
+  const d21 = new Date(dt.getTime() - 21 * 24 * 60 * 60 * 1000);
+  
+  relativeDates.hoy = dateStr;
+  relativeDates.d1 = formatSpanishDateJS(d1);
+  relativeDates.d7 = formatSpanishDateJS(d7);
+  relativeDates.d14 = formatSpanishDateJS(d14);
+  relativeDates.d21 = formatSpanishDateJS(d21);
+}
+
+function reinitializeHoursForNewDate() {
+  const orders = hourlyData.orders;
+  const hoyOrders = orders.filter(o => o.Fecha_Creacion === selectedDate);
+  let latestHour = 13;
+  if (hoyOrders.length > 0) {
+    const maxHourInHoy = Math.max(...hoyOrders.map(o => o.Hora));
+    if (maxHourInHoy >= 0 && maxHourInHoy <= 23) {
+      const latestHourOrdersCount = hoyOrders.filter(o => o.Hora === maxHourInHoy).length;
+      if (latestHourOrdersCount < 50 && maxHourInHoy > 0) {
+        latestHour = maxHourInHoy - 1;
+      } else {
+        latestHour = maxHourInHoy;
+      }
+    }
+  }
+  
+  const availableHours = [...new Set(orders.map(o => o.Hora))].filter(h => h >= 0 && h <= 23).sort((a,b) => a-b);
+  selectedHours = new Set();
+  availableHours.forEach(h => {
+    if (h <= latestHour) {
+      selectedHours.add(h);
+    }
+  });
+  
+  populateDropdownOptions("hour", availableHours, selectedHours, updateHourSelection, h => `${h.toString().padStart(2, '0')}:00 hrs`);
+}
+
 // Populate multiselect filters dynamically from raw orders list
 function initializeFilters() {
   if (!hourlyData || !hourlyData.orders) return;
@@ -68,6 +185,21 @@ function initializeFilters() {
   const orders = hourlyData.orders;
   const campaignCoords = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA'];
   const campaignOrders = orders.filter(o => campaignCoords.includes(o.COORDINADOR));
+  
+  // 0. Unique Dates (Filtered to last 30 days of max date)
+  const allDates = [...new Set(orders.map(o => o.Fecha_Creacion))];
+  const parsedDates = allDates.map(dStr => ({ str: dStr, date: parseSpanishDateJS(dStr) })).filter(d => d.date !== null);
+  parsedDates.sort((a, b) => b.date - a.date); // Latest first
+  
+  if (parsedDates.length > 0) {
+    const maxDate = parsedDates[0].date;
+    const thirtyDaysAgo = new Date(maxDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const allowedDates = parsedDates.filter(d => d.date >= thirtyDaysAgo);
+    
+    selectedDate = allowedDates[0].str;
+    populateDateDropdownOptions(allowedDates.map(d => d.str), selectedDate);
+    updateRelativeDates(selectedDate);
+  }
   
   // 1. Unique Coordinadores
   const coords = [...new Set(campaignOrders.map(o => o.COORDINADOR))].filter(Boolean).sort();
@@ -89,8 +221,7 @@ function initializeFilters() {
   
   // Determine default selected hours: by default, check all hours up to the latest hour with data in HOY
   let latestHour = 13; // default fallback
-  const hoyStr = hourlyData.metadata.hoy_date;
-  const hoyOrders = orders.filter(o => o.Fecha_Creacion === hoyStr);
+  const hoyOrders = orders.filter(o => o.Fecha_Creacion === selectedDate);
   if (hoyOrders.length > 0) {
     const maxHourInHoy = Math.max(...hoyOrders.map(o => o.Hora));
     if (maxHourInHoy >= 0 && maxHourInHoy <= 23) {
@@ -268,7 +399,14 @@ function renderHourlyDashboard() {
   if (!hourlyData || !hourlyData.orders) return;
   
   const orders = hourlyData.orders;
-  const meta = hourlyData.metadata;
+  const meta = {
+    ...hourlyData.metadata,
+    hoy_date: relativeDates.hoy,
+    d1_date: relativeDates.d1,
+    d7_date: relativeDates.d7,
+    d14_date: relativeDates.d14,
+    d21_date: relativeDates.d21
+  };
   
   // 1. Get current filter parameters
   // If hours is empty, we show 0. To make it cumulative, we filter where Hora <= max(selectedHours)

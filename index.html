@@ -97,47 +97,153 @@
       </div>
     </section>
 
-    <!-- KPI Summary Row -->
-    <section class="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-label">HOY</div>
-        <div class="kpi-value" id="kpi-hoy">0</div>
-        <div class="kpi-trend-row" style="margin-top:0.25rem;">
-          <div class="kpi-date" id="kpi-date-hoy" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
-        </div>
+    <!-- Top Executive Grid (Redesigned Unified Layout) -->
+    <section class="top-executive-panel">
+      <!-- Left: Consolidated KPI Block -->
+      <div class="kpi-panel-card card">
+        <section class="kpi-dashboard-grid">
+          <!-- Left Column: Hoy & Participaciones -->
+          <div class="kpi-column col-left">
+            <div class="kpi-main-card">
+              <div class="kpi-label">Ingresos Hoy</div>
+              <div class="kpi-value-large" id="kpi-hoy">0</div>
+              <div class="kpi-date-sub" id="kpi-date-hoy">Fecha: -</div>
+            </div>
+            <div class="kpi-mini-grid">
+              <div class="kpi-mini-box">
+                <span class="mini-label">Multipedido</span>
+                <span class="mini-val" id="mini-multipedido-val">0</span>
+                <span class="mini-pct" id="mini-multipedido-pct">0.00% Part</span>
+              </div>
+              <div class="kpi-mini-box">
+                <span class="mini-label">Express</span>
+                <span class="mini-val" id="mini-express-val">0</span>
+                <span class="mini-pct" id="mini-express-pct">0.00% Part</span>
+              </div>
+              <div class="kpi-mini-box">
+                <span class="mini-label">Pickup</span>
+                <span class="mini-val" id="mini-pickup-val">0</span>
+                <span class="mini-pct" id="mini-pickup-pct">0.00% Part</span>
+              </div>
+              <div class="kpi-mini-box highlight">
+                <span class="mini-label">Proyecc</span>
+                <span class="mini-val" id="mini-proyecc-val">0</span>
+                <span class="mini-pct">Día Estimado</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Middle Column: D-x Historics -->
+          <div class="kpi-column col-middle">
+            <div class="kpi-subcard">
+              <div class="subcard-header">
+                <span class="kpi-label">D-1 (Ayer)</span>
+                <span class="kpi-trend" id="kpi-var-d1">-</span>
+              </div>
+              <div class="subcard-val" id="kpi-d1">0</div>
+              <div class="subcard-date" id="kpi-date-d1">-</div>
+            </div>
+            <div class="kpi-subcard">
+              <div class="subcard-header">
+                <span class="kpi-label">D-7 (Sem. Anterior)</span>
+                <span class="kpi-trend" id="kpi-var-d7">-</span>
+              </div>
+              <div class="subcard-val" id="kpi-d7">0</div>
+              <div class="subcard-date" id="kpi-date-d7">-</div>
+            </div>
+            <div class="kpi-subcard">
+              <div class="subcard-header">
+                <span class="kpi-label">D-14 (2 Sem. Antes)</span>
+                <span class="kpi-trend" id="kpi-var-d14">-</span>
+              </div>
+              <div class="subcard-val" id="kpi-d14">0</div>
+              <div class="subcard-date" id="kpi-date-d14">-</div>
+            </div>
+            <div class="kpi-subcard">
+              <div class="subcard-header">
+                <span class="kpi-label">D-21 (3 Sem. Antes)</span>
+                <span class="kpi-trend" id="kpi-var-d21">-</span>
+              </div>
+              <div class="subcard-val" id="kpi-d21">0</div>
+              <div class="subcard-date" id="kpi-date-d21">-</div>
+            </div>
+          </div>
+          
+          <!-- Right Column: Campaña MTD -->
+          <div class="kpi-column col-right">
+            <div class="kpi-campaign-card">
+              <div class="campaign-header">Campaña Mes en Curso (MTD)</div>
+              <div class="campaign-metrics-list">
+                <div class="campaign-item">
+                  <div class="campaign-info">
+                    <span class="camp-label">efect camp (Entrega)</span>
+                    <span class="camp-val" id="camp-efect-val">0.00%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill pct-blue" id="camp-efect-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="campaign-item">
+                  <div class="campaign-info">
+                    <span class="camp-label">activ (% Activas)</span>
+                    <span class="camp-val" id="camp-activ-val">0.00%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill pct-green" id="camp-activ-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="campaign-item">
+                  <div class="campaign-info">
+                    <span class="camp-label">Part Express (Mes)</span>
+                    <span class="camp-val" id="camp-express-val">0.00%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill pct-cyan" id="camp-express-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="campaign-item">
+                  <div class="campaign-info">
+                    <span class="camp-label">Part Pickup (Mes)</span>
+                    <span class="camp-val" id="camp-pickup-val">0.00%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill pct-purple" id="camp-pickup-bar" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">D-1 (Día Anterior)</div>
-        <div class="kpi-value" id="kpi-d1">0</div>
-        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-          <div class="kpi-trend" id="kpi-var-d1">-</div>
-          <div class="kpi-date" id="kpi-date-d1" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+      
+      <!-- Right: Table 4: Avance por Cuartil (Solo Cuartiles) -->
+      <section class="table-section card top-table-card">
+        <div class="table-header">
+          <div class="table-icon">📊</div>
+          <h2>Avance por Cuartil (Resumen)</h2>
         </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">D-7 (Semana Anterior)</div>
-        <div class="kpi-value" id="kpi-d7">0</div>
-        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-          <div class="kpi-trend" id="kpi-var-d7">-</div>
-          <div class="kpi-date" id="kpi-date-d7" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
+        <div class="table-wrapper">
+          <table class="executive-table">
+            <thead>
+              <tr>
+                <th>Cuartil</th>
+                <th style="text-align:right;">Hoy</th>
+                <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                <th style="text-align:center;">D-1 (%)</th>
+                <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                <th style="text-align:center;">D-7 (%)</th>
+                <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                <th style="text-align:center;">D-14 (%)</th>
+                <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                <th style="text-align:center;">D-21 (%)</th>
+              </tr>
+            </thead>
+            <tbody id="hourly-only-cuartiles-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">D-14 (2 Semanas Antes)</div>
-        <div class="kpi-value" id="kpi-d14">0</div>
-        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-          <div class="kpi-trend" id="kpi-var-d14">-</div>
-          <div class="kpi-date" id="kpi-date-d14" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">D-21 (3 Semanas Antes)</div>
-        <div class="kpi-value" id="kpi-d21">0</div>
-        <div class="kpi-trend-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-          <div class="kpi-trend" id="kpi-var-d21">-</div>
-          <div class="kpi-date" id="kpi-date-d21" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Fecha: -</div>
-        </div>
-      </div>
+      </section>
     </section>
     
     <!-- Main Dashboard Body -->
@@ -148,34 +254,6 @@
         
         <!-- Left Column -->
         <div class="tables-column">
-          <!-- Table 4: Avance por Cuartil (Solo Cuartiles) -->
-          <section class="table-section card">
-            <div class="table-header">
-              <div class="table-icon">📊</div>
-              <h2>Avance por Cuartil (Resumen)</h2>
-            </div>
-            <div class="table-wrapper">
-              <table class="executive-table">
-                <thead>
-                  <tr>
-                    <th>Cuartil</th>
-                    <th style="text-align:right;">Hoy</th>
-                    <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
-                    <th style="text-align:center;">D-1 (%)</th>
-                    <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
-                    <th style="text-align:center;">D-7 (%)</th>
-                    <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
-                    <th style="text-align:center;">D-14 (%)</th>
-                    <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
-                    <th style="text-align:center;">D-21 (%)</th>
-                  </tr>
-                </thead>
-                <tbody id="hourly-only-cuartiles-table-body">
-                  <!-- Populated by JS -->
-                </tbody>
-              </table>
-            </div>
-          </section>
 
           <!-- Table 1: Avance por Coordinador / Cuartil -->
           <section class="table-section card">

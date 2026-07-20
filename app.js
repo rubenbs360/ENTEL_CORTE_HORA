@@ -438,9 +438,18 @@ function renderHourlyDashboard() {
   
   // 3. Compute KPI Summary Cards (based on ALL orders in CSV up to the selected hour)
   const kpis = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+  let multipedidoHoy = 0;
+  let expressHoy = 0;
+  let pickupHoy = 0;
+  
   orders.forEach(o => {
     if (o.Hora > maxSelectedHour) return;
-    if (o.Fecha_Creacion === meta.hoy_date) kpis.hoy++;
+    if (o.Fecha_Creacion === meta.hoy_date) {
+      kpis.hoy++;
+      if (o.Multilinea === 'SI') multipedidoHoy++;
+      if (o.Tipo_Despacho_Detalle === 'EXPRES' || o.Tipo_Despacho_Detalle === 'EXPRESS') expressHoy++;
+      if (o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA') pickupHoy++;
+    }
     else if (o.Fecha_Creacion === meta.d1_date) kpis.d1++;
     else if (o.Fecha_Creacion === meta.d7_date) kpis.d7++;
     else if (o.Fecha_Creacion === meta.d14_date) kpis.d14++;
@@ -456,25 +465,116 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d14_date) tableTotals.d14++;
     else if (o.Fecha_Creacion === meta.d21_date) tableTotals.d21++;
   });
-
+  
+  // Projection formula
+  const horasTrabajadas = Math.max(1, maxSelectedHour - 9 + 1);
+  const proyeccHoy = Math.round((kpis.hoy / horasTrabajadas) * 10);
+  
+  // Update Hoy main & mini grid values
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
   document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
   
+  document.getElementById("mini-multipedido-val").textContent = multipedidoHoy.toLocaleString();
+  document.getElementById("mini-multipedido-pct").textContent = formatPercent(multipedidoHoy, kpis.hoy) + " Part";
+  
+  document.getElementById("mini-express-val").textContent = expressHoy.toLocaleString();
+  document.getElementById("mini-express-pct").textContent = formatPercent(expressHoy, kpis.hoy) + " Part";
+  
+  document.getElementById("mini-pickup-val").textContent = pickupHoy.toLocaleString();
+  document.getElementById("mini-pickup-pct").textContent = formatPercent(pickupHoy, kpis.hoy) + " Part";
+  
+  document.getElementById("mini-proyecc-val").textContent = proyeccHoy.toLocaleString();
+  
+  // Update Historical D-x cards
   document.getElementById("kpi-d1").textContent = kpis.d1.toLocaleString();
   document.getElementById("kpi-var-d1").innerHTML = formatVariation(kpis.hoy, kpis.d1);
-  document.getElementById("kpi-date-d1").textContent = `Fecha: ${meta.d1_date}`;
+  document.getElementById("kpi-date-d1").textContent = meta.d1_date;
   
   document.getElementById("kpi-d7").textContent = kpis.d7.toLocaleString();
   document.getElementById("kpi-var-d7").innerHTML = formatVariation(kpis.hoy, kpis.d7);
-  document.getElementById("kpi-date-d7").textContent = `Fecha: ${meta.d7_date}`;
+  document.getElementById("kpi-date-d7").textContent = meta.d7_date;
   
   document.getElementById("kpi-d14").textContent = kpis.d14.toLocaleString();
   document.getElementById("kpi-var-d14").innerHTML = formatVariation(kpis.hoy, kpis.d14);
-  document.getElementById("kpi-date-d14").textContent = `Fecha: ${meta.d14_date}`;
+  document.getElementById("kpi-date-d14").textContent = meta.d14_date;
   
   document.getElementById("kpi-d21").textContent = kpis.d21.toLocaleString();
   document.getElementById("kpi-var-d21").innerHTML = formatVariation(kpis.hoy, kpis.d21);
-  document.getElementById("kpi-date-d21").textContent = `Fecha: ${meta.d21_date}`;
+  document.getElementById("kpi-date-d21").textContent = meta.d21_date;
+  
+  // Campaign Month-to-date (MTD) Metrics calculation
+  // Find current selected date ISO
+  const sampleHoyOrder = orders.find(o => o.Fecha_Creacion === meta.hoy_date);
+  let cmpEfect = 0;
+  let cmpActiv = 0;
+  let cmpExpress = 0;
+  let cmpPickup = 0;
+  
+  if (sampleHoyOrder && sampleHoyOrder.Fecha_Creacion_ISO) {
+    const hoyIso = sampleHoyOrder.Fecha_Creacion_ISO; // e.g. "2026-07-20"
+    const monthPrefix = hoyIso.substring(0, 8); // e.g. "2026-07-"
+    
+    // Compute D-1 ISO
+    const parts = hoyIso.split('-');
+    const parsedHoy = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    const parsedD1 = new Date(parsedHoy.getFullYear(), parsedHoy.getMonth(), parsedHoy.getDate() - 1);
+    const d1Iso = parsedD1.getFullYear() + "-" + 
+                  (parsedD1.getMonth() + 1).toString().padStart(2, '0') + "-" + 
+                  parsedD1.getDate().toString().padStart(2, '0');
+                  
+    // Subset 1: Campaign metrics up to D-1 (Outbound only, pactada <= D-1, creacion <= D-1)
+    let subsetD1Total = 0;
+    let subsetD1Entregado = 0;
+    let subsetD1Cerradas = 0;
+    
+    // Subset 2: Monthly dispatch share up to selected hour of Hoy (Outbound only)
+    let cmpTotalShare = 0;
+    let cmpExpressShare = 0;
+    let cmpPickupShare = 0;
+    
+    orders.forEach(o => {
+      if (o.Grupo_Canal !== 'Outbound') return;
+      if (!o.Fecha_Creacion_ISO || !o.Fecha_Creacion_ISO.startsWith(monthPrefix)) return;
+      
+      // Calculate dispatch share up to current selected hour of Hoy
+      const isBeforeHoy = o.Fecha_Creacion_ISO < hoyIso;
+      const isHoyAtOrBeforeHour = (o.Fecha_Creacion_ISO === hoyIso && o.Hora <= maxSelectedHour);
+      if (isBeforeHoy || isHoyAtOrBeforeHour) {
+        cmpTotalShare++;
+        if (o.Tipo_Despacho_Detalle === 'EXPRES' || o.Tipo_Despacho_Detalle === 'EXPRESS') cmpExpressShare++;
+        if (o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA') cmpPickupShare++;
+      }
+      
+      // Calculate Campaign MTD Delivery and Actives ratios up to D-1
+      if (o.Fecha_Creacion_ISO <= d1Iso && o.Fecha_Pactada_ISO && o.Fecha_Pactada_ISO <= d1Iso) {
+        subsetD1Total++;
+        if (o.Estado_T === 'Entregado') {
+          subsetD1Entregado++;
+          if (o.EOC_Estado === 'CERRADAS') {
+            subsetD1Cerradas++;
+          }
+        }
+      }
+    });
+    
+    cmpEfect = subsetD1Total > 0 ? (subsetD1Entregado / subsetD1Total) * 100 : 0;
+    cmpActiv = subsetD1Entregado > 0 ? (subsetD1Cerradas / subsetD1Entregado) * 100 : 0;
+    cmpExpress = cmpTotalShare > 0 ? (cmpExpressShare / cmpTotalShare) * 100 : 0;
+    cmpPickup = cmpTotalShare > 0 ? (cmpPickupShare / cmpTotalShare) * 100 : 0;
+  }
+  
+  // Render Campaign Metrics
+  document.getElementById("camp-efect-val").textContent = cmpEfect.toFixed(2) + "%";
+  document.getElementById("camp-efect-bar").style.width = cmpEfect.toFixed(2) + "%";
+  
+  document.getElementById("camp-activ-val").textContent = cmpActiv.toFixed(2) + "%";
+  document.getElementById("camp-activ-bar").style.width = cmpActiv.toFixed(2) + "%";
+  
+  document.getElementById("camp-express-val").textContent = cmpExpress.toFixed(2) + "%";
+  document.getElementById("camp-express-bar").style.width = cmpExpress.toFixed(2) + "%";
+  
+  document.getElementById("camp-pickup-val").textContent = cmpPickup.toFixed(2) + "%";
+  document.getElementById("camp-pickup-bar").style.width = cmpPickup.toFixed(2) + "%";
   
   // 4. Render Table 1: Cuartil
   const ccTbody = document.getElementById("hourly-cuartil-table-body");

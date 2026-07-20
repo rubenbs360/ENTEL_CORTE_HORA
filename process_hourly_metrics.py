@@ -102,7 +102,7 @@ def main():
     df_all['CUARTIL'] = quartils
     df_all['ANTIGÜEDAD'] = antiguedades
     
-    # Clean coordinator names and fill NaNs to keep all records (operation, backs, trainers, etc.)
+    # Clean coordinator names and fill NaNs to keep all records
     def clean_coordinator_name(name):
         if pd.isna(name):
             return 'OTROS'
@@ -145,10 +145,45 @@ def main():
     # Filter only orders belonging to allowed range
     df_filtered = df_all[df_all['Fecha_Creacion'].isin(allowed_date_strings)].copy()
     
+    # Clean/fill missing values for added columns
+    df_filtered['Cruce_INAR'] = df_filtered['Cruce_INAR'].fillna("No").astype(str).str.strip()
+    df_filtered['Grupo_Canal'] = df_filtered['Grupo_Canal'].fillna("Otros").astype(str).str.strip()
+    df_filtered['Estado_T'] = df_filtered['Estado_T'].fillna("Otros").astype(str).str.strip()
+    df_filtered['EOC_Estado'] = df_filtered['EOC_Estado'].fillna("Otros").astype(str).str.strip()
+    
+    # Robust Multilinea header detection and starts-with check (handles encoded characters like 'MultilÃ-nea')
+    multi_col = None
+    for col in df_filtered.columns:
+        if 'MULTILINEA' in col.upper():
+            multi_col = col
+            break
+            
+    if multi_col:
+        print(f"Detectada columna de Multilinea: {multi_col}")
+        # Mark as 'SI' if string value starts with 'Mult' (case insensitive)
+        df_filtered['Multilinea'] = df_filtered[multi_col].fillna("").astype(str).str.strip().str.upper().str.startswith('MULT').map({True: 'SI', False: 'NO'})
+    else:
+        print("ADVERTENCIA: No se detectó ninguna columna de Multilinea en el CSV.")
+        df_filtered['Multilinea'] = 'NO'
+    
+    # Calculate ISO date strings for fast date arithmetic on frontend
+    creacion_iso = []
+    pactada_iso = []
+    
+    for _, row in df_filtered.iterrows():
+        c_dt = parse_spanish_date(row['Fecha_Creacion'])
+        creacion_iso.append(c_dt.strftime("%Y-%m-%d") if c_dt else "")
+        p_dt = parse_spanish_date(row['Fecha_Entrega_Pactada'])
+        pactada_iso.append(p_dt.strftime("%Y-%m-%d") if p_dt else "")
+        
+    df_filtered['Fecha_Creacion_ISO'] = creacion_iso
+    df_filtered['Fecha_Pactada_ISO'] = pactada_iso
+    
     # Keep only necessary columns for the front-end to save bandwidth and speed up load times
     cols_to_keep = [
-        'Fecha_Creacion', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
-        'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle'
+        'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
+        'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
+        'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado'
     ]
     df_filtered = df_filtered[cols_to_keep]
     

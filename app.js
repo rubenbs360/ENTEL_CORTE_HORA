@@ -474,14 +474,14 @@ function renderHourlyDashboard() {
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
   document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
   
-  document.getElementById("mini-multipedido-val").textContent = multipedidoHoy.toLocaleString();
-  document.getElementById("mini-multipedido-pct").textContent = formatPercent(multipedidoHoy, kpis.hoy) + " Part";
+  document.getElementById("mini-multipedido-pct").textContent = formatPercent(multipedidoHoy, kpis.hoy);
+  document.getElementById("mini-multipedido-val").textContent = multipedidoHoy.toLocaleString() + " u.";
   
-  document.getElementById("mini-express-val").textContent = expressHoy.toLocaleString();
-  document.getElementById("mini-express-pct").textContent = formatPercent(expressHoy, kpis.hoy) + " Part";
+  document.getElementById("mini-express-pct").textContent = formatPercent(expressHoy, kpis.hoy);
+  document.getElementById("mini-express-val").textContent = expressHoy.toLocaleString() + " u.";
   
-  document.getElementById("mini-pickup-val").textContent = pickupHoy.toLocaleString();
-  document.getElementById("mini-pickup-pct").textContent = formatPercent(pickupHoy, kpis.hoy) + " Part";
+  document.getElementById("mini-pickup-pct").textContent = formatPercent(pickupHoy, kpis.hoy);
+  document.getElementById("mini-pickup-val").textContent = pickupHoy.toLocaleString() + " u.";
   
   document.getElementById("mini-proyecc-val").textContent = proyeccHoy.toLocaleString();
   

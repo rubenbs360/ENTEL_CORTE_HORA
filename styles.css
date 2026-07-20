@@ -351,13 +351,14 @@ body {
 }
 
 .kpi-mini-box.highlight {
-  border-color: rgba(139, 92, 246, 0.4);
+  border: 1.5px solid var(--accent-purple) !important;
+  box-shadow: 0 0 12px rgba(109, 40, 217, 0.15) !important;
   background: linear-gradient(135deg, var(--bg-card) 70%, rgba(139, 92, 246, 0.05) 100%);
 }
 
 .kpi-mini-box.highlight:hover {
-  border-color: rgba(139, 92, 246, 0.7);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+  border-color: var(--accent-purple);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25) !important;
 }
 
 .mini-label {
@@ -366,6 +367,11 @@ body {
   color: var(--text-muted);
   font-weight: 700;
   letter-spacing: 0.05em;
+}
+
+#proj-label {
+  color: var(--accent-purple) !important;
+  font-weight: 800;
 }
 
 .mini-val {

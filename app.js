@@ -466,9 +466,13 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d21_date) tableTotals.d21++;
   });
   
-  // Projection formula
-  const horasTrabajadas = Math.max(1, maxSelectedHour - 9 + 1);
-  const proyeccHoy = Math.round((kpis.hoy / horasTrabajadas) * 10);
+  // Projection formula: during work hours (9am to 6pm, <= 10 hrs), extrapolate to 10 hrs.
+  // After 18:00 / 19:00 hrs (when 10 work hours completed), projection equals actual Hoy volume.
+  let proyeccHoy = kpis.hoy;
+  if (maxSelectedHour >= 9 && maxSelectedHour < 18) {
+    const horasTrabajadas = Math.max(1, maxSelectedHour - 9 + 1);
+    proyeccHoy = Math.round((kpis.hoy / horasTrabajadas) * 10);
+  }
   
   // Update Hoy main & mini grid values
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();

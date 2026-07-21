@@ -1003,6 +1003,8 @@ function renderHourlyDashboard() {
     rowsConfig.forEach(rowConf => {
       // Filter hours by current checkbox selection
       const activeHours = rowConf.hours.filter(h => selectedHours.has(h));
+      if (activeHours.length === 0) return; // Hide row if not selected in filter
+      
       const rSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
       
       if (activeHours.length > 0) {

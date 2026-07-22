@@ -26,6 +26,7 @@ echo [3/3] Subiendo cambios a GitHub...
 git remote get-url origin >nul 2>&1
 if errorlevel 1 goto noremote
 
+git pull origin main --rebase
 git push origin main
 goto endremote
 

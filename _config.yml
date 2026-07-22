@@ -1,0 +1,4 @@
+# Jekyll Configuration to exclude raw data folders from building
+exclude:
+  - REPORTERO_HORA_HORA
+  - scratch

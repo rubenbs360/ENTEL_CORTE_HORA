@@ -715,3 +715,11 @@ body {
   display: inline-block;
   color: var(--accent-cyan);
 }
+
+.col-middle {
+  gap: 0.6rem !important;
+}
+.col-middle .kpi-subcard {
+  padding: 0.6rem 0.8rem !important;
+  gap: 0.15rem !important;
+}

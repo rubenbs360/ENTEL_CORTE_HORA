@@ -129,8 +129,8 @@ def main():
         raise ValueError("No se pudieron parsear las fechas de la columna Fecha_Creacion.")
     max_dt = max(parsed_dates.keys())
     
-    # Keep all dates within 52 days of max_dt to support D-21 for any "HOY" selected in the last 30 days
-    limit_dt = max_dt - datetime.timedelta(days=52)
+    # Keep all dates within 60 days of max_dt to support D-28 for any "HOY" selected in the last 30 days
+    limit_dt = max_dt - datetime.timedelta(days=60)
     allowed_date_strings = [str_val for dt, str_val in parsed_dates.items() if dt >= limit_dt]
     
     str_hoy = parsed_dates.get(max_dt, format_spanish_date(max_dt))
@@ -138,6 +138,7 @@ def main():
     str_d7 = parsed_dates.get(max_dt - datetime.timedelta(days=7), format_spanish_date(max_dt - datetime.timedelta(days=7)))
     str_d14 = parsed_dates.get(max_dt - datetime.timedelta(days=14), format_spanish_date(max_dt - datetime.timedelta(days=14)))
     str_d21 = parsed_dates.get(max_dt - datetime.timedelta(days=21), format_spanish_date(max_dt - datetime.timedelta(days=21)))
+    str_d28 = parsed_dates.get(max_dt - datetime.timedelta(days=28), format_spanish_date(max_dt - datetime.timedelta(days=28)))
     
     print(f"  Max/Latest Date (D-0): {str_hoy}")
     print(f"  Allowed data range: {len(allowed_date_strings)} dates (from {limit_dt} to {max_dt})")
@@ -195,6 +196,7 @@ def main():
             "d7_date": str_d7,
             "d14_date": str_d14,
             "d21_date": str_d21,
+            "d28_date": str_d28,
             "last_update": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         },
         "orders": df_filtered.to_dict(orient='records')

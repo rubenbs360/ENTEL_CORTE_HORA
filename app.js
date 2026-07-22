@@ -5,7 +5,7 @@ let selectedSupervisores = new Set();
 let selectedAntiguedades = new Set();
 let selectedHours = new Set();
 let selectedDate = ""; // Stores currently selected HOY date
-let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "" }; // Stores dynamic relative dates
+let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "", d28: "" }; // Stores dynamic relative dates
 
 // Date parser helper (Spanish date string -> Date object)
 function parseSpanishDateJS(dateStr) {
@@ -437,7 +437,7 @@ function renderHourlyDashboard() {
   });
   
   // 3. Compute KPI Summary Cards (based on ALL orders in CSV up to the selected hour)
-  const kpis = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+  const kpis = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
   let multipedidoHoy = 0;
   let expressHoy = 0;
   let pickupHoy = 0;
@@ -454,16 +454,18 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d7_date) kpis.d7++;
     else if (o.Fecha_Creacion === meta.d14_date) kpis.d14++;
     else if (o.Fecha_Creacion === meta.d21_date) kpis.d21++;
+    else if (o.Fecha_Creacion === meta.d28_date) kpis.d28++;
   });
   
   // Compute Table Totals (the campaign coordinators subtotal)
-  const tableTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+  const tableTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
   filteredOrders.forEach(o => {
     if (o.Fecha_Creacion === meta.hoy_date) tableTotals.hoy++;
     else if (o.Fecha_Creacion === meta.d1_date) tableTotals.d1++;
     else if (o.Fecha_Creacion === meta.d7_date) tableTotals.d7++;
     else if (o.Fecha_Creacion === meta.d14_date) tableTotals.d14++;
     else if (o.Fecha_Creacion === meta.d21_date) tableTotals.d21++;
+    else if (o.Fecha_Creacion === meta.d28_date) tableTotals.d28++;
   });
   
   // Projection formula: during work hours (9am to 5pm, <= 9 hrs), extrapolate to 9 hrs.
@@ -505,6 +507,10 @@ function renderHourlyDashboard() {
   document.getElementById("kpi-d21").textContent = kpis.d21.toLocaleString();
   document.getElementById("kpi-var-d21").innerHTML = formatVariation(kpis.hoy, kpis.d21);
   document.getElementById("kpi-date-d21").textContent = meta.d21_date;
+  
+  document.getElementById("kpi-d28").textContent = kpis.d28.toLocaleString();
+  document.getElementById("kpi-var-d28").innerHTML = formatVariation(kpis.hoy, kpis.d28);
+  document.getElementById("kpi-date-d28").textContent = meta.d28_date;
   
   // Campaign Month-to-date (MTD) Metrics calculation
   // Find current selected date ISO
@@ -592,13 +598,14 @@ function renderHourlyDashboard() {
     if (coordOrders.length === 0 && selectedCoordinadores.size > 1) return; // skip if no data and showing all
     
     // Aggregates for bold row
-    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     coordOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) coordSums.hoy++;
       else if (o.Fecha_Creacion === meta.d1_date) coordSums.d1++;
       else if (o.Fecha_Creacion === meta.d7_date) coordSums.d7++;
       else if (o.Fecha_Creacion === meta.d14_date) coordSums.d14++;
       else if (o.Fecha_Creacion === meta.d21_date) coordSums.d21++;
+      else if (o.Fecha_Creacion === meta.d28_date) coordSums.d28++;
     });
     
     const groupId = `group-cc-${coord.replace(/\s+/g, '_')}`;
@@ -616,6 +623,8 @@ function renderHourlyDashboard() {
       <td>${formatVariation(coordSums.hoy, coordSums.d14)}</td>
       <td style="color:var(--text-muted);">${coordSums.d21}</td>
       <td>${formatVariation(coordSums.hoy, coordSums.d21)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d28}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d28)}</td>
     `;
     ccTbody.appendChild(boldRow);
     
@@ -623,13 +632,14 @@ function renderHourlyDashboard() {
     const quartils = ['Q1', 'Q2', 'Q3', 'Q4'];
     quartils.forEach(q => {
       const qOrders = coordOrders.filter(o => o.CUARTIL === q);
-      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
       qOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
         else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
         else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
         else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
         else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
+        else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
       });
       
       const subRow = document.createElement("tr");
@@ -645,6 +655,8 @@ function renderHourlyDashboard() {
         <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
         <td style="color:var(--text-muted);">${qSums.d21}</td>
         <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
+        <td style="color:var(--text-muted);">${qSums.d28}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
       `;
       ccTbody.appendChild(subRow);
     });
@@ -666,6 +678,8 @@ function renderHourlyDashboard() {
     <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
     <td style="color:var(--text-muted);">${tableTotals.d21}</td>
     <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d28}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d28)}</td>
   `;
   ccTbody.appendChild(ccTotalRow);
   
@@ -678,13 +692,14 @@ function renderHourlyDashboard() {
     if (coordOrders.length === 0 && selectedCoordinadores.size > 1) return;
     
     // Aggregates for bold row
-    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     coordOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) coordSums.hoy++;
       else if (o.Fecha_Creacion === meta.d1_date) coordSums.d1++;
       else if (o.Fecha_Creacion === meta.d7_date) coordSums.d7++;
       else if (o.Fecha_Creacion === meta.d14_date) coordSums.d14++;
       else if (o.Fecha_Creacion === meta.d21_date) coordSums.d21++;
+      else if (o.Fecha_Creacion === meta.d28_date) coordSums.d28++;
     });
     
     const groupId = `group-cs-${coord.replace(/\s+/g, '_')}`;
@@ -702,6 +717,8 @@ function renderHourlyDashboard() {
       <td>${formatVariation(coordSums.hoy, coordSums.d14)}</td>
       <td style="color:var(--text-muted);">${coordSums.d21}</td>
       <td>${formatVariation(coordSums.hoy, coordSums.d21)}</td>
+      <td style="color:var(--text-muted);">${coordSums.d28}</td>
+      <td>${formatVariation(coordSums.hoy, coordSums.d28)}</td>
     `;
     csTbody.appendChild(boldRow);
     
@@ -711,13 +728,14 @@ function renderHourlyDashboard() {
     // Calculate and sort supervisors by HOY DESC
     const supRows = supsInCoord.map(sup => {
       const supOrders = coordOrders.filter(o => o.SUPERVISOR === sup);
-      const supSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      const supSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
       supOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) supSums.hoy++;
         else if (o.Fecha_Creacion === meta.d1_date) supSums.d1++;
         else if (o.Fecha_Creacion === meta.d7_date) supSums.d7++;
         else if (o.Fecha_Creacion === meta.d14_date) supSums.d14++;
         else if (o.Fecha_Creacion === meta.d21_date) supSums.d21++;
+        else if (o.Fecha_Creacion === meta.d28_date) supSums.d28++;
       });
       return { sup, ...supSums };
     }).sort((a, b) => b.hoy - a.hoy || a.sup.localeCompare(b.sup));
@@ -736,6 +754,8 @@ function renderHourlyDashboard() {
         <td>${formatVariation(item.hoy, item.d14)}</td>
         <td style="color:var(--text-muted);">${item.d21}</td>
         <td>${formatVariation(item.hoy, item.d21)}</td>
+        <td style="color:var(--text-muted);">${item.d28}</td>
+        <td>${formatVariation(item.hoy, item.d28)}</td>
       `;
       csTbody.appendChild(subRow);
     });
@@ -757,6 +777,8 @@ function renderHourlyDashboard() {
     <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
     <td style="color:var(--text-muted);">${tableTotals.d21}</td>
     <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
+    <td style="color:var(--text-muted);">${tableTotals.d28}</td>
+    <td>${formatVariation(tableTotals.hoy, tableTotals.d28)}</td>
   `;
   csTbody.appendChild(csTotalRow);
   
@@ -888,18 +910,19 @@ function renderHourlyDashboard() {
   const qTbody = document.getElementById("hourly-only-cuartiles-table-body");
   if (qTbody) {
     qTbody.innerHTML = "";
-    const table4Totals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    const table4Totals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     
     // Q1 to Q4 rows
     quartilsList.forEach(q => {
       const qOrders = orders.filter(o => o.Hora <= maxSelectedHour && o.CUARTIL === q);
-      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
       qOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
         else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
         else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
         else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
         else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
+        else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
       });
       
       table4Totals.hoy += qSums.hoy;
@@ -907,6 +930,7 @@ function renderHourlyDashboard() {
       table4Totals.d7 += qSums.d7;
       table4Totals.d14 += qSums.d14;
       table4Totals.d21 += qSums.d21;
+      table4Totals.d28 += qSums.d28;
       
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -920,19 +944,22 @@ function renderHourlyDashboard() {
         <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
         <td style="color:var(--text-muted);">${qSums.d21}</td>
         <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
+        <td style="color:var(--text-muted);">${qSums.d28}</td>
+        <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
       `;
       qTbody.appendChild(row);
     });
     
     // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4)
     const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && !quartilsList.includes(o.CUARTIL));
-    const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     platOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) platSums.hoy++;
       else if (o.Fecha_Creacion === meta.d1_date) platSums.d1++;
       else if (o.Fecha_Creacion === meta.d7_date) platSums.d7++;
       else if (o.Fecha_Creacion === meta.d14_date) platSums.d14++;
       else if (o.Fecha_Creacion === meta.d21_date) platSums.d21++;
+      else if (o.Fecha_Creacion === meta.d28_date) platSums.d28++;
     });
     
     table4Totals.hoy += platSums.hoy;
@@ -940,6 +967,7 @@ function renderHourlyDashboard() {
     table4Totals.d7 += platSums.d7;
     table4Totals.d14 += platSums.d14;
     table4Totals.d21 += platSums.d21;
+    table4Totals.d28 += platSums.d28;
     
     const platRow = document.createElement("tr");
     platRow.innerHTML = `
@@ -972,6 +1000,8 @@ function renderHourlyDashboard() {
       <td>${formatVariation(table4Totals.hoy, table4Totals.d14)}</td>
       <td style="color:var(--text-muted);">${table4Totals.d21}</td>
       <td>${formatVariation(table4Totals.hoy, table4Totals.d21)}</td>
+      <td style="color:var(--text-muted);">${table4Totals.d28}</td>
+      <td>${formatVariation(table4Totals.hoy, table4Totals.d28)}</td>
     `;
     qTbody.appendChild(qTotalRow);
   }
@@ -1002,14 +1032,14 @@ function renderHourlyDashboard() {
       { label: "21:00 - 23:00 hrs", hours: [21, 22, 23] }
     ];
     
-    const globalTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+    const globalTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     
     rowsConfig.forEach(rowConf => {
       // Filter hours by current checkbox selection
       const activeHours = rowConf.hours.filter(h => selectedHours.has(h));
       if (activeHours.length === 0) return; // Hide row if not selected in filter
       
-      const rSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0 };
+      const rSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
       
       if (activeHours.length > 0) {
         // Use orders (unfiltered global orders) instead of filteredOrders
@@ -1020,6 +1050,7 @@ function renderHourlyDashboard() {
           else if (o.Fecha_Creacion === meta.d7_date) rSums.d7++;
           else if (o.Fecha_Creacion === meta.d14_date) rSums.d14++;
           else if (o.Fecha_Creacion === meta.d21_date) rSums.d21++;
+          else if (o.Fecha_Creacion === meta.d28_date) rSums.d28++;
         });
       }
       
@@ -1029,6 +1060,7 @@ function renderHourlyDashboard() {
       globalTotals.d7 += rSums.d7;
       globalTotals.d14 += rSums.d14;
       globalTotals.d21 += rSums.d21;
+      globalTotals.d28 += rSums.d28;
       
       // Render row
       const tr = document.createElement("tr");
@@ -1043,6 +1075,8 @@ function renderHourlyDashboard() {
         <td>${formatVariation(rSums.hoy, rSums.d14)}</td>
         <td style="color:var(--text-muted);">${rSums.d21}</td>
         <td>${formatVariation(rSums.hoy, rSums.d21)}</td>
+        <td style="color:var(--text-muted);">${rSums.d28}</td>
+        <td>${formatVariation(rSums.hoy, rSums.d28)}</td>
       `;
       ingTbody.appendChild(tr);
     });
@@ -1063,6 +1097,8 @@ function renderHourlyDashboard() {
       <td>${formatVariation(globalTotals.hoy, globalTotals.d14)}</td>
       <td style="color:var(--text-muted);">${globalTotals.d21}</td>
       <td>${formatVariation(globalTotals.hoy, globalTotals.d21)}</td>
+      <td style="color:var(--text-muted);">${globalTotals.d28}</td>
+      <td>${formatVariation(globalTotals.hoy, globalTotals.d28)}</td>
     `;
     ingTbody.appendChild(globalTotalRow);
   }

@@ -183,7 +183,7 @@ function initializeFilters() {
   if (!hourlyData || !hourlyData.orders) return;
   
   const orders = hourlyData.orders;
-  const campaignCoords = ['MALCA SILVA EVER', 'EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'MEDINA DELGADO PIERO FRANCISCO', 'PIERO MEDINA'];
+  const campaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA'];
   const campaignOrders = orders.filter(o => campaignCoords.includes(o.COORDINADOR));
   
   // 0. Unique Dates (Filtered to last 30 days of max date)

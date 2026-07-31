@@ -38,7 +38,7 @@ def main():
     print("--- INICIANDO COMPILACION DE DETALLE DE METRICAS ---")
     
     # 1. Load Nomina
-    nomina_files = glob.glob(os.path.join(folder, "*NOMINA*.xlsx"))
+    nomina_files = [f for f in glob.glob(os.path.join(folder, "*.xlsx")) if not os.path.basename(f).startswith("~$")]
     if not nomina_files:
         raise FileNotFoundError("No se encontró el archivo de nómina XLSX.")
     nomina_file = max(nomina_files, key=os.path.getmtime)
@@ -49,7 +49,17 @@ def main():
     df_nomina['SUPERVISOR'] = df_nomina['SUPERVISOR'].astype(str).str.strip().str.upper()
     df_nomina['COORDINADOR'] = df_nomina['COORDINADOR'].astype(str).str.strip().str.upper()
     df_nomina['CUARTIL'] = df_nomina['CUARTIL'].astype(str).str.strip().str.upper()
-    df_nomina['ANTIGÜEDAD'] = df_nomina['ANTIGÜEDAD'].fillna("No especificado").astype(str).str.strip()
+    
+    # Resolve Antigüedad column dynamically (handles variations like Antigedad)
+    antiguedad_col = None
+    for col in df_nomina.columns:
+        if 'ANTIG' in col.upper():
+            antiguedad_col = col
+            break
+    if not antiguedad_col:
+        raise KeyError("No se encontró la columna de Antigüedad en el archivo de nómina.")
+        
+    df_nomina['ANTIGÜEDAD'] = df_nomina[antiguedad_col].fillna("No especificado").astype(str).str.strip()
     
     # Create helper dictionary for faster lookup
     nomina_dict = {}

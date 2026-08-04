@@ -1240,11 +1240,8 @@ function renderLookerPanel(panelId, startStr, endStr) {
   headHtml += `<th>Total</th>`;
   theadTr.innerHTML = headHtml;
   
-  // Filter orders matching the global filters (Coordinator, Supervisor, Antigüedad)
+  // Looker view represents the total operation volume
   const filtered = orders.filter(o => {
-    if (!selectedCoordinadores.has(o.COORDINADOR)) return false;
-    if (!selectedSupervisores.has(o.SUPERVISOR)) return false;
-    if (!selectedAntiguedades.has(o.ANTIGÜEDAD)) return false;
     return rangeDates.includes(o.Fecha_Creacion);
   });
   

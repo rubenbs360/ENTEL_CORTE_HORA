@@ -717,3 +717,169 @@ body {
 }
 
 
+
+/* Tab Navigation Styles */
+.header-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin: 0 1rem;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.5rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+}
+.tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  box-shadow: 0 2px 8px rgba(8, 145, 178, 0.3);
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* Looker Split View Styles */
+.looker-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 1200px) {
+  .looker-split-container {
+    grid-template-columns: 1fr;
+  }
+}
+.looker-panel {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.looker-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+.looker-panel-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.looker-date-pickers {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.date-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.date-picker-item label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.looker-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.35rem 1.75rem 0.35rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 9l3 3 3-3' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.25rem;
+}
+.looker-select:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* Scrollable Container and Table */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+.table-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.looker-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.looker-table th, .looker-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+.looker-table th {
+  background: rgba(255, 255, 255, 0.02);
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+.looker-table td.hour-label {
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.01);
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 2px solid var(--border-color);
+}
+
+/* Heatmap intensities */
+.heat-cell {
+  transition: all 0.15s ease;
+}
+.heat-lvl-0 { background: transparent; color: var(--text-muted); }
+.heat-lvl-1 { background: rgba(8, 145, 178, 0.1) !important; color: var(--text-main) !important; }
+.heat-lvl-2 { background: rgba(8, 145, 178, 0.25) !important; color: var(--text-main) !important; }
+.heat-lvl-3 { background: rgba(14, 116, 144, 0.5) !important; color: #fff !important; font-weight: 600; }
+.heat-lvl-4 { background: rgba(14, 116, 144, 0.8) !important; color: #fff !important; font-weight: 700; }

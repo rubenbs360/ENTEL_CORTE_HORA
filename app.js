@@ -7,6 +7,13 @@ let selectedHours = new Set();
 let selectedDate = ""; // Stores currently selected HOY date
 let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "", d28: "" }; // Stores dynamic relative dates
 
+// Looker View State
+let lookerDates = []; // List of all sorted unique dates (objects: { str: "...", date: Date })
+let lookerAStart = "";
+let lookerAEnd = "";
+let lookerBStart = "";
+let lookerBEnd = "";
+
 // Date parser helper (Spanish date string -> Date object)
 function parseSpanishDateJS(dateStr) {
   if (!dateStr) return null;
@@ -64,6 +71,7 @@ async function loadData() {
     
     initializeFilters();
     renderHourlyDashboard();
+  renderLookerView();
   } catch (error) {
     console.error("Error loading JSON data:", error);
     const badge = document.getElementById("last-update-time");
@@ -126,6 +134,7 @@ function populateDateDropdownOptions(dateStrings, activeDateStr) {
       
       reinitializeHoursForNewDate();
       renderHourlyDashboard();
+  renderLookerView();
       
       container.classList.add("hidden");
       container.parentElement.classList.remove("active");
@@ -215,6 +224,9 @@ function initializeFilters() {
   const ants = [...new Set(campaignOrders.map(o => o.ANTIGÜEDAD))].filter(Boolean).sort();
   selectedAntiguedades = new Set(ants);
   populateDropdownOptions("antiguedad", ants, selectedAntiguedades, updateAntiguedadSelection);
+  
+  // Looker view initialization
+  initializeLookerFilters();
   
   // 4. Hours (0 to 23 as options)
   const availableHours = [...new Set(orders.map(o => o.Hora))].filter(h => h >= 0 && h <= 23).sort((a,b) => a-b);
@@ -353,22 +365,26 @@ function updateDropdownLabel(type, selectedSet, totalCount) {
 function updateCoordinadorSelection() {
   updateDropdownLabel("coord", selectedCoordinadores, [...new Set(hourlyData.orders.map(o => o.COORDINADOR))].filter(Boolean).length);
   renderHourlyDashboard();
+  renderLookerView();
 }
 
 function updateSupervisorSelection() {
   updateDropdownLabel("supervisor", selectedSupervisores, [...new Set(hourlyData.orders.map(o => o.SUPERVISOR))].filter(Boolean).length);
   renderHourlyDashboard();
+  renderLookerView();
 }
 
 function updateAntiguedadSelection() {
   updateDropdownLabel("antiguedad", selectedAntiguedades, [...new Set(hourlyData.orders.map(o => o.ANTIGÜEDAD))].filter(Boolean).length);
   renderHourlyDashboard();
+  renderLookerView();
 }
 
 function updateHourSelection() {
   const allHours = [...new Set(hourlyData.orders.map(o => o.Hora))].filter(h => h >= 9 && h <= 23);
   updateDropdownLabel("hour", selectedHours, allHours.length);
   renderHourlyDashboard();
+  renderLookerView();
 }
 
 // Trend formatting helpers
@@ -1121,3 +1137,215 @@ window.toggleTableGroup = function(groupId, event) {
   }
 };
 
+
+// Looker View Tab Navigation
+window.switchTab = function(tabId) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+  const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  
+  if (tabId === 'looker') {
+    renderLookerView();
+  }
+};
+
+// Initialize Looker selects
+function initializeLookerFilters() {
+  if (!hourlyData || !hourlyData.orders) return;
+  
+  const orders = hourlyData.orders;
+  // Get all unique dates sorted chronologically (oldest first)
+  const allDates = [...new Set(orders.map(o => o.Fecha_Creacion))];
+  lookerDates = allDates.map(dStr => ({ str: dStr, date: parseSpanishDateJS(dStr) }))
+                        .filter(d => d.date !== null)
+                        .sort((a, b) => a.date - b.date);
+  
+  const selectAStart = document.getElementById("looker-a-start");
+  const selectAEnd = document.getElementById("looker-a-end");
+  const selectBStart = document.getElementById("looker-b-start");
+  const selectBEnd = document.getElementById("looker-b-end");
+  
+  [selectAStart, selectAEnd, selectBStart, selectBEnd].forEach(select => {
+    select.innerHTML = "";
+    lookerDates.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.str;
+      opt.textContent = d.str;
+      select.appendChild(opt);
+    });
+  });
+  
+  // Set default values:
+  // Panel A: Start = 7 days ago (or oldest available), End = today
+  // Panel B: Start = today, End = today
+  if (lookerDates.length > 0) {
+    const todayStr = relativeDates.hoy;
+    
+    // Find index of today
+    const todayIdx = lookerDates.findIndex(d => d.str === todayStr);
+    
+    // Default A
+    const aStartIdx = Math.max(0, (todayIdx >= 0 ? todayIdx : lookerDates.length - 1) - 7);
+    const aEndIdx = todayIdx >= 0 ? todayIdx : lookerDates.length - 1;
+    
+    selectAStart.value = lookerDates[aStartIdx].str;
+    selectAEnd.value = lookerDates[aEndIdx].str;
+    
+    // Default B
+    selectBStart.value = lookerDates[aEndIdx].str;
+    selectBEnd.value = lookerDates[aEndIdx].str;
+  }
+  
+  // Attach listeners
+  [selectAStart, selectAEnd, selectBStart, selectBEnd].forEach(select => {
+    select.addEventListener("change", () => {
+      renderLookerView();
+    });
+  });
+}
+
+// Render Looker Pivot Table Panel (Independent)
+function renderLookerPanel(panelId, startStr, endStr) {
+  const theadTr = document.getElementById(`looker-${panelId}-thead-tr`);
+  const tbody = document.getElementById(`looker-${panelId}-tbody`);
+  
+  if (!theadTr || !tbody || !hourlyData) return;
+  
+  const orders = hourlyData.orders;
+  
+  // Parse range dates
+  const startDt = parseSpanishDateJS(startStr);
+  const endDt = parseSpanishDateJS(endStr);
+  
+  if (!startDt || !endDt) {
+    theadTr.innerHTML = "<th>Error de fecha</th>";
+    tbody.innerHTML = "";
+    return;
+  }
+  
+  // Get all dates in this range (chronological)
+  const rangeDates = lookerDates.filter(d => d.date >= startDt && d.date <= endDt).map(d => d.str);
+  
+  // Build header row: Hora, then each date, then Total
+  let headHtml = `<th style="text-align: left; position: sticky; left: 0; z-index: 3;">Hora</th>`;
+  rangeDates.forEach(dStr => {
+    // Simplify date label for columns (e.g. "31 jul 2026" -> "31 jul")
+    const parts = dStr.split(" ");
+    const shortLabel = parts.length >= 2 ? `${parts[0]} ${parts[1]}` : dStr;
+    headHtml += `<th>${shortLabel}</th>`;
+  });
+  headHtml += `<th>Total</th>`;
+  theadTr.innerHTML = headHtml;
+  
+  // Filter orders matching the global filters (Coordinator, Supervisor, Antigüedad)
+  const filtered = orders.filter(o => {
+    if (!selectedCoordinadores.has(o.COORDINADOR)) return false;
+    if (!selectedSupervisores.has(o.SUPERVISOR)) return false;
+    if (!selectedAntiguedades.has(o.ANTIGÜEDAD)) return false;
+    return rangeDates.includes(o.Fecha_Creacion);
+  });
+  
+  // Hours to show: we show 00:00 to 23:00
+  // Group by hour and date
+  const hourMap = {};
+  for (let h = 0; h <= 23; h++) {
+    hourMap[h] = {};
+    rangeDates.forEach(d => { hourMap[h][d] = 0; });
+  }
+  
+  filtered.forEach(o => {
+    const h = o.Hora;
+    const d = o.Fecha_Creacion;
+    if (hourMap[h] !== undefined && hourMap[h][d] !== undefined) {
+      hourMap[h][d]++;
+    }
+  });
+  
+  // Compute column totals and row totals
+  const colTotals = {};
+  rangeDates.forEach(d => { colTotals[d] = 0; });
+  let grandTotal = 0;
+  
+  // Render rows
+  let tbodyHtml = "";
+  let maxCellVal = 0;
+  
+  // Determine max cell value for heatmap scaling (ignoring totals)
+  for (let h = 0; h <= 23; h++) {
+    rangeDates.forEach(d => {
+      const val = hourMap[h][d];
+      if (val > maxCellVal) maxCellVal = val;
+    });
+  }
+  
+  // Loop hours
+  for (let h = 0; h <= 23; h++) {
+    // Skip rendering if the hour has no data across the whole range AND is outside typical working hours
+    // (e.g. 0 to 5) to save screen space, but if it has data we show it.
+    let rowTotal = 0;
+    let rowHtml = "";
+    
+    rangeDates.forEach(d => {
+      const val = hourMap[h][d];
+      rowTotal += val;
+      colTotals[d] += val;
+      
+      // Determine heatmap level
+      let heatClass = "heat-lvl-0";
+      if (val > 0 && maxCellVal > 0) {
+        const ratio = val / maxCellVal;
+        if (ratio <= 0.25) heatClass = "heat-lvl-1";
+        else if (ratio <= 0.50) heatClass = "heat-lvl-2";
+        else if (ratio <= 0.75) heatClass = "heat-lvl-3";
+        else heatClass = "heat-lvl-4";
+      }
+      
+      const displayVal = val > 0 ? val.toLocaleString() : "-";
+      rowHtml += `<td class="heat-cell ${heatClass}">${displayVal}</td>`;
+    });
+    
+    grandTotal += rowTotal;
+    
+    // Format hour label
+    const labelHour = `${h.toString().padStart(2, '0')}:00 hrs`;
+    
+    // Only hide rows of hours that are completely empty in this range
+    if (rowTotal === 0 && (h < 7 || h > 21)) {
+      continue;
+    }
+    
+    tbodyHtml += `
+      <tr>
+        <td class="hour-label">${labelHour}</td>
+        ${rowHtml}
+        <td style="font-weight: 700; background: rgba(255,255,255,0.03);">${rowTotal.toLocaleString()}</td>
+      </tr>
+    `;
+  }
+  
+  // Render total row
+  let totalRowHtml = `<tr class="bold-row" style="border-top: 2px solid var(--text-main); background: rgba(8,145,178,0.08);">
+    <td class="hour-label">Total</td>`;
+  rangeDates.forEach(d => {
+    totalRowHtml += `<td>${colTotals[d].toLocaleString()}</td>`;
+  });
+  totalRowHtml += `<td style="font-weight: 800;">${grandTotal.toLocaleString()}</td></tr>`;
+  
+  tbody.innerHTML = tbodyHtml + totalRowHtml;
+}
+
+// Global render Looker view function
+function renderLookerView() {
+  const selectAStart = document.getElementById("looker-a-start");
+  const selectAEnd = document.getElementById("looker-a-end");
+  const selectBStart = document.getElementById("looker-b-start");
+  const selectBEnd = document.getElementById("looker-b-end");
+  
+  if (!selectAStart) return;
+  
+  renderLookerPanel("a", selectAStart.value, selectAEnd.value);
+  renderLookerPanel("b", selectBStart.value, selectBEnd.value);
+}

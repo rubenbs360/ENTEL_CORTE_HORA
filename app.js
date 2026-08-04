@@ -1469,8 +1469,13 @@ function drawCalendar(panelId) {
     if (!available) classes += " disabled";
     if (selected) classes += " selected";
     
-    const clickHandler = available ? `onclick="toggleDaySelect('${panelId}', '${dateStr}', event)"` : "";
-    gridHtml += `<div class="${classes}" ${clickHandler}>${d}</div>`;
+    // Attach mouse drag and toggle event handlers
+    const dragHandlers = available ? `
+      onmousedown="startDragSelect('${panelId}', '${dateStr}', event)"
+      onmouseenter="continueDragSelect('${panelId}', '${dateStr}', event)"
+      onclick="toggleDaySelect('${panelId}', '${dateStr}', event)"
+    ` : "";
+    gridHtml += `<div class="${classes}" ${dragHandlers}>${d}</div>`;
   }
   
   popup.innerHTML = `
@@ -1492,6 +1497,7 @@ function drawCalendar(panelId) {
       ${gridHtml}
     </div>
     <div class="cal-footer">
+      <button class="cal-cancel-btn" onclick="selectEntireMonth('${panelId}', event)" style="margin-right: auto; color: var(--accent-cyan); padding-left: 0;">Seleccionar Mes</button>
       <button class="cal-cancel-btn" onclick="cancelCalSelection('${panelId}', event)">Cancelar</button>
       <button class="cal-apply-btn" onclick="applyCalSelection('${panelId}', event)">Aplicar</button>
     </div>
@@ -1570,3 +1576,61 @@ function updateCalendarLabel(panelId) {
     }
   }
 }
+
+// Calendar Drag-to-Select State
+let isDraggingCal = false;
+let dragStartStr = "";
+let dragPanelId = "";
+
+window.startDragSelect = function(panelId, dateStr, event) {
+  event.preventDefault(); // Prevents text selection highlight during drag
+  isDraggingCal = true;
+  dragStartStr = dateStr;
+  dragPanelId = panelId;
+  
+  // Set initial selected date
+  lookerTempSelectedDates[panelId] = new Set([dateStr]);
+  drawCalendar(panelId);
+};
+
+window.continueDragSelect = function(panelId, dateStr, event) {
+  if (!isDraggingCal || dragPanelId !== panelId) return;
+  
+  const startIdx = lookerDates.findIndex(d => d.str === dragStartStr);
+  const curIdx = lookerDates.findIndex(d => d.str === dateStr);
+  
+  if (startIdx === -1 || curIdx === -1) return;
+  
+  const minIdx = Math.min(startIdx, curIdx);
+  const maxIdx = Math.max(startIdx, curIdx);
+  
+  lookerTempSelectedDates[panelId].clear();
+  for (let i = minIdx; i <= maxIdx; i++) {
+    lookerTempSelectedDates[panelId].add(lookerDates[i].str);
+  }
+  drawCalendar(panelId);
+};
+
+// Global mouseup to stop dragging
+document.addEventListener("mouseup", () => {
+  if (isDraggingCal) {
+    isDraggingCal = false;
+  }
+});
+
+// Shortcut to select all available dates in active month
+window.selectEntireMonth = function(panelId, event) {
+  event.stopPropagation();
+  const y = lookerActiveMonth[panelId].year;
+  const m = lookerActiveMonth[panelId].month;
+  
+  const numDays = new Date(y, m + 1, 0).getDate();
+  
+  for (let d = 1; d <= numDays; d++) {
+    const dateStr = getSpanishDateStr(y, m, d);
+    if (lookerDates.some(ld => ld.str === dateStr)) {
+      lookerTempSelectedDates[panelId].add(dateStr);
+    }
+  }
+  drawCalendar(panelId);
+};

@@ -404,14 +404,14 @@
         <div class="looker-panel card">
           <div class="looker-panel-header">
             <h3>Panel Comparativo A</h3>
-            <div class="looker-date-pickers">
-              <div class="date-picker-item">
-                <label>Inicio:</label>
-                <select id="looker-a-start" class="looker-select"></select>
-              </div>
-              <div class="date-picker-item">
-                <label>Fin:</label>
-                <select id="looker-a-end" class="looker-select"></select>
+            <div class="calendar-dropdown" id="dropdown-calendar-a">
+              <button class="calendar-btn" onclick="toggleCalendarDropdown('a', event)">
+                <span class="icon">📅</span>
+                <span class="selected-text" id="calendar-a-label">1 jul 2026 - 3 jul 2026</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="calendar-popup hidden" id="calendar-popup-a" onclick="event.stopPropagation()">
+                <!-- Generated dynamically by JS -->
               </div>
             </div>
           </div>
@@ -433,14 +433,14 @@
         <div class="looker-panel card">
           <div class="looker-panel-header">
             <h3>Panel Comparativo B</h3>
-            <div class="looker-date-pickers">
-              <div class="date-picker-item">
-                <label>Inicio:</label>
-                <select id="looker-b-start" class="looker-select"></select>
-              </div>
-              <div class="date-picker-item">
-                <label>Fin:</label>
-                <select id="looker-b-end" class="looker-select"></select>
+            <div class="calendar-dropdown" id="dropdown-calendar-b">
+              <button class="calendar-btn" onclick="toggleCalendarDropdown('b', event)">
+                <span class="icon">📅</span>
+                <span class="selected-text" id="calendar-b-label">3 ago 2026 - 3 ago 2026</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="calendar-popup hidden" id="calendar-popup-b" onclick="event.stopPropagation()">
+                <!-- Generated dynamically by JS -->
               </div>
             </div>
           </div>

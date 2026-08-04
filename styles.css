@@ -903,3 +903,202 @@ body {
   white-space: nowrap !important;
   min-width: 90px !important;
 }
+
+/* Calendar Dropdown Container */
+.calendar-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-premium);
+  min-width: 190px;
+  justify-content: space-between;
+}
+
+.calendar-btn:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-dropdown.active .calendar-btn {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+/* Calendar Popup Card */
+.calendar-popup {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  width: 280px;
+  padding: 1rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.calendar-popup.hidden {
+  display: none;
+}
+
+/* Calendar Navigation Header */
+.cal-pop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.cal-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.cal-month-year {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Weekday column headers */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.35rem;
+}
+
+.cal-weekdays span {
+  cursor: pointer;
+  padding: 0.2rem 0;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.cal-weekdays span:hover {
+  background: rgba(8, 145, 178, 0.15);
+  color: var(--accent-cyan);
+}
+
+/* Days Grid Layout */
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  user-select: none;
+  color: var(--text-main);
+}
+
+.day-cell.empty {
+  cursor: default;
+}
+
+.day-cell.disabled {
+  color: rgba(255, 255, 255, 0.15);
+  cursor: not-allowed;
+}
+
+.day-cell.disabled:hover {
+  background: transparent;
+}
+
+.day-cell:hover:not(.empty):not(.disabled) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.day-cell.selected {
+  background-color: #0256cf !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* Footer Buttons */
+.cal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+}
+
+.cal-cancel-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cal-cancel-btn:hover {
+  color: var(--text-main);
+}
+
+.cal-apply-btn {
+  background: #e2e8f0;
+  color: #0f172a;
+  border: none;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cal-apply-btn:hover {
+  background: #cbd5e1;
+}

@@ -9,10 +9,18 @@ let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "", d28: "" }; // S
 
 // Looker View State
 let lookerDates = []; // List of all sorted unique dates (objects: { str: "...", date: Date })
-let lookerAStart = "";
-let lookerAEnd = "";
-let lookerBStart = "";
-let lookerBEnd = "";
+let lookerSelectedDates = {
+  a: new Set(),
+  b: new Set()
+};
+let lookerTempSelectedDates = {
+  a: new Set(),
+  b: new Set()
+};
+let lookerActiveMonth = {
+  a: { year: 2026, month: 7 }, // August
+  b: { year: 2026, month: 7 }  // August
+};
 
 // Date parser helper (Spanish date string -> Date object)
 function parseSpanishDateJS(dateStr) {
@@ -1152,7 +1160,20 @@ window.switchTab = function(tabId) {
   }
 };
 
-// Initialize Looker selects
+// Close calendar popups clicking outside
+function setupCalendarDismiss() {
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".calendar-dropdown")) {
+      document.querySelectorAll(".calendar-popup").forEach(el => {
+        el.classList.add("hidden");
+        el.parentElement.classList.remove("active");
+      });
+    }
+  });
+}
+setupCalendarDismiss();
+
+// Initialize Looker Calendars
 function initializeLookerFilters() {
   if (!hourlyData || !hourlyData.orders) return;
   
@@ -1163,52 +1184,35 @@ function initializeLookerFilters() {
                         .filter(d => d.date !== null)
                         .sort((a, b) => a.date - b.date);
   
-  const selectAStart = document.getElementById("looker-a-start");
-  const selectAEnd = document.getElementById("looker-a-end");
-  const selectBStart = document.getElementById("looker-b-start");
-  const selectBEnd = document.getElementById("looker-b-end");
-  
-  [selectAStart, selectAEnd, selectBStart, selectBEnd].forEach(select => {
-    select.innerHTML = "";
-    lookerDates.forEach(d => {
-      const opt = document.createElement("option");
-      opt.value = d.str;
-      opt.textContent = d.str;
-      select.appendChild(opt);
-    });
-  });
-  
-  // Set default values:
-  // Panel A: Start = 7 days ago (or oldest available), End = today
-  // Panel B: Start = today, End = today
   if (lookerDates.length > 0) {
+    // Determine max available date (today)
     const todayStr = relativeDates.hoy;
+    const todayObj = lookerDates.find(d => d.str === todayStr) || lookerDates[lookerDates.length - 1];
     
-    // Find index of today
-    const todayIdx = lookerDates.findIndex(d => d.str === todayStr);
+    // Set active months to max date month/year
+    const activeYr = todayObj.date.getFullYear();
+    const activeMth = todayObj.date.getMonth();
+    lookerActiveMonth.a = { year: activeYr, month: activeMth };
+    lookerActiveMonth.b = { year: activeYr, month: activeMth };
     
-    // Default A
-    const aStartIdx = Math.max(0, (todayIdx >= 0 ? todayIdx : lookerDates.length - 1) - 7);
-    const aEndIdx = todayIdx >= 0 ? todayIdx : lookerDates.length - 1;
+    // Set defaults:
+    // Panel A: Last 3 dates of range
+    const maxIdx = lookerDates.length - 1;
+    const aStartIdx = Math.max(0, maxIdx - 2);
+    for (let i = aStartIdx; i <= maxIdx; i++) {
+      lookerSelectedDates.a.add(lookerDates[i].str);
+    }
     
-    selectAStart.value = lookerDates[aStartIdx].str;
-    selectAEnd.value = lookerDates[aEndIdx].str;
+    // Panel B: Only the latest date (today)
+    lookerSelectedDates.b.add(todayObj.str);
     
-    // Default B
-    selectBStart.value = lookerDates[aEndIdx].str;
-    selectBEnd.value = lookerDates[aEndIdx].str;
+    updateCalendarLabel('a');
+    updateCalendarLabel('b');
   }
-  
-  // Attach listeners
-  [selectAStart, selectAEnd, selectBStart, selectBEnd].forEach(select => {
-    select.addEventListener("change", () => {
-      renderLookerView();
-    });
-  });
 }
 
 // Render Looker Pivot Table Panel (Independent)
-function renderLookerPanel(panelId, startStr, endStr) {
+function renderLookerPanel(panelId) {
   const theadTr = document.getElementById(`looker-${panelId}-thead-tr`);
   const tbody = document.getElementById(`looker-${panelId}-tbody`);
   
@@ -1216,18 +1220,14 @@ function renderLookerPanel(panelId, startStr, endStr) {
   
   const orders = hourlyData.orders;
   
-  // Parse range dates
-  const startDt = parseSpanishDateJS(startStr);
-  const endDt = parseSpanishDateJS(endStr);
+  // Get currently selected dates for this panel, sorted chronologically
+  const rangeDates = lookerDates.filter(d => lookerSelectedDates[panelId].has(d.str)).map(d => d.str);
   
-  if (!startDt || !endDt) {
-    theadTr.innerHTML = "<th>Error de fecha</th>";
+  if (rangeDates.length === 0) {
+    theadTr.innerHTML = "<th>Ninguna fecha seleccionada</th>";
     tbody.innerHTML = "";
     return;
   }
-  
-  // Get all dates in this range (chronological)
-  const rangeDates = lookerDates.filter(d => d.date >= startDt && d.date <= endDt).map(d => d.str);
   
   // Build header row: Hora, then each date, then Total
   let headHtml = `<th style="text-align: left; position: sticky; left: 0; z-index: 3;">Hora</th>`;
@@ -1333,13 +1333,240 @@ function renderLookerPanel(panelId, startStr, endStr) {
 
 // Global render Looker view function
 function renderLookerView() {
-  const selectAStart = document.getElementById("looker-a-start");
-  const selectAEnd = document.getElementById("looker-a-end");
-  const selectBStart = document.getElementById("looker-b-start");
-  const selectBEnd = document.getElementById("looker-b-end");
+  if (lookerSelectedDates.a.size === 0 && lookerDates.length > 0) {
+    // fallback init
+    initializeLookerFilters();
+  }
+  renderLookerPanel("a");
+  renderLookerPanel("b");
+}
+
+// Toggle dropdown visibility
+window.toggleCalendarDropdown = function(panelId, event) {
+  event.stopPropagation();
+  const dropdown = document.getElementById(`dropdown-calendar-${panelId}`);
+  const popup = document.getElementById(`calendar-popup-${panelId}`);
+  const isHidden = popup.classList.contains("hidden");
   
-  if (!selectAStart) return;
+  // Close all other dropdowns / popups
+  document.querySelectorAll(".calendar-popup").forEach(el => el.classList.add("hidden"));
+  document.querySelectorAll(".calendar-dropdown").forEach(el => el.classList.remove("active"));
   
-  renderLookerPanel("a", selectAStart.value, selectAEnd.value);
-  renderLookerPanel("b", selectBStart.value, selectBEnd.value);
+  if (isHidden) {
+    popup.classList.remove("hidden");
+    dropdown.classList.add("active");
+    
+    // Copy active selection to temp working set
+    lookerTempSelectedDates[panelId] = new Set(lookerSelectedDates[panelId]);
+    
+    // Render
+    drawCalendar(panelId);
+  }
+};
+
+// Navigate months in popup
+window.navCal = function(panelId, dir, event) {
+  event.stopPropagation();
+  let m = lookerActiveMonth[panelId].month + dir;
+  let y = lookerActiveMonth[panelId].year;
+  
+  if (m < 0) {
+    m = 11;
+    y--;
+  } else if (m > 11) {
+    m = 0;
+    y++;
+  }
+  
+  lookerActiveMonth[panelId].month = m;
+  lookerActiveMonth[panelId].year = y;
+  drawCalendar(panelId);
+};
+
+// Check if a specific date contains records in the DB
+function isDateAvailableInDb(year, month, day) {
+  const monthsEng = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  
+  const dateStr = `${day} ${monthsSp[month]} ${year}`;
+  return lookerDates.some(d => d.str === dateStr);
+}
+
+// Format Spanish Date String from numbers
+function getSpanishDateStr(year, month, day) {
+  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  return `${day} ${monthsSp[month]} ${year}`;
+}
+
+// Weekday shortcut toggler (e.g. clicking 'L' selects all Mondays in active month)
+window.toggleWeekdayShortcut = function(panelId, targetDayOfWeek, event) {
+  event.stopPropagation();
+  const y = lookerActiveMonth[panelId].year;
+  const m = lookerActiveMonth[panelId].month;
+  
+  const numDays = new Date(y, m + 1, 0).getDate();
+  
+  // Find all dates of this weekday in the active month that exist in the database
+  const datesToToggle = [];
+  let allAlreadySelected = true;
+  
+  for (let d = 1; d <= numDays; d++) {
+    const dt = new Date(y, m, d);
+    if (dt.getDay() === targetDayOfWeek) {
+      const dateStr = getSpanishDateStr(y, m, d);
+      if (lookerDates.some(ld => ld.str === dateStr)) {
+        datesToToggle.push(dateStr);
+        if (!lookerTempSelectedDates[panelId].has(dateStr)) {
+          allAlreadySelected = false;
+        }
+      }
+    }
+  }
+  
+  if (datesToToggle.length === 0) return;
+  
+  // Toggle selection
+  if (allAlreadySelected) {
+    // Unselect all
+    datesToToggle.forEach(dStr => lookerTempSelectedDates[panelId].delete(dStr));
+  } else {
+    // Select all
+    datesToToggle.forEach(dStr => lookerTempSelectedDates[panelId].add(dStr));
+  }
+  
+  drawCalendar(panelId);
+};
+
+// Draw Calendar GUI grid
+function drawCalendar(panelId) {
+  const popup = document.getElementById(`calendar-popup-${panelId}`);
+  if (!popup) return;
+  
+  const y = lookerActiveMonth[panelId].year;
+  const m = lookerActiveMonth[panelId].month;
+  const monthsLabels = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  
+  // Determine grid cells
+  const firstDayOfWeek = new Date(y, m, 1).getDay(); // Sunday=0, Monday=1
+  // Map Sunday (0) to index 6, and Monday-Saturday (1-6) to index 0-5
+  const firstDayIndex = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+  const numDays = new Date(y, m + 1, 0).getDate();
+  
+  let gridHtml = "";
+  
+  // Empty start cells
+  for (let i = 0; i < firstDayIndex; i++) {
+    gridHtml += `<div class="day-cell empty"></div>`;
+  }
+  
+  // Day cells
+  for (let d = 1; d <= numDays; d++) {
+    const dateStr = getSpanishDateStr(y, m, d);
+    const available = lookerDates.some(ld => ld.str === dateStr);
+    const selected = lookerTempSelectedDates[panelId].has(dateStr);
+    
+    let classes = "day-cell";
+    if (!available) classes += " disabled";
+    if (selected) classes += " selected";
+    
+    const clickHandler = available ? `onclick="toggleDaySelect('${panelId}', '${dateStr}', event)"` : "";
+    gridHtml += `<div class="${classes}" ${clickHandler}>${d}</div>`;
+  }
+  
+  popup.innerHTML = `
+    <div class="cal-pop-header">
+      <button class="cal-nav-btn" onclick="navCal('${panelId}', -1, event)">◀</button>
+      <span class="cal-month-year">${monthsLabels[m]} ${y}</span>
+      <button class="cal-nav-btn" onclick="navCal('${panelId}', 1, event)">▶</button>
+    </div>
+    <div class="cal-weekdays">
+      <span onclick="toggleWeekdayShortcut('${panelId}', 1, event)" title="Alternar todos los Lunes">L</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 2, event)" title="Alternar todos los Martes">M</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 3, event)" title="Alternar todos los Miércoles">X</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 4, event)" title="Alternar todos los Jueves">J</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 5, event)" title="Alternar todos los Viernes">V</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 6, event)" title="Alternar todos los Sábados">S</span>
+      <span onclick="toggleWeekdayShortcut('${panelId}', 0, event)" title="Alternar todos los Domingos">D</span>
+    </div>
+    <div class="cal-days-grid">
+      ${gridHtml}
+    </div>
+    <div class="cal-footer">
+      <button class="cal-cancel-btn" onclick="cancelCalSelection('${panelId}', event)">Cancelar</button>
+      <button class="cal-apply-btn" onclick="applyCalSelection('${panelId}', event)">Aplicar</button>
+    </div>
+  `;
+}
+
+// Toggle individual day select
+window.toggleDaySelect = function(panelId, dateStr, event) {
+  event.stopPropagation();
+  if (lookerTempSelectedDates[panelId].has(dateStr)) {
+    lookerTempSelectedDates[panelId].delete(dateStr);
+  } else {
+    lookerTempSelectedDates[panelId].add(dateStr);
+  }
+  drawCalendar(panelId);
+};
+
+// Cancel and dismiss calendar popup
+window.cancelCalSelection = function(panelId, event) {
+  if (event) event.stopPropagation();
+  const popup = document.getElementById(`calendar-popup-${panelId}`);
+  const dropdown = document.getElementById(`dropdown-calendar-${panelId}`);
+  popup.classList.add("hidden");
+  dropdown.classList.remove("active");
+};
+
+// Apply date selections and refresh panel
+window.applyCalSelection = function(panelId, event) {
+  if (event) event.stopPropagation();
+  
+  // Save temp selections to main active sets
+  lookerSelectedDates[panelId] = new Set(lookerTempSelectedDates[panelId]);
+  
+  updateCalendarLabel(panelId);
+  cancelCalSelection(panelId);
+  renderLookerPanel(panelId);
+};
+
+// Update button text to summarize selection
+function updateCalendarLabel(panelId) {
+  const label = document.getElementById(`calendar-${panelId}-label`);
+  if (!label) return;
+  
+  const count = lookerSelectedDates[panelId].size;
+  if (count === 0) {
+    label.textContent = "Ninguna fecha";
+  } else if (count === 1) {
+    // Show single date (simplified "3 ago 2026" -> "3 ago")
+    const dStr = [...lookerSelectedDates[panelId]][0];
+    const parts = dStr.split(" ");
+    label.textContent = parts.length >= 2 ? `${parts[0]} ${parts[1]}` : dStr;
+  } else {
+    // Try to see if it is a continuous range
+    const selected = lookerDates.filter(d => lookerSelectedDates[panelId].has(d.str));
+    let isContinuous = true;
+    
+    // Find index sequence
+    const indices = selected.map(s => lookerDates.findIndex(ld => ld.str === s.str));
+    indices.sort((a, b) => a - b);
+    
+    for (let i = 1; i < indices.length; i++) {
+      if (indices[i] !== indices[i-1] + 1) {
+        isContinuous = false;
+        break;
+      }
+    }
+    
+    if (isContinuous && selected.length > 1) {
+      const startStr = selected[0].str.split(" ");
+      const endStr = selected[selected.length - 1].str.split(" ");
+      const startLbl = startStr.length >= 2 ? `${startStr[0]} ${startStr[1]}` : selected[0].str;
+      const endLbl = endStr.length >= 2 ? `${endStr[0]} ${endStr[1]}` : selected[selected.length - 1].str;
+      label.textContent = `${startLbl} - ${endLbl}`;
+    } else {
+      label.textContent = `${count} días seleccionados`;
+    }
+  }
 }

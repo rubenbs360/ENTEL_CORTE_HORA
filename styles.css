@@ -891,6 +891,8 @@ body {
   z-index: 3 !important;
   background-color: #ffffff !important;
   border-right: 2px solid var(--border-color) !important;
+  white-space: nowrap !important;
+  min-width: 90px !important;
 }
 .looker-table td.hour-label {
   position: sticky !important;
@@ -898,4 +900,6 @@ body {
   z-index: 2 !important;
   background-color: #ffffff !important;
   border-right: 2px solid var(--border-color) !important;
+  white-space: nowrap !important;
+  min-width: 90px !important;
 }

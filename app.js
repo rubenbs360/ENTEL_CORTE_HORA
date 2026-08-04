@@ -1312,10 +1312,7 @@ function renderLookerPanel(panelId, startStr, endStr) {
     // Format hour label
     const labelHour = `${h.toString().padStart(2, '0')}:00 hrs`;
     
-    // Only hide rows of hours that are completely empty in this range
-    if (rowTotal === 0 && (h < 7 || h > 21)) {
-      continue;
-    }
+
     
     tbodyHtml += `
       <tr>

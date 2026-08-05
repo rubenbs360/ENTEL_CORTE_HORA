@@ -86,8 +86,7 @@ def main():
     df_all = pd.concat(dfs, ignore_index=True)
     df_all['FRM_N_DNI_Asesor'] = df_all['FRM_N_DNI_Asesor'].astype(str).str.strip().str.upper()
     
-    # Exclude 'No bop' orders
-    df_all = df_all[df_all['Tipo_Despacho_Detalle'] != 'No bop']
+    # Include all orders (No bop orders are processed in raw data)
     
     # Map advisor metadata
     coordinators = []

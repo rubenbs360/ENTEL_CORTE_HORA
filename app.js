@@ -465,6 +465,7 @@ function renderHourlyDashboard() {
   let multipedidoHoy = 0;
   let expressHoy = 0;
   let pickupHoy = 0;
+  let noBopHoy = 0;
   
   orders.forEach(o => {
     if (o.Hora > maxSelectedHour) return;
@@ -473,6 +474,7 @@ function renderHourlyDashboard() {
       if (o.Multilinea === 'SI') multipedidoHoy++;
       if (o.Tipo_Despacho_Detalle === 'EXPRES' || o.Tipo_Despacho_Detalle === 'EXPRESS') expressHoy++;
       if (o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA') pickupHoy++;
+      if (o.Tipo_Despacho_Detalle === 'No bop') noBopHoy++;
     }
     else if (o.Fecha_Creacion === meta.d1_date) kpis.d1++;
     else if (o.Fecha_Creacion === meta.d7_date) kpis.d7++;
@@ -503,6 +505,17 @@ function renderHourlyDashboard() {
   // Update Hoy main & mini grid values
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
   document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
+  
+  // Update No bop alert badge
+  const bopAlert = document.getElementById("kpi-bop-alert");
+  if (bopAlert) {
+    if (noBopHoy >= 10) {
+      bopAlert.textContent = `⚠️ ${noBopHoy} No Bop`;
+      bopAlert.classList.remove("hidden");
+    } else {
+      bopAlert.classList.add("hidden");
+    }
+  }
   
   document.getElementById("mini-multipedido-pct").textContent = formatPercent(multipedidoHoy, kpis.hoy);
   document.getElementById("mini-multipedido-val").textContent = multipedidoHoy.toLocaleString() + " u.";

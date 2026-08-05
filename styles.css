@@ -1102,3 +1102,37 @@ body {
 .cal-apply-btn:hover {
   background: #cbd5e1;
 }
+
+/* KPI Main Card Alert Badge (No bop) */
+.kpi-main-card {
+  position: relative !important;
+}
+
+.kpi-alert-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  padding: 0.25rem 0.60rem;
+  border-radius: 20px;
+  font-size: 0.70rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+  animation: pulse-alert 2s infinite;
+  z-index: 5;
+}
+
+@keyframes pulse-alert {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.kpi-alert-badge.hidden {
+  display: none !important;
+}

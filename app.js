@@ -1044,7 +1044,7 @@ function renderHourlyDashboard() {
       if (val >= 75) {
         // Soft pastel green
         return 'style="text-align:center; background-color: rgba(34, 197, 94, 0.15); color: var(--text-main); font-weight: 600;"';
-      } else if (val >= 65) {
+      } else if (val >= 70) {
         // Soft pastel yellow
         return 'style="text-align:center; background-color: rgba(234, 179, 8, 0.15); color: var(--text-main); font-weight: 600;"';
       } else {

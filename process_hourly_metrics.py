@@ -45,6 +45,9 @@ def main():
     print(f"Cargando nómina desde: {os.path.basename(nomina_file)}")
     
     df_nomina = pd.read_excel(nomina_file, sheet_name=0)
+    # Filter only active advisors (exclude terminated/cesados and others)
+    if 'ESTADO' in df_nomina.columns:
+        df_nomina = df_nomina[df_nomina['ESTADO'].astype(str).str.strip().str.upper() == 'ACTIVO']
     df_nomina['USUARIO'] = df_nomina['USUARIO'].astype(str).str.strip().str.upper()
     df_nomina['SUPERVISOR'] = df_nomina['SUPERVISOR'].astype(str).str.strip().str.upper()
     df_nomina['COORDINADOR'] = df_nomina['COORDINADOR'].astype(str).str.strip().str.upper()

@@ -948,6 +948,127 @@ function renderHourlyDashboard() {
   `;
   partTbody.appendChild(tTotalRow);
 
+  // 6.5. Render Table 5: Efectividad por Tipo de Despacho (Hoy)
+  const effTbody = document.getElementById("hourly-efectividad-table-body");
+  if (effTbody) {
+    effTbody.innerHTML = "";
+    
+    // Get sample hoy order to find hoyIso
+    const sampleHoyOrder = orders.find(x => x.Fecha_Creacion === meta.hoy_date);
+    const hoyIso = sampleHoyOrder ? sampleHoyOrder.Fecha_Creacion_ISO : '';
+
+    function getEffPct(ordersList, typeFilter = null) {
+      let filtered = ordersList.filter(o => {
+        if (o.Grupo_Canal !== 'Outbound') return false;
+        if (o.Tipo_Despacho_Detalle === 'No bop') return false;
+        
+        if (typeFilter) {
+          const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+          if (typeFilter === 'EXPRESS') {
+            if (type !== 'EXPRESS' && type !== 'EXPRES') return false;
+          } else if (typeFilter === 'RETIRO EN TIENDA') {
+            if (type !== 'RETIRO EN TIENDA' && type !== 'RETIRO EN TIENDA (PICKUP)') return false;
+          } else if (typeFilter === 'PROGRAMADO') {
+            if (type !== 'PROGRAMADO' && type !== 'EXPRESS PROGRAMADO') return false;
+          }
+        }
+        
+        if (o.Fecha_Pactada_ISO && hoyIso && o.Fecha_Pactada_ISO > hoyIso) {
+          return false;
+        }
+        return true;
+      });
+      
+      const total = filtered.length;
+      if (total === 0) return '-';
+      
+      const delivered = filtered.filter(o => o.Estado_T === 'Entregado').length;
+      return ((delivered / total) * 100).toFixed(2) + "%";
+    }
+
+    function getEffStyle(valStr) {
+      if (valStr === '-') return 'style="text-align:center;"';
+      const val = parseFloat(valStr);
+      if (isNaN(val)) return 'style="text-align:center;"';
+      if (val >= 80) {
+        const opacity = Math.min(0.2, (val - 80) / 20 * 0.2 + 0.05);
+        return `style="text-align:center; background-color: rgba(34, 197, 94, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
+      } else if (val < 65) {
+        const opacity = Math.min(0.2, (65 - val) / 25 * 0.2 + 0.05);
+        return `style="text-align:center; background-color: rgba(239, 68, 68, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
+      }
+      return 'style="text-align:center;"';
+    }
+
+    coordinatorsList.forEach(coord => {
+      const coordHoyOrders = filteredOrders.filter(o => o.COORDINADOR === coord && o.Fecha_Creacion === meta.hoy_date);
+      if (coordHoyOrders.length === 0 && selectedCoordinadores.size > 1) return;
+      
+      const cExpressEff = getEffPct(coordHoyOrders, 'EXPRESS');
+      const cProgEff = getEffPct(coordHoyOrders, 'PROGRAMADO');
+      const cRetiroEff = getEffPct(coordHoyOrders, 'RETIRO EN TIENDA');
+      const cTotalEff = getEffPct(coordHoyOrders);
+      
+      const groupId = `group-eff-${coord.replace(/\s+/g, '_')}`;
+      const boldRow = document.createElement("tr");
+      boldRow.className = "bold-row";
+      boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+      boldRow.innerHTML = `
+        <td><span class="toggle-icon">▼</span>${coord}</td>
+        <td ${getEffStyle(cExpressEff)}>${cExpressEff}</td>
+        <td ${getEffStyle(cProgEff)}>${cProgEff}</td>
+        <td ${getEffStyle(cRetiroEff)}>${cRetiroEff}</td>
+        <td ${getEffStyle(cTotalEff)}>${cTotalEff}</td>
+      `;
+      effTbody.appendChild(boldRow);
+      
+      const supsInCoord = [...new Set(coordHoyOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
+      
+      const supEffRows = supsInCoord.map(sup => {
+        const supHoyOrders = coordHoyOrders.filter(o => o.SUPERVISOR === sup);
+        const sExpressEff = getEffPct(supHoyOrders, 'EXPRESS');
+        const sProgEff = getEffPct(supHoyOrders, 'PROGRAMADO');
+        const sRetiroEff = getEffPct(supHoyOrders, 'RETIRO EN TIENDA');
+        const sTotalEff = getEffPct(supHoyOrders);
+        return { sup, sExpressEff, sProgEff, sRetiroEff, sTotalEff };
+      });
+      
+      supEffRows.forEach(item => {
+        const subRow = document.createElement("tr");
+        subRow.className = groupId;
+        subRow.innerHTML = `
+          <td style="padding-left: 2rem; white-space: nowrap;">${item.sup}</td>
+          <td ${getEffStyle(item.sExpressEff)}>${item.sExpressEff}</td>
+          <td ${getEffStyle(item.sProgEff)}>${item.sProgEff}</td>
+          <td ${getEffStyle(item.sRetiroEff)}>${item.sRetiroEff}</td>
+          <td ${getEffStyle(item.sTotalEff)}>${item.sTotalEff}</td>
+        `;
+        effTbody.appendChild(subRow);
+      });
+    });
+
+    // Append TOTAL OPERACIÓN row for Table 5
+    const effTotalRow = document.createElement("tr");
+    effTotalRow.className = "bold-row";
+    effTotalRow.style.borderTop = "2px solid var(--text-main)";
+    effTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    
+    const tHoyOrders = filteredOrders.filter(o => o.Fecha_Creacion === meta.hoy_date);
+    const tExpressEff = getEffPct(tHoyOrders, 'EXPRESS');
+    const tProgEff = getEffPct(tHoyOrders, 'PROGRAMADO');
+    const tRetiroEff = getEffPct(tHoyOrders, 'RETIRO EN TIENDA');
+    const tTotalEff = getEffPct(tHoyOrders);
+    
+    effTotalRow.innerHTML = `
+      <td>TOTAL OPERACIÓN</td>
+      <td ${getEffStyle(tExpressEff)}>${tExpressEff}</td>
+      <td ${getEffStyle(tProgEff)}>${tProgEff}</td>
+      <td ${getEffStyle(tRetiroEff)}>${tRetiroEff}</td>
+      <td ${getEffStyle(tTotalEff)}>${tTotalEff}</td>
+    `;
+    effTbody.appendChild(effTotalRow);
+  }
+
   // 7. Render Table 4: Avance por Cuartil (Solo Cuartiles)
   const quartilsList = ['Q1', 'Q2', 'Q3', 'Q4'];
   const qTbody = document.getElementById("hourly-only-cuartiles-table-body");

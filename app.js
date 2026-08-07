@@ -435,6 +435,7 @@ function renderHourlyDashboard() {
   // 1. Get current filter parameters
   // If hours is empty, we show 0. To make it cumulative, we filter where Hora <= max(selectedHours)
   const maxSelectedHour = selectedHours.size > 0 ? Math.max(...selectedHours) : -1;
+  const coordinatorsList = [...selectedCoordinadores].sort();
   
   // Update Last Update Badge (shows maxSelectedHour + 1 to display the end of the hour range, e.g. 17:00 for hour 16)
   const updateBadge = document.getElementById("last-update-time");

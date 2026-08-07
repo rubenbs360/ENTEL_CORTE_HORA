@@ -569,10 +569,10 @@ function renderHourlyDashboard() {
                   (parsedD1.getMonth() + 1).toString().padStart(2, '0') + "-" + 
                   parsedD1.getDate().toString().padStart(2, '0');
                   
-    // Subset 1: Campaign metrics up to D-1 (Outbound only, pactada <= D-1, creacion <= D-1)
-    let subsetD1Total = 0;
-    let subsetD1Entregado = 0;
-    let subsetD1Cerradas = 0;
+    // Campaign metrics up to Today (Outbound only, pactada <= Hoy, excluding 'No bop')
+    let subsetMTDTotal = 0;
+    let subsetMTDEntregado = 0;
+    let subsetMTDCerradas = 0;
     
     // Subset 2: Monthly dispatch share up to selected hour of Hoy (Outbound only)
     let cmpTotalShare = 0;
@@ -583,6 +583,9 @@ function renderHourlyDashboard() {
       if (o.Grupo_Canal !== 'Outbound') return;
       if (!o.Fecha_Creacion_ISO || !o.Fecha_Creacion_ISO.startsWith(monthPrefix)) return;
       
+      // Exclude 'No bop' from effectiveness to match Looker
+      if (o.Tipo_Despacho_Detalle === 'No bop') return;
+      
       // Calculate dispatch share up to current selected hour of Hoy
       const isBeforeHoy = o.Fecha_Creacion_ISO < hoyIso;
       const isHoyAtOrBeforeHour = (o.Fecha_Creacion_ISO === hoyIso && o.Hora <= maxSelectedHour);
@@ -592,20 +595,23 @@ function renderHourlyDashboard() {
         if (o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA') cmpPickupShare++;
       }
       
-      // Calculate Campaign MTD Delivery and Actives ratios up to D-1
-      if (o.Fecha_Creacion_ISO <= d1Iso && o.Fecha_Pactada_ISO && o.Fecha_Pactada_ISO <= d1Iso) {
-        subsetD1Total++;
+      // Calculate Campaign MTD Delivery and Actives ratios up to Hoy (excluding future pactada dates)
+      if (o.Fecha_Creacion_ISO <= hoyIso) {
+        if (o.Fecha_Pactada_ISO && o.Fecha_Pactada_ISO > hoyIso) {
+          return; // Exclude orders with future delivery/pactada dates
+        }
+        subsetMTDTotal++;
         if (o.Estado_T === 'Entregado') {
-          subsetD1Entregado++;
+          subsetMTDEntregado++;
           if (o.EOC_Estado === 'CERRADAS') {
-            subsetD1Cerradas++;
+            subsetMTDCerradas++;
           }
         }
       }
     });
     
-    cmpEfect = subsetD1Total > 0 ? (subsetD1Entregado / subsetD1Total) * 100 : 0;
-    cmpActiv = subsetD1Entregado > 0 ? (subsetD1Cerradas / subsetD1Entregado) * 100 : 0;
+    cmpEfect = subsetMTDTotal > 0 ? (subsetMTDEntregado / subsetMTDTotal) * 100 : 0;
+    cmpActiv = subsetMTDEntregado > 0 ? (subsetMTDCerradas / subsetMTDEntregado) * 100 : 0;
     cmpExpress = cmpTotalShare > 0 ? (cmpExpressShare / cmpTotalShare) * 100 : 0;
     cmpPickup = cmpTotalShare > 0 ? (cmpPickupShare / cmpTotalShare) * 100 : 0;
   }

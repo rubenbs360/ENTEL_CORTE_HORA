@@ -948,14 +948,24 @@ function renderHourlyDashboard() {
   `;
   partTbody.appendChild(tTotalRow);
 
-  // 6.5. Render Table 5: Efectividad por Tipo de Despacho (Hoy)
+  // 6.5. Render Table 5: Efectividad por Tipo de Despacho (Acumulado MTD)
   const effTbody = document.getElementById("hourly-efectividad-table-body");
   if (effTbody) {
     effTbody.innerHTML = "";
     
-    // Get sample hoy order to find hoyIso
+    // Get sample hoy order to find hoyIso and monthPrefix
     const sampleHoyOrder = orders.find(x => x.Fecha_Creacion === meta.hoy_date);
     const hoyIso = sampleHoyOrder ? sampleHoyOrder.Fecha_Creacion_ISO : '';
+    const monthPrefix = hoyIso ? hoyIso.substring(0, 8) : ''; // e.g. "2026-08-"
+
+    // Filter to get MTD orders up to the active selected hour for today
+    const mtdOrders = filteredOrders.filter(o => {
+      if (!o.Fecha_Creacion_ISO || !o.Fecha_Creacion_ISO.startsWith(monthPrefix)) return false;
+      
+      const isBeforeHoy = o.Fecha_Creacion_ISO < hoyIso;
+      const isHoyAtOrBeforeHour = (o.Fecha_Creacion_ISO === hoyIso && o.Hora <= maxSelectedHour);
+      return isBeforeHoy || isHoyAtOrBeforeHour;
+    });
 
     function getEffPct(ordersList, typeFilter = null) {
       let filtered = ordersList.filter(o => {
@@ -973,6 +983,7 @@ function renderHourlyDashboard() {
           }
         }
         
+        // Exclude orders with future pactada dates relative to today
         if (o.Fecha_Pactada_ISO && hoyIso && o.Fecha_Pactada_ISO > hoyIso) {
           return false;
         }
@@ -986,28 +997,70 @@ function renderHourlyDashboard() {
       return ((delivered / total) * 100).toFixed(2) + "%";
     }
 
-    function getEffStyle(valStr) {
-      if (valStr === '-') return 'style="text-align:center;"';
+    // 1. Semaphoring for RETIRO EN TIENDA (only on supervisor rows)
+    function getRetiroStyle(valStr, isCoordinatorRow) {
+      if (isCoordinatorRow || valStr === '-') return 'style="text-align:center;"';
       const val = parseFloat(valStr);
       if (isNaN(val)) return 'style="text-align:center;"';
-      if (val >= 80) {
-        const opacity = Math.min(0.2, (val - 80) / 20 * 0.2 + 0.05);
-        return `style="text-align:center; background-color: rgba(34, 197, 94, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
-      } else if (val < 65) {
+      if (val < 65) {
         const opacity = Math.min(0.2, (65 - val) / 25 * 0.2 + 0.05);
         return `style="text-align:center; background-color: rgba(239, 68, 68, ${opacity.toFixed(2)}); font-weight: 600; color: var(--text-main);"`;
       }
       return 'style="text-align:center;"';
     }
 
-    coordinatorsList.forEach(coord => {
-      const coordHoyOrders = filteredOrders.filter(o => o.COORDINADOR === coord && o.Fecha_Creacion === meta.hoy_date);
-      if (coordHoyOrders.length === 0 && selectedCoordinadores.size > 1) return;
+    // Calculate Overall MTD Express Average for Express signs
+    const totalMtdExpress = mtdOrders.filter(o => {
+      if (o.Grupo_Canal !== 'Outbound' || o.Tipo_Despacho_Detalle === 'No bop') return false;
+      const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+      if (type !== 'EXPRESS' && type !== 'EXPRES') return false;
+      if (o.Fecha_Pactada_ISO && hoyIso && o.Fecha_Pactada_ISO > hoyIso) return false;
+      return true;
+    });
+    const totalMtdExpressDelivered = totalMtdExpress.filter(o => o.Estado_T === 'Entregado').length;
+    const overallExpressMtdAvg = totalMtdExpress.length > 0 ? (totalMtdExpressDelivered / totalMtdExpress.length) * 100 : 0;
+
+    // 2. Semaphoring for EXPRESS (signs only, no cell background colors)
+    function getExpressSign(valStr) {
+      if (valStr === '-') return '';
+      const val = parseFloat(valStr);
+      if (isNaN(val)) return '';
       
-      const cExpressEff = getEffPct(coordHoyOrders, 'EXPRESS');
-      const cProgEff = getEffPct(coordHoyOrders, 'PROGRAMADO');
-      const cRetiroEff = getEffPct(coordHoyOrders, 'RETIRO EN TIENDA');
-      const cTotalEff = getEffPct(coordHoyOrders);
+      if (val > overallExpressMtdAvg + 1.5) {
+        return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">▲</span>`;
+      } else if (val < overallExpressMtdAvg - 1.5) {
+        return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">▼</span>`;
+      } else {
+        return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">▶</span>`;
+      }
+    }
+
+    // 3. Semaphoring for TOTAL (soft pastel colors: red, yellow, green)
+    function getTotalStyle(valStr) {
+      if (valStr === '-') return 'style="text-align:center;"';
+      const val = parseFloat(valStr);
+      if (isNaN(val)) return 'style="text-align:center;"';
+      
+      if (val >= 75) {
+        // Soft pastel green
+        return 'style="text-align:center; background-color: rgba(34, 197, 94, 0.15); color: var(--text-main); font-weight: 600;"';
+      } else if (val >= 65) {
+        // Soft pastel yellow
+        return 'style="text-align:center; background-color: rgba(234, 179, 8, 0.15); color: var(--text-main); font-weight: 600;"';
+      } else {
+        // Soft pastel red
+        return 'style="text-align:center; background-color: rgba(239, 68, 68, 0.15); color: var(--text-main); font-weight: 600;"';
+      }
+    }
+
+    coordinatorsList.forEach(coord => {
+      const coordMtdOrders = mtdOrders.filter(o => o.COORDINADOR === coord);
+      if (coordMtdOrders.length === 0 && selectedCoordinadores.size > 1) return;
+      
+      const cExpressEff = getEffPct(coordMtdOrders, 'EXPRESS');
+      const cProgEff = getEffPct(coordMtdOrders, 'PROGRAMADO');
+      const cRetiroEff = getEffPct(coordMtdOrders, 'RETIRO EN TIENDA');
+      const cTotalEff = getEffPct(coordMtdOrders);
       
       const groupId = `group-eff-${coord.replace(/\s+/g, '_')}`;
       const boldRow = document.createElement("tr");
@@ -1015,21 +1068,21 @@ function renderHourlyDashboard() {
       boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
       boldRow.innerHTML = `
         <td><span class="toggle-icon">▼</span>${coord}</td>
-        <td ${getEffStyle(cExpressEff)}>${cExpressEff}</td>
-        <td ${getEffStyle(cProgEff)}>${cProgEff}</td>
-        <td ${getEffStyle(cRetiroEff)}>${cRetiroEff}</td>
-        <td ${getEffStyle(cTotalEff)}>${cTotalEff}</td>
+        <td style="text-align:center;">${getExpressSign(cExpressEff)} ${cExpressEff}</td>
+        <td style="text-align:center;">${cProgEff}</td>
+        <td ${getRetiroStyle(cRetiroEff, true)}>${cRetiroEff}</td>
+        <td ${getTotalStyle(cTotalEff)}>${cTotalEff}</td>
       `;
       effTbody.appendChild(boldRow);
       
-      const supsInCoord = [...new Set(coordHoyOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
+      const supsInCoord = [...new Set(coordMtdOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
       
       const supEffRows = supsInCoord.map(sup => {
-        const supHoyOrders = coordHoyOrders.filter(o => o.SUPERVISOR === sup);
-        const sExpressEff = getEffPct(supHoyOrders, 'EXPRESS');
-        const sProgEff = getEffPct(supHoyOrders, 'PROGRAMADO');
-        const sRetiroEff = getEffPct(supHoyOrders, 'RETIRO EN TIENDA');
-        const sTotalEff = getEffPct(supHoyOrders);
+        const supMtdOrders = coordMtdOrders.filter(o => o.SUPERVISOR === sup);
+        const sExpressEff = getEffPct(supMtdOrders, 'EXPRESS');
+        const sProgEff = getEffPct(supMtdOrders, 'PROGRAMADO');
+        const sRetiroEff = getEffPct(supMtdOrders, 'RETIRO EN TIENDA');
+        const sTotalEff = getEffPct(supMtdOrders);
         return { sup, sExpressEff, sProgEff, sRetiroEff, sTotalEff };
       });
       
@@ -1038,10 +1091,10 @@ function renderHourlyDashboard() {
         subRow.className = groupId;
         subRow.innerHTML = `
           <td style="padding-left: 2rem; white-space: nowrap;">${item.sup}</td>
-          <td ${getEffStyle(item.sExpressEff)}>${item.sExpressEff}</td>
-          <td ${getEffStyle(item.sProgEff)}>${item.sProgEff}</td>
-          <td ${getEffStyle(item.sRetiroEff)}>${item.sRetiroEff}</td>
-          <td ${getEffStyle(item.sTotalEff)}>${item.sTotalEff}</td>
+          <td style="text-align:center; white-space:nowrap;">${getExpressSign(item.sExpressEff)} ${item.sExpressEff}</td>
+          <td style="text-align:center;">${item.sProgEff}</td>
+          <td ${getRetiroStyle(item.sRetiroEff, false)}>${item.sRetiroEff}</td>
+          <td ${getTotalStyle(item.sTotalEff)}>${item.sTotalEff}</td>
         `;
         effTbody.appendChild(subRow);
       });
@@ -1053,18 +1106,17 @@ function renderHourlyDashboard() {
     effTotalRow.style.borderTop = "2px solid var(--text-main)";
     effTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
     
-    const tHoyOrders = filteredOrders.filter(o => o.Fecha_Creacion === meta.hoy_date);
-    const tExpressEff = getEffPct(tHoyOrders, 'EXPRESS');
-    const tProgEff = getEffPct(tHoyOrders, 'PROGRAMADO');
-    const tRetiroEff = getEffPct(tHoyOrders, 'RETIRO EN TIENDA');
-    const tTotalEff = getEffPct(tHoyOrders);
+    const tExpressEff = getEffPct(mtdOrders, 'EXPRESS');
+    const tProgEff = getEffPct(mtdOrders, 'PROGRAMADO');
+    const tRetiroEff = getEffPct(mtdOrders, 'RETIRO EN TIENDA');
+    const tTotalEff = getEffPct(mtdOrders);
     
     effTotalRow.innerHTML = `
       <td>TOTAL OPERACIÓN</td>
-      <td ${getEffStyle(tExpressEff)}>${tExpressEff}</td>
-      <td ${getEffStyle(tProgEff)}>${tProgEff}</td>
-      <td ${getEffStyle(tRetiroEff)}>${tRetiroEff}</td>
-      <td ${getEffStyle(tTotalEff)}>${tTotalEff}</td>
+      <td style="text-align:center;">${getExpressSign(tExpressEff)} ${tExpressEff}</td>
+      <td style="text-align:center;">${tProgEff}</td>
+      <td ${getRetiroStyle(tRetiroEff, true)}>${tRetiroEff}</td>
+      <td ${getTotalStyle(tTotalEff)}>${tTotalEff}</td>
     `;
     effTbody.appendChild(effTotalRow);
   }

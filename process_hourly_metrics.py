@@ -38,9 +38,9 @@ def main():
     print("--- INICIANDO COMPILACION DE DETALLE DE METRICAS ---")
     
     # 1. Load Nomina
-    nomina_files = [f for f in glob.glob(os.path.join(folder, "*.xlsx")) if not os.path.basename(f).startswith("~$")]
+    nomina_files = [f for f in glob.glob(os.path.join(folder, "*.xlsx")) if 'NOMINA' in os.path.basename(f).upper() and not os.path.basename(f).startswith("~$")]
     if not nomina_files:
-        raise FileNotFoundError("No se encontró el archivo de nómina XLSX.")
+        raise FileNotFoundError("No se encontró el archivo de nómina NOMINA_*.xlsx.")
     nomina_file = max(nomina_files, key=os.path.getmtime)
     print(f"Cargando nómina desde: {os.path.basename(nomina_file)}")
     
@@ -89,44 +89,45 @@ def main():
     df_all = pd.concat(dfs, ignore_index=True)
     df_all['FRM_N_DNI_Asesor'] = df_all['FRM_N_DNI_Asesor'].astype(str).str.strip().str.upper()
     
-    # Include all orders (No bop orders are processed in raw data)
-    
-    # Map advisor metadata
-    coordinators = []
-    supervisors = []
-    quartils = []
-    antiguedades = []
-    for val in df_all['FRM_N_DNI_Asesor']:
-        info = nomina_dict.get(val)
-        if info:
-            coordinators.append(info['coordinador'])
-            supervisors.append(info['supervisor'])
-            quartils.append(info['cuartil'])
-            antiguedades.append(info['antiguedad'])
-        else:
-            coordinators.append(np.nan)
-            supervisors.append(np.nan)
-            quartils.append(np.nan)
-            antiguedades.append(np.nan)
-            
-    df_all['COORDINADOR'] = coordinators
-    df_all['SUPERVISOR'] = supervisors
-    df_all['CUARTIL'] = quartils
-    df_all['ANTIGÜEDAD'] = antiguedades
-    
-    # Clean coordinator names and fill NaNs to keep all records
-    def clean_coordinator_name(name):
-        if pd.isna(name):
-            return 'OTROS'
-        name = str(name).strip()
-        if 'SOLORZANO' in name:
-            return 'JOSÉ SOLORZANO'
-        return name
-    df_all['COORDINADOR'] = df_all['COORDINADOR'].apply(clean_coordinator_name)
-    
-    df_all['SUPERVISOR'] = df_all['SUPERVISOR'].fillna("OTROS")
-    df_all['CUARTIL'] = df_all['CUARTIL'].fillna("OTROS")
-    df_all['ANTIGÜEDAD'] = df_all['ANTIGÜEDAD'].fillna("OTROS")
+    # Helper to map coordinator, supervisor, cuartil and antiguedad
+    def map_advisor_metadata(df):
+        coords = []
+        sups = []
+        quars = []
+        antigs = []
+        for val in df['FRM_N_DNI_Asesor']:
+            info = nomina_dict.get(val)
+            if info:
+                coords.append(info['coordinador'])
+                sups.append(info['supervisor'])
+                quars.append(info['cuartil'])
+                antigs.append(info['antiguedad'])
+            else:
+                coords.append(np.nan)
+                sups.append(np.nan)
+                quars.append(np.nan)
+                antigs.append(np.nan)
+        df['COORDINADOR'] = coords
+        df['SUPERVISOR'] = sups
+        df['CUARTIL'] = quars
+        df['ANTIGÜEDAD'] = antigs
+        
+        # Clean coordinator names
+        def clean_coordinator_name(name):
+            if pd.isna(name):
+                return 'OTROS'
+            name = str(name).strip()
+            if 'SOLORZANO' in name:
+                return 'JOSÉ SOLORZANO'
+            return name
+        df['COORDINADOR'] = df['COORDINADOR'].apply(clean_coordinator_name)
+        df['SUPERVISOR'] = df['SUPERVISOR'].fillna("OTROS")
+        df['CUARTIL'] = df['CUARTIL'].fillna("OTROS")
+        df['ANTIGÜEDAD'] = df['ANTIGÜEDAD'].fillna("OTROS")
+        return df
+
+    # Map metadata for the regular CSV files
+    df_all = map_advisor_metadata(df_all)
     
     # Find key dates
     print("Calculando fechas relativas (HOY, D-1, D-7, D-14, D-21)...")
@@ -164,7 +165,7 @@ def main():
     df_filtered['Estado_T'] = df_filtered['Estado_T'].fillna("Otros").astype(str).str.strip()
     df_filtered['EOC_Estado'] = df_filtered['EOC_Estado'].fillna("Otros").astype(str).str.strip()
     
-    # Robust Multilinea header detection and starts-with check (handles encoded characters like 'MultilÃ-nea')
+    # Robust Multilinea header detection and starts-with check
     multi_col = None
     for col in df_filtered.columns:
         if 'MULTILINEA' in col.upper():
@@ -173,16 +174,13 @@ def main():
             
     if multi_col:
         print(f"Detectada columna de Multilinea: {multi_col}")
-        # Mark as 'SI' if string value starts with 'Mult' (case insensitive)
         df_filtered['Multilinea'] = df_filtered[multi_col].fillna("").astype(str).str.strip().str.upper().str.startswith('MULT').map({True: 'SI', False: 'NO'})
     else:
-        print("ADVERTENCIA: No se detectó ninguna columna de Multilinea en el CSV.")
         df_filtered['Multilinea'] = 'NO'
     
     # Calculate ISO date strings for fast date arithmetic on frontend
     creacion_iso = []
     pactada_iso = []
-    
     for _, row in df_filtered.iterrows():
         c_dt = parse_spanish_date(row['Fecha_Creacion'])
         creacion_iso.append(c_dt.strftime("%Y-%m-%d") if c_dt else "")
@@ -192,7 +190,66 @@ def main():
     df_filtered['Fecha_Creacion_ISO'] = creacion_iso
     df_filtered['Fecha_Pactada_ISO'] = pactada_iso
     
-    # Keep only necessary columns for the front-end to save bandwidth and speed up load times
+    # 2.5. LOAD AND PROCESS MARCH DATA (LOOKER MARZO_OUT_2026.xlsx)
+    march_files = glob.glob(os.path.join(folder, "*MARZO*.xlsx"))
+    df_march = pd.DataFrame()
+    if march_files:
+        march_file = march_files[0]
+        print(f"Cargando archivo histórico de Marzo: {os.path.basename(march_file)}")
+        df_march_raw = pd.read_excel(march_file, sheet_name=0)
+        df_march_raw['FRM_N_DNI_Asesor'] = df_march_raw['FRM_N_DNI_Asesor'].astype(str).str.strip().str.upper()
+        
+        # Parse Dates to Spanish and ISO formats
+        def format_to_str(val):
+            if pd.isna(val): return np.nan
+            dt = pd.to_datetime(val)
+            months_sp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
+            return f"{dt.day} {months_sp[dt.month - 1]} {dt.year}"
+            
+        def format_to_iso(val):
+            if pd.isna(val): return np.nan
+            dt = pd.to_datetime(val)
+            return dt.strftime("%Y-%m-%d")
+
+        df_march_raw['Fecha_Creacion_ISO'] = df_march_raw['Fecha_Creacion'].apply(format_to_iso)
+        df_march_raw['Fecha_Creacion'] = df_march_raw['Fecha_Creacion'].apply(format_to_str)
+        df_march_raw['Fecha_Pactada_ISO'] = df_march_raw['Fecha_Entrega_Pactada'].apply(format_to_iso)
+        
+        # Clean columns
+        df_march_raw['Cruce_INAR'] = df_march_raw['Cruce_INAR'].fillna("No").astype(str).str.strip()
+        df_march_raw['Grupo_Canal'] = df_march_raw['Grupo_Canal'].fillna("Otros").astype(str).str.strip()
+        df_march_raw['Estado_T'] = df_march_raw['Estado_T'].fillna("Otros").astype(str).str.strip()
+        df_march_raw['EOC_Estado'] = df_march_raw['EOC_Estado'].fillna("Otros").astype(str).str.strip()
+        
+        # Multilinea detection
+        m_col = None
+        for col in df_march_raw.columns:
+            if 'MULTILINEA' in col.upper():
+                m_col = col
+                break
+        if m_col:
+            df_march_raw['Multilinea'] = df_march_raw[m_col].fillna("").astype(str).str.strip().str.upper().str.startswith('MULT').map({True: 'SI', False: 'NO'})
+        else:
+            df_march_raw['Multilinea'] = 'NO'
+            
+        # Map advisor metadata
+        df_march_raw = map_advisor_metadata(df_march_raw)
+        
+        # Keep columns
+        cols_to_keep = [
+            'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
+            'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
+            'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado'
+        ]
+        df_march = df_march_raw[cols_to_keep].copy()
+        print(f"  Procesados {len(df_march)} registros de Marzo.")
+    else:
+        print("ADVERTENCIA: No se encontró el archivo de nómina de Marzo.")
+        
+    # Concatenate regular and March data
+    if not df_march.empty:
+        df_filtered = pd.concat([df_filtered, df_march], ignore_index=True)
+        
     cols_to_keep = [
         'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
         'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 

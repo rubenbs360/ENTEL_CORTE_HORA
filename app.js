@@ -629,102 +629,120 @@ function renderHourlyDashboard() {
   document.getElementById("camp-pickup-val").textContent = cmpPickup.toFixed(2) + "%";
   document.getElementById("camp-pickup-bar").style.width = cmpPickup.toFixed(2) + "%";
   
-  // 4. Render Table 1: Cuartil
-  const ccTbody = document.getElementById("hourly-cuartil-table-body");
-  ccTbody.innerHTML = "";
-  
-  // Extract visible coordinators in selection
-  const coordinatorsList = [...selectedCoordinadores].sort();
-  
-  coordinatorsList.forEach(coord => {
-    const coordOrders = filteredOrders.filter(o => o.COORDINADOR === coord);
-    if (coordOrders.length === 0 && selectedCoordinadores.size > 1) return; // skip if no data and showing all
+  // 4. Render Table 1: Comparativo Marzo (Hora a Hora)
+  const ccTbody = document.getElementById("comparativo-marzo-tbody");
+  const ccTheadTr = document.getElementById("comparativo-marzo-thead-tr");
+  if (ccTbody && ccTheadTr) {
+    ccTbody.innerHTML = "";
+    ccTheadTr.innerHTML = "";
     
-    // Aggregates for bold row
-    const coordSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-    coordOrders.forEach(o => {
-      if (o.Fecha_Creacion === meta.hoy_date) coordSums.hoy++;
-      else if (o.Fecha_Creacion === meta.d1_date) coordSums.d1++;
-      else if (o.Fecha_Creacion === meta.d7_date) coordSums.d7++;
-      else if (o.Fecha_Creacion === meta.d14_date) coordSums.d14++;
-      else if (o.Fecha_Creacion === meta.d21_date) coordSums.d21++;
-      else if (o.Fecha_Creacion === meta.d28_date) coordSums.d28++;
+    // Determine target day of week based on selectedDate
+    const dt = parseSpanishDateJS(selectedDate || meta.hoy_date);
+    const dayOfWeek = dt ? dt.getDay() : -1;
+    const weekdaysSp = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const dayName = dayOfWeek >= 0 ? weekdaysSp[dayOfWeek] : "Día";
+    
+    // Update the section title
+    const compTitle = document.getElementById("comparativo-marzo-title");
+    if (compTitle) {
+      compTitle.textContent = `Comparativo Marzo (${dayName})`;
+    }
+    
+    // Find all unique dates in March 2026
+    const allMarchOrders = orders.filter(o => o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO.startsWith("2026-03-"));
+    const uniqueMarchDates = [...new Set(allMarchOrders.map(o => o.Fecha_Creacion))];
+    
+    // Filter matching March dates (same day of week)
+    const matchingMarchDates = [];
+    uniqueMarchDates.forEach(dStr => {
+      const mDt = parseSpanishDateJS(dStr);
+      if (mDt && mDt.getDay() === dayOfWeek) {
+        matchingMarchDates.push({ str: dStr, date: mDt });
+      }
     });
     
-    const groupId = `group-cc-${coord.replace(/\s+/g, '_')}`;
-    const boldRow = document.createElement("tr");
-    boldRow.className = "bold-row";
-    boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
-    boldRow.innerHTML = `
-      <td><span class="toggle-icon">▼</span>${coord}</td>
-      <td>${coordSums.hoy}</td>
-      <td style="color:var(--text-muted);">${coordSums.d1}</td>
-      <td>${formatVariation(coordSums.hoy, coordSums.d1)}</td>
-      <td style="color:var(--text-muted);">${coordSums.d7}</td>
-      <td>${formatVariation(coordSums.hoy, coordSums.d7)}</td>
-      <td style="color:var(--text-muted);">${coordSums.d14}</td>
-      <td>${formatVariation(coordSums.hoy, coordSums.d14)}</td>
-      <td style="color:var(--text-muted);">${coordSums.d21}</td>
-      <td>${formatVariation(coordSums.hoy, coordSums.d21)}</td>
-      <td style="color:var(--text-muted);">${coordSums.d28}</td>
-      <td>${formatVariation(coordSums.hoy, coordSums.d28)}</td>
-    `;
-    ccTbody.appendChild(boldRow);
+    // Sort chronologically
+    matchingMarchDates.sort((a, b) => a.date - b.date);
     
-    // Sub-quartiles
-    const quartils = ['Q1', 'Q2', 'Q3', 'Q4'];
-    quartils.forEach(q => {
-      const qOrders = coordOrders.filter(o => o.CUARTIL === q);
-      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-      qOrders.forEach(o => {
-        if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
-        else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
-        else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
-        else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
-        else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
-        else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
+    // Build Table Header
+    let theadHtml = `<th>Hora</th><th>Hoy</th>`;
+    matchingMarchDates.forEach(md => {
+      const dateParts = md.str.split(" ");
+      const shortLabel = dateParts.length >= 2 ? `${dateParts[0]} ${dateParts[1].substring(0,3)}` : md.str;
+      theadHtml += `
+        <th style="text-align:right; color:var(--text-muted);">${shortLabel} (Q)</th>
+        <th style="text-align:center;">${shortLabel} (%)</th>
+      `;
+    });
+    ccTheadTr.innerHTML = theadHtml;
+    
+    // Define rowsConfig matching "Ingreso por Hora (Detalle)" exactly
+    const rowsConfig = [
+      { label: "00:00 - 08:00 hrs", hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+      { label: "09:00 hrs", hours: [9] },
+      { label: "10:00 hrs", hours: [10] },
+      { label: "11:00 hrs", hours: [11] },
+      { label: "12:00 hrs", hours: [12] },
+      { label: "13:00 hrs", hours: [13] },
+      { label: "14:00 hrs", hours: [14] },
+      { label: "15:00 hrs", hours: [15] },
+      { label: "16:00 hrs", hours: [16] },
+      { label: "17:00 hrs", hours: [17] },
+      { label: "18:00 hrs", hours: [18] },
+      { label: "19:00 hrs", hours: [19] },
+      { label: "20:00 hrs", hours: [20] },
+      { label: "21:00 - 23:00 hrs", hours: [21, 22, 23] }
+    ];
+    
+    // Track totals
+    const marchTotals = {};
+    matchingMarchDates.forEach(md => { marchTotals[md.str] = 0; });
+    let hoyTotalVal = 0;
+    
+    // Render rows
+    rowsConfig.forEach(rowConf => {
+      const activeHours = rowConf.hours.filter(h => selectedHours.has(h));
+      if (activeHours.length === 0) return;
+      
+      const hoyOrders = orders.filter(o => o.Fecha_Creacion === (selectedDate || meta.hoy_date) && activeHours.includes(o.Hora));
+      const hoyVal = hoyOrders.length;
+      hoyTotalVal += hoyVal;
+      
+      let rowHtml = `<td style="font-weight: 600; padding-left: 1rem;">${rowConf.label}</td><td>${hoyVal}</td>`;
+      
+      matchingMarchDates.forEach(md => {
+        const mOrders = orders.filter(o => o.Fecha_Creacion === md.str && activeHours.includes(o.Hora));
+        const val = mOrders.length;
+        marchTotals[md.str] += val;
+        
+        rowHtml += `
+          <td style="color:var(--text-muted); text-align:right;">${val}</td>
+          <td style="text-align:center;">${formatVariation(hoyVal, val)}</td>
+        `;
       });
       
-      const subRow = document.createElement("tr");
-      subRow.className = groupId;
-      subRow.innerHTML = `
-        <td style="padding-left: 2rem;">${q}</td>
-        <td>${qSums.hoy}</td>
-        <td style="color:var(--text-muted);">${qSums.d1}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
-        <td style="color:var(--text-muted);">${qSums.d7}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d7)}</td>
-        <td style="color:var(--text-muted);">${qSums.d14}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
-        <td style="color:var(--text-muted);">${qSums.d21}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
-        <td style="color:var(--text-muted);">${qSums.d28}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
-      `;
-      ccTbody.appendChild(subRow);
+      const tr = document.createElement("tr");
+      tr.innerHTML = rowHtml;
+      ccTbody.appendChild(tr);
     });
-  });
-  
-  // Append TOTAL OPERACIÓN row for Table 1
-  const ccTotalRow = document.createElement("tr");
-  ccTotalRow.className = "bold-row";
-  ccTotalRow.style.borderTop = "2px solid var(--text-main)";
-  ccTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
-  ccTotalRow.innerHTML = `
-    <td>TOTAL OPERACIÓN</td>
-    <td>${tableTotals.hoy}</td>
-    <td style="color:var(--text-muted);">${tableTotals.d1}</td>
-    <td>${formatVariation(tableTotals.hoy, tableTotals.d1)}</td>
-    <td style="color:var(--text-muted);">${tableTotals.d7}</td>
-    <td>${formatVariation(tableTotals.hoy, tableTotals.d7)}</td>
-    <td style="color:var(--text-muted);">${tableTotals.d14}</td>
-    <td>${formatVariation(tableTotals.hoy, tableTotals.d14)}</td>
-    <td style="color:var(--text-muted);">${tableTotals.d21}</td>
-    <td>${formatVariation(tableTotals.hoy, tableTotals.d21)}</td>
-    <td style="color:var(--text-muted);">${tableTotals.d28}</td>
-    <td>${formatVariation(tableTotals.hoy, tableTotals.d28)}</td>
-  `;
-  ccTbody.appendChild(ccTotalRow);
+    
+    // Append TOTAL GLOBAL row
+    const ccTotalRow = document.createElement("tr");
+    ccTotalRow.className = "bold-row";
+    ccTotalRow.style.borderTop = "2px solid var(--text-main)";
+    ccTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    
+    let totalRowHtml = `<td>TOTAL GLOBAL</td><td>${hoyTotalVal}</td>`;
+    matchingMarchDates.forEach(md => {
+      const val = marchTotals[md.str];
+      totalRowHtml += `
+        <td style="color:var(--text-muted); text-align:right;">${val}</td>
+        <td style="text-align:center;">${formatVariation(hoyTotalVal, val)}</td>
+      `;
+    });
+    ccTotalRow.innerHTML = totalRowHtml;
+    ccTbody.appendChild(ccTotalRow);
+  }
   
   // 5. Render Table 2: Supervisor
   const csTbody = document.getElementById("hourly-supervisor-table-body");

@@ -1136,3 +1136,53 @@ body {
 .kpi-alert-badge.hidden {
   display: none !important;
 }
+
+/* Pilots KPI Layout inside Main Card */
+.kpi-main-card {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+}
+
+.kpi-main-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.kpi-main-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: rgba(8, 145, 178, 0.05);
+  border-left: 3px solid var(--accent-cyan);
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  min-width: 175px;
+  align-self: center;
+}
+
+.pilot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  gap: 0.75rem;
+}
+
+.pilot-item .pilot-label {
+  color: var(--text-muted);
+}
+
+.pilot-item .pilot-val {
+  color: var(--text-main);
+  font-weight: 800;
+  background: rgba(8, 145, 178, 0.1);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+

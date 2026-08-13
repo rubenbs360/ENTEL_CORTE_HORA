@@ -484,10 +484,20 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d28_date) kpis.d28++;
   });
   
-  // Compute Table Totals (the campaign coordinators subtotal)
+  // Compute Table Totals (the campaign coordinators subtotal) and count Pilot orders
   const tableTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+  let pilotRuc10Hoy = 0;
+  let pilotWhatsappHoy = 0;
+  let pilotBotHoy = 0;
+
   filteredOrders.forEach(o => {
-    if (o.Fecha_Creacion === meta.hoy_date) tableTotals.hoy++;
+    if (o.Fecha_Creacion === meta.hoy_date) {
+      tableTotals.hoy++;
+      const p = o.Piloto || "";
+      if (p === 'Base Ventas Ruc 10' || p === 'Ventas Ruc 10') pilotRuc10Hoy++;
+      else if (p === 'Base Whatsapp') pilotWhatsappHoy++;
+      else if (p === 'Base Bot Maker') pilotBotHoy++;
+    }
     else if (o.Fecha_Creacion === meta.d1_date) tableTotals.d1++;
     else if (o.Fecha_Creacion === meta.d7_date) tableTotals.d7++;
     else if (o.Fecha_Creacion === meta.d14_date) tableTotals.d14++;
@@ -506,6 +516,15 @@ function renderHourlyDashboard() {
   // Update Hoy main & mini grid values
   document.getElementById("kpi-hoy").textContent = kpis.hoy.toLocaleString();
   document.getElementById("kpi-date-hoy").textContent = `Fecha: ${meta.hoy_date}`;
+  
+  // Update Pilots counters
+  const ruc10El = document.getElementById("pilot-ruc10-val");
+  const whatsappEl = document.getElementById("pilot-whatsapp-val");
+  const botEl = document.getElementById("pilot-bot-val");
+  
+  if (ruc10El) ruc10El.textContent = `${pilotRuc10Hoy} u.`;
+  if (whatsappEl) whatsappEl.textContent = `${pilotWhatsappHoy} u.`;
+  if (botEl) botEl.textContent = `${pilotBotHoy} u.`;
   
   // Update No bop alert badge
   const bopAlert = document.getElementById("kpi-bop-alert");

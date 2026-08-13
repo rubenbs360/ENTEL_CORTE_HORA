@@ -4,6 +4,9 @@ import json
 import datetime
 import pandas as pd
 import numpy as np
+import urllib.request
+import urllib
+import io
 
 # Config
 folder = r"C:\Users\USUARIO\OneDrive\Escritorio\RUBEN DOC\NETCALL_CORTE_HORA\REPORTERO_HORA_HORA"
@@ -129,6 +132,39 @@ def main():
     # Map metadata for the regular CSV files
     df_all = map_advisor_metadata(df_all)
     
+    # LOAD AND MERGE PILOTS DATA FROM GOOGLE SHEETS
+    print("Cargando base de datos de pilotos desde Google Sheets...")
+    sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRFb9w8eFAyfrLtb4_IdJj5ZRiI21tEPNU5G7AqNGv5yoBd0J1jX6jdy4r5VPnXDjC3uoHJL7Dl82kD/pub?gid=0&single=true&output=csv"
+    pilot_map = {}
+    try:
+        req = urllib.request.Request(sheet_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=10) as response:
+            csv_data = response.read().decode('utf-8')
+        df_sheet = pd.read_csv(io.StringIO(csv_data))
+        
+        def clean_order_num(val):
+            if pd.isna(val): return ""
+            try:
+                return str(int(float(val)))
+            except:
+                return str(val).strip()
+                
+        df_sheet['order_clean'] = df_sheet['Orden'].apply(clean_order_num)
+        pilot_map = dict(zip(df_sheet['order_clean'], df_sheet['Piloto']))
+        print(f"  Cargados {len(pilot_map)} registros de pilotos desde Google Sheets.")
+    except Exception as e:
+        print(f"ADVERTENCIA: No se pudo cargar la base de pilotos de Google Sheets: {e}")
+        
+    def clean_order_num(val):
+        if pd.isna(val): return ""
+        try:
+            return str(int(float(val)))
+        except:
+            return str(val).strip()
+            
+    df_all['order_clean'] = df_all['FRM_Orden_Final'].apply(clean_order_num)
+    df_all['Piloto'] = df_all['order_clean'].map(pilot_map).fillna("Campaña Regular")
+    
     # Find key dates
     print("Calculando fechas relativas (HOY, D-1, D-7, D-14, D-21)...")
     unique_dates = df_all['Fecha_Creacion'].dropna().unique()
@@ -235,11 +271,15 @@ def main():
         # Map advisor metadata
         df_march_raw = map_advisor_metadata(df_march_raw)
         
+        # Map pilots
+        df_march_raw['order_clean'] = df_march_raw['FRM_Orden_Final'].apply(clean_order_num)
+        df_march_raw['Piloto'] = df_march_raw['order_clean'].map(pilot_map).fillna("Campaña Regular")
+        
         # Keep columns
         cols_to_keep = [
             'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
             'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
-            'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado'
+            'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
         ]
         df_march = df_march_raw[cols_to_keep].copy()
         print(f"  Procesados {len(df_march)} registros de Marzo.")
@@ -253,7 +293,7 @@ def main():
     cols_to_keep = [
         'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
         'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
-        'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado'
+        'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
     ]
     df_filtered = df_filtered[cols_to_keep]
     

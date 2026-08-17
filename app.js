@@ -1168,7 +1168,7 @@ function renderHourlyDashboard() {
     
     // Q1 to Q4 rows
     quartilsList.forEach(q => {
-      const qOrders = orders.filter(o => o.Hora <= maxSelectedHour && o.CUARTIL === q);
+      const qOrders = filteredOrders.filter(o => o.CUARTIL === q);
       const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
       qOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
@@ -1205,7 +1205,7 @@ function renderHourlyDashboard() {
     });
     
     // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4)
-    const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && !quartilsList.includes(o.CUARTIL));
+    const platOrders = filteredOrders.filter(o => !quartilsList.includes(o.CUARTIL));
     const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     platOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) platSums.hoy++;

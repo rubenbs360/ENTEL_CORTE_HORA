@@ -200,7 +200,7 @@ function initializeFilters() {
   if (!hourlyData || !hourlyData.orders) return;
   
   const orders = hourlyData.orders;
-  const campaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA'];
+  const campaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
   const campaignOrders = orders.filter(o => campaignCoords.includes(o.COORDINADOR));
   
   // 0. Unique Dates (Filtered to last 30 days of max date)
@@ -1159,6 +1159,86 @@ function renderHourlyDashboard() {
     effTbody.appendChild(effTotalRow);
   }
 
+  // 6.6. Render Table 6: Distribución Monolínea / Multilínea (Hoy)
+  const multiTbody = document.getElementById("hourly-multilinea-table-body");
+  if (multiTbody) {
+    multiTbody.innerHTML = "";
+    
+    const todayOrders = filteredOrders.filter(o => o.Fecha_Creacion === meta.hoy_date);
+    
+    coordinatorsList.forEach(coord => {
+      const coordTodayOrders = todayOrders.filter(o => o.COORDINADOR === coord);
+      if (coordTodayOrders.length === 0 && selectedCoordinadores.size > 1) return;
+      
+      const cTotal = coordTodayOrders.length;
+      const cMulti = coordTodayOrders.filter(o => o.Multilinea === 'SI').length;
+      const cMono = cTotal - cMulti;
+      
+      const cMultiPct = cTotal > 0 ? ((cMulti / cTotal) * 100).toFixed(2) + "%" : "-";
+      const cMonoPct = cTotal > 0 ? ((cMono / cTotal) * 100).toFixed(2) + "%" : "-";
+      
+      const groupId = `group-multi-${coord.replace(/\s+/g, '_')}`;
+      const boldRow = document.createElement("tr");
+      boldRow.className = "bold-row";
+      boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+      boldRow.innerHTML = `
+        <td><span class="toggle-icon">▼</span>${coord}</td>
+        <td style="text-align:center;">${cMono}</td>
+        <td style="text-align:center; color:var(--text-muted);">${cMonoPct}</td>
+        <td style="text-align:center;">${cMulti}</td>
+        <td style="text-align:center; color:var(--text-muted);">${cMultiPct}</td>
+        <td style="text-align:center; font-weight:700;">${cTotal}</td>
+      `;
+      multiTbody.appendChild(boldRow);
+      
+      const supsInCoord = [...new Set(coordTodayOrders.map(o => o.SUPERVISOR))].filter(s => selectedSupervisores.has(s)).sort();
+      
+      supsInCoord.forEach(sup => {
+        const supTodayOrders = coordTodayOrders.filter(o => o.SUPERVISOR === sup);
+        const sTotal = supTodayOrders.length;
+        const sMulti = supTodayOrders.filter(o => o.Multilinea === 'SI').length;
+        const sMono = sTotal - sMulti;
+        
+        const sMultiPct = sTotal > 0 ? ((sMulti / sTotal) * 100).toFixed(2) + "%" : "-";
+        const sMonoPct = sTotal > 0 ? ((sMono / sTotal) * 100).toFixed(2) + "%" : "-";
+        
+        const subRow = document.createElement("tr");
+        subRow.className = groupId;
+        subRow.innerHTML = `
+          <td style="padding-left: 2rem; white-space: nowrap;">${sup}</td>
+          <td style="text-align:center;">${sMono}</td>
+          <td style="text-align:center; color:var(--text-muted);">${sMonoPct}</td>
+          <td style="text-align:center;">${sMulti}</td>
+          <td style="text-align:center; color:var(--text-muted);">${sMultiPct}</td>
+          <td style="text-align:center; font-weight:600;">${sTotal}</td>
+        `;
+        multiTbody.appendChild(subRow);
+      });
+    });
+    
+    // Append TOTAL OPERACIÓN row for Table 6
+    const tTotal = todayOrders.length;
+    const tMulti = todayOrders.filter(o => o.Multilinea === 'SI').length;
+    const tMono = tTotal - tMulti;
+    
+    const tMultiPct = tTotal > 0 ? ((tMulti / tTotal) * 100).toFixed(2) + "%" : "-";
+    const tMonoPct = tTotal > 0 ? ((tMono / tTotal) * 100).toFixed(2) + "%" : "-";
+    
+    const totalRow = document.createElement("tr");
+    totalRow.className = "bold-row";
+    totalRow.style.borderTop = "2px solid var(--text-main)";
+    totalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    totalRow.innerHTML = `
+      <td>TOTAL OPERACIÓN</td>
+      <td style="text-align:center;">${tMono}</td>
+      <td style="text-align:center; color:var(--text-muted);">${tMonoPct}</td>
+      <td style="text-align:center;">${tMulti}</td>
+      <td style="text-align:center; color:var(--text-muted);">${tMultiPct}</td>
+      <td style="text-align:center; font-weight:800;">${tTotal}</td>
+    `;
+    multiTbody.appendChild(totalRow);
+  }
+
   // 7. Render Table 4: Avance por Cuartil (Solo Cuartiles)
   const quartilsList = ['Q1', 'Q2', 'Q3', 'Q4'];
   const qTbody = document.getElementById("hourly-only-cuartiles-table-body");
@@ -1204,8 +1284,9 @@ function renderHourlyDashboard() {
       qTbody.appendChild(row);
     });
     
-    // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4)
-    const platOrders = filteredOrders.filter(o => !quartilsList.includes(o.CUARTIL));
+    // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4 or belong to non-campaign leaders)
+    const activeCampaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
+    const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && (!activeCampaignCoords.includes(o.COORDINADOR) || !quartilsList.includes(o.CUARTIL)));
     const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     platOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) platSums.hoy++;

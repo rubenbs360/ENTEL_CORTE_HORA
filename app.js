@@ -6,6 +6,12 @@ let selectedAntiguedades = new Set();
 let selectedHours = new Set();
 let selectedDate = ""; // Stores currently selected HOY date
 let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "", d28: "" }; // Stores dynamic relative dates
+let projectionHours = 9; // Target shift hours for projection
+
+function updateProjectionHours(val) {
+  projectionHours = parseInt(val, 10);
+  renderHourlyDashboard();
+}
 
 // Looker View State
 let lookerDates = []; // List of all sorted unique dates (objects: { str: "...", date: Date })
@@ -505,12 +511,13 @@ function renderHourlyDashboard() {
     else if (o.Fecha_Creacion === meta.d28_date) tableTotals.d28++;
   });
   
-  // Projection formula: during work hours (9am to 5pm, <= 9 hrs), extrapolate to 9 hrs.
-  // After 17:00 hrs (when 9 work hours completed), projection equals actual Hoy volume.
+  // Projection formula: during work hours (starting 9am), extrapolate to target projectionHours.
+  // After target hours completed (9 + projectionHours), projection equals actual Hoy volume.
   let proyeccHoy = kpis.hoy;
-  if (maxSelectedHour >= 9 && maxSelectedHour < 17) {
+  const endHour = 9 + projectionHours;
+  if (maxSelectedHour >= 9 && maxSelectedHour < endHour) {
     const horasTrabajadas = Math.max(1, maxSelectedHour - 9 + 1);
-    proyeccHoy = Math.round((kpis.hoy / horasTrabajadas) * 9);
+    proyeccHoy = Math.round((kpis.hoy / horasTrabajadas) * projectionHours);
   }
   
   // Update Hoy main & mini grid values
@@ -547,6 +554,10 @@ function renderHourlyDashboard() {
   document.getElementById("mini-pickup-val").textContent = pickupHoy.toLocaleString() + " u.";
   
   document.getElementById("mini-proyecc-val").textContent = proyeccHoy.toLocaleString();
+  const projLabel = document.getElementById("proj-label");
+  if (projLabel) {
+    projLabel.textContent = `Proyecc (${projectionHours}h)`;
+  }
   
   // Update Historical D-x cards
   document.getElementById("kpi-d1").textContent = kpis.d1.toLocaleString();

@@ -9,7 +9,7 @@ let relativeDates = { hoy: "", d1: "", d7: "", d14: "", d21: "", d28: "" }; // S
 let projectionHours = 9; // Target shift hours for projection
 
 function updateProjectionHours(val) {
-  projectionHours = parseInt(val, 10);
+  projectionHours = parseFloat(val);
   renderHourlyDashboard();
 }
 

@@ -1498,36 +1498,39 @@ setupCalendarDismiss();
 // Initialize Looker Calendars
 function initializeLookerFilters() {
   if (!hourlyData || !hourlyData.orders) return;
-  
+
   const orders = hourlyData.orders;
   // Get all unique dates sorted chronologically (oldest first)
   const allDates = [...new Set(orders.map(o => o.Fecha_Creacion))];
   lookerDates = allDates.map(dStr => ({ str: dStr, date: parseSpanishDateJS(dStr) }))
                         .filter(d => d.date !== null)
                         .sort((a, b) => a.date - b.date);
-  
+
   if (lookerDates.length > 0) {
+    lookerSelectedDates.a.clear();
+    lookerSelectedDates.b.clear();
+
     // Determine max available date (today)
     const todayStr = relativeDates.hoy;
     const todayObj = lookerDates.find(d => d.str === todayStr) || lookerDates[lookerDates.length - 1];
-    
-    // Set active months to max date month/year
-    const activeYr = todayObj.date.getFullYear();
-    const activeMth = todayObj.date.getMonth();
-    lookerActiveMonth.a = { year: activeYr, month: activeMth };
-    lookerActiveMonth.b = { year: activeYr, month: activeMth };
-    
-    // Set defaults:
-    // Panel A: Last 3 dates of range
-    const maxIdx = lookerDates.length - 1;
-    const aStartIdx = Math.max(0, maxIdx - 2);
-    for (let i = aStartIdx; i <= maxIdx; i++) {
-      lookerSelectedDates.a.add(lookerDates[i].str);
-    }
-    
-    // Panel B: Only the latest date (today)
-    lookerSelectedDates.b.add(todayObj.str);
-    
+
+    const maxYear = todayObj.date.getFullYear();
+    const maxMonth = todayObj.date.getMonth(); // E.g., August = 7
+    const maxDay = todayObj.date.getDate(); // E.g., 21
+
+    // Set active months in calendar picker
+    lookerActiveMonth.a = { year: maxYear, month: maxMonth };
+    lookerActiveMonth.b = { year: maxYear, month: maxMonth - 1 }; // July
+
+    // Select defaults:
+    // Panel A: August 1st to August maxDay (1 to 21)
+    const augustDates = lookerDates.filter(d => d.date.getFullYear() === maxYear && d.date.getMonth() === maxMonth && d.date.getDate() <= maxDay);
+    augustDates.forEach(d => lookerSelectedDates.a.add(d.str));
+
+    // Panel B: July 1st to July maxDay (1 to 21)
+    const julyDates = lookerDates.filter(d => d.date.getFullYear() === maxYear && d.date.getMonth() === (maxMonth - 1) && d.date.getDate() <= maxDay);
+    julyDates.forEach(d => lookerSelectedDates.b.add(d.str));
+
     updateCalendarLabel('a');
     updateCalendarLabel('b');
   }
@@ -1661,6 +1664,144 @@ function renderLookerView() {
   }
   renderLookerPanel("a");
   renderLookerPanel("b");
+  renderLookerComparison();
+}
+
+function renderLookerComparison() {
+  const tbody = document.getElementById("looker-comparison-tbody");
+  if (!tbody || !hourlyData) return;
+  
+  const orders = hourlyData.orders;
+  
+  // Selected ranges
+  const rangeA = lookerSelectedDates.a;
+  const rangeB = lookerSelectedDates.b;
+  
+  const ordersA = orders.filter(o => rangeA.has(o.Fecha_Creacion));
+  const ordersB = orders.filter(o => rangeB.has(o.Fecha_Creacion));
+  
+  const totalA = ordersA.length;
+  const totalB = ordersB.length;
+  
+  const diffAbs = totalA - totalB;
+  const diffPctVal = totalB > 0 ? (diffAbs / totalB) * 100 : 0;
+  
+  const daysA = rangeA.size;
+  const daysB = rangeB.size;
+  
+  const avgA = daysA > 0 ? (totalA / daysA) : 0;
+  const avgb = daysB > 0 ? (totalB / daysB) : 0;
+  
+  // Update KPI cards
+  document.getElementById("summary-total-a").textContent = `${totalA.toLocaleString()} u.`;
+  document.getElementById("summary-days-a").textContent = `${daysA} ${daysA === 1 ? 'día seleccionado' : 'días seleccionados'}`;
+  
+  document.getElementById("summary-total-b").textContent = `${totalB.toLocaleString()} u.`;
+  document.getElementById("summary-days-b").textContent = `${daysB} ${daysB === 1 ? 'día seleccionado' : 'días seleccionados'}`;
+  
+  // Difference styling
+  const diffAbsEl = document.getElementById("summary-diff-abs");
+  const diffPctEl = document.getElementById("summary-diff-pct");
+  
+  const sign = diffAbs >= 0 ? "+" : "";
+  diffAbsEl.textContent = `${sign}${diffAbs.toLocaleString()} u.`;
+  diffPctEl.textContent = `${sign}${diffPctVal.toFixed(2)}%`;
+  
+  if (diffAbs >= 0) {
+    diffAbsEl.style.color = "var(--success)";
+    diffPctEl.style.color = "var(--success)";
+  } else {
+    diffAbsEl.style.color = "var(--danger)";
+    diffPctEl.style.color = "var(--danger)";
+  }
+  
+  document.getElementById("summary-avg-a").textContent = `${avgA.toFixed(1)} u./día`;
+  document.getElementById("summary-avg-b").textContent = `vs ${avgb.toFixed(1)} u./día (Panel B)`;
+  
+  // Render table
+  tbody.innerHTML = "";
+  
+  // Coordinators list
+  const coordsList = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
+  
+  let tA = 0;
+  let tB = 0;
+  
+  coordsList.forEach(coord => {
+    // Treat 'JOS SOLORZANO' and 'JOSÉ SOLORZANO' as the same
+    const checkCoord = (oCoord) => {
+      if (!oCoord) return false;
+      const cUpper = oCoord.toUpperCase();
+      if (coord === 'JOSÉ SOLORZANO') {
+        return cUpper === 'JOS SOLORZANO' || cUpper === 'JOSÉ SOLORZANO';
+      }
+      return cUpper === coord;
+    };
+    
+    const vA = ordersA.filter(o => checkCoord(o.COORDINADOR)).length;
+    const vB = ordersB.filter(o => checkCoord(o.COORDINADOR)).length;
+    
+    tA += vA;
+    tB += vB;
+    
+    const diff = vA - vB;
+    const pct = vB > 0 ? (diff / vB) * 100 : 0;
+    const signCol = diff >= 0 ? "+" : "";
+    const colorStyle = diff >= 0 ? "color:var(--success);" : "color:var(--danger);";
+    
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td style="font-weight:600;">${coord}</td>
+      <td style="text-align:center;">${vA.toLocaleString()}</td>
+      <td style="text-align:center;">${vB.toLocaleString()}</td>
+      <td style="text-align:center; font-weight:700; ${colorStyle}">${signCol}${diff.toLocaleString()}</td>
+      <td style="text-align:center; font-weight:700; ${colorStyle}">${signCol}${pct.toFixed(2)}%</td>
+    `;
+    tbody.appendChild(row);
+  });
+  
+  // Add OTROS row
+  const checkOtros = (oCoord) => {
+    if (!oCoord) return true;
+    const cUpper = oCoord.toUpperCase();
+    return !['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'].includes(cUpper);
+  };
+  const oA = ordersA.filter(o => checkOtros(o.COORDINADOR)).length;
+  const oB = ordersB.filter(o => checkOtros(o.COORDINADOR)).length;
+  
+  const oDiff = oA - oB;
+  const oPct = oB > 0 ? (oDiff / oB) * 100 : 0;
+  const oSign = oDiff >= 0 ? "+" : "";
+  const oColor = oDiff >= 0 ? "color:var(--success);" : "color:var(--danger);";
+  
+  const oRow = document.createElement("tr");
+  oRow.innerHTML = `
+    <td style="font-weight:600; color:var(--text-muted);">OTROS (PLATAFORMA)</td>
+    <td style="text-align:center;">${oA.toLocaleString()}</td>
+    <td style="text-align:center;">${oB.toLocaleString()}</td>
+    <td style="text-align:center; font-weight:700; ${oColor}">${oSign}${oDiff.toLocaleString()}</td>
+    <td style="text-align:center; font-weight:700; ${oColor}">${oSign}${oPct.toFixed(2)}%</td>
+  `;
+  tbody.appendChild(oRow);
+  
+  // Total Row
+  const grandDiff = totalA - totalB;
+  const grandPct = totalB > 0 ? (grandDiff / totalB) * 100 : 0;
+  const gSign = grandDiff >= 0 ? "+" : "";
+  const gColor = grandDiff >= 0 ? "color:var(--success);" : "color:var(--danger);";
+  
+  const totalRow = document.createElement("tr");
+  totalRow.className = "bold-row";
+  totalRow.style.borderTop = "2px solid var(--text-main)";
+  totalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+  totalRow.innerHTML = `
+    <td>TOTAL OPERACIÓN</td>
+    <td style="text-align:center;">${totalA.toLocaleString()}</td>
+    <td style="text-align:center;">${totalB.toLocaleString()}</td>
+    <td style="text-align:center; font-weight:800; ${gColor}">${gSign}${grandDiff.toLocaleString()}</td>
+    <td style="text-align:center; font-weight:800; ${gColor}">${gSign}${grandPct.toFixed(2)}%</td>
+  `;
+  tbody.appendChild(totalRow);
 }
 
 // Toggle dropdown visibility

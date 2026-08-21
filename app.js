@@ -1695,11 +1695,11 @@ function renderLookerPanel(panelId) {
       const pctActive = delivCount > 0 ? ((activeCount / delivCount) * 100).toFixed(0) + "%" : "0%";
       const pctDeliv = q > 0 ? ((delivCount / q) * 100).toFixed(0) + "%" : "0%";
       
-      // Heatmap styles for % ENTREGA
+      // Heatmap styles for % ENTREGA (<69% red, 69-73% yellow, >=74% green)
       let heatBg = "transparent";
       const pctDelivVal = q > 0 ? (delivCount / q) * 100 : 0;
-      if (pctDelivVal >= 80) heatBg = "rgba(34, 197, 94, 0.15)";
-      else if (pctDelivVal >= 65) heatBg = "rgba(234, 179, 8, 0.15)";
+      if (pctDelivVal >= 74) heatBg = "rgba(34, 197, 94, 0.15)";
+      else if (pctDelivVal >= 69) heatBg = "rgba(234, 179, 8, 0.15)";
       else heatBg = "rgba(239, 68, 68, 0.15)";
       
       const row = document.createElement("tr");
@@ -1726,8 +1726,8 @@ function renderLookerPanel(panelId) {
     
     let heatBgTotal = "transparent";
     const pctDelivTotalVal = tQ > 0 ? (tDelivCount / tQ) * 100 : 0;
-    if (pctDelivTotalVal >= 80) heatBgTotal = "rgba(34, 197, 94, 0.2)";
-    else if (pctDelivTotalVal >= 65) heatBgTotal = "rgba(234, 179, 8, 0.2)";
+    if (pctDelivTotalVal >= 74) heatBgTotal = "rgba(34, 197, 94, 0.2)";
+    else if (pctDelivTotalVal >= 69) heatBgTotal = "rgba(234, 179, 8, 0.2)";
     else heatBgTotal = "rgba(239, 68, 68, 0.2)";
     
     const totalRow = document.createElement("tr");

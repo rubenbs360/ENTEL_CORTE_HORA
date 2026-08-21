@@ -1655,6 +1655,40 @@ function renderLookerPanel(panelId) {
   
   tbody.innerHTML = tbodyHtml + totalRowHtml;
 
+  // Helper icon generators for daily summary columns
+  function getExpressIcon(val) {
+    if (isNaN(val)) return "";
+    if (val >= 60) {
+      return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">▲</span>`; // Green up triangle (>=60)
+    } else if (val >= 56) {
+      return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">▶</span>`; // Orange right triangle (56-59)
+    } else {
+      return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">▼</span>`; // Red down triangle (<56)
+    }
+  }
+
+  const getTiendaIcon = (val) => {
+    if (isNaN(val)) return "";
+    if (val <= 17) {
+      return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">●</span>`; // Green circle (<=17)
+    } else if (val <= 20) {
+      return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">●</span>`; // Orange circle (18-20)
+    } else {
+      return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">●</span>`; // Red circle (>20)
+    }
+  };
+
+  const getMultipedidoIcon = (val) => {
+    if (isNaN(val)) return "";
+    if (val >= 35) {
+      return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">↑</span>`; // Green up arrow (>=35)
+    } else if (val >= 32) {
+      return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">→</span>`; // Orange right arrow (32-34)
+    } else {
+      return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">↓</span>`; // Red down arrow (<32)
+    }
+  };
+
   // Render Daily Summary Table: RESUMEN VENTAS MÓVILES POR DÍA
   const dailyTbody = document.getElementById(`looker-daily-tbody-${panelId}`);
   if (dailyTbody) {
@@ -1689,6 +1723,10 @@ function renderLookerPanel(panelId) {
       tActiveCount += activeCount;
       tDelivCount += delivCount;
       
+      const pctExpVal = q > 0 ? (expCount / q) * 100 : 0;
+      const pctStoreVal = q > 0 ? (storeCount / q) * 100 : 0;
+      const pctMultiVal = q > 0 ? (multiCount / q) * 100 : 0;
+
       const pctExp = q > 0 ? ((expCount / q) * 100).toFixed(0) + "%" : "0%";
       const pctStore = q > 0 ? ((storeCount / q) * 100).toFixed(0) + "%" : "0%";
       const pctMulti = q > 0 ? ((multiCount / q) * 100).toFixed(0) + "%" : "0%";
@@ -1706,9 +1744,9 @@ function renderLookerPanel(panelId) {
       row.innerHTML = `
         <td style="font-weight: 600;">${dStr}</td>
         <td style="text-align:center; font-weight:700;">${q}</td>
-        <td style="text-align:center;">${pctExp}</td>
-        <td style="text-align:center;">${pctStore}</td>
-        <td style="text-align:center;">${pctMulti}</td>
+        <td style="text-align:center;">${getExpressIcon(pctExpVal)} ${pctExp}</td>
+        <td style="text-align:center;">${getTiendaIcon(pctStoreVal)} ${pctStore}</td>
+        <td style="text-align:center;">${getMultipedidoIcon(pctMultiVal)} ${pctMulti}</td>
         <td style="text-align:center;">${activeCount}</td>
         <td style="text-align:center; font-weight:600;">${pctActive}</td>
         <td style="text-align:center;">${delivCount}</td>
@@ -1718,6 +1756,10 @@ function renderLookerPanel(panelId) {
     });
     
     // Total Row
+    const pctExpTotalVal = tQ > 0 ? (tExpCount / tQ) * 100 : 0;
+    const pctStoreTotalVal = tQ > 0 ? (tStoreCount / tQ) * 100 : 0;
+    const pctMultiTotalVal = tQ > 0 ? (tMultiCount / tQ) * 100 : 0;
+
     const pctExpTotal = tQ > 0 ? ((tExpCount / tQ) * 100).toFixed(0) + "%" : "0%";
     const pctStoreTotal = tQ > 0 ? ((tStoreCount / tQ) * 100).toFixed(0) + "%" : "0%";
     const pctMultiTotal = tQ > 0 ? ((tMultiCount / tQ) * 100).toFixed(0) + "%" : "0%";
@@ -1737,9 +1779,9 @@ function renderLookerPanel(panelId) {
     totalRow.innerHTML = `
       <td>Total general</td>
       <td style="text-align:center; font-weight:800;">${tQ}</td>
-      <td style="text-align:center; font-weight:700;">${pctExpTotal}</td>
-      <td style="text-align:center; font-weight:700;">${pctStoreTotal}</td>
-      <td style="text-align:center; font-weight:700;">${pctMultiTotal}</td>
+      <td style="text-align:center; font-weight:700;">${getExpressIcon(pctExpTotalVal)} ${pctExpTotal}</td>
+      <td style="text-align:center; font-weight:700;">${getTiendaIcon(pctStoreTotalVal)} ${pctStoreTotal}</td>
+      <td style="text-align:center; font-weight:700;">${getMultipedidoIcon(pctMultiTotalVal)} ${pctMultiTotal}</td>
       <td style="text-align:center; font-weight:700;">${tActiveCount}</td>
       <td style="text-align:center; font-weight:800;">${pctActiveTotal}</td>
       <td style="text-align:center; font-weight:700;">${tDelivCount}</td>

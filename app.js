@@ -1654,6 +1654,99 @@ function renderLookerPanel(panelId) {
   totalRowHtml += `<td style="font-weight: 800;">${grandTotal.toLocaleString()}</td></tr>`;
   
   tbody.innerHTML = tbodyHtml + totalRowHtml;
+
+  // Render Daily Summary Table: RESUMEN VENTAS MÓVILES POR DÍA
+  const dailyTbody = document.getElementById(`looker-daily-tbody-${panelId}`);
+  if (dailyTbody) {
+    dailyTbody.innerHTML = "";
+    
+    let tQ = 0;
+    let tExpCount = 0;
+    let tStoreCount = 0;
+    let tMultiCount = 0;
+    let tActiveCount = 0;
+    let tDelivCount = 0;
+    
+    // Sort rangeDates chronologically
+    const sortedDates = [...rangeDates].sort((a, b) => parseSpanishDateJS(a) - parseSpanishDateJS(b));
+    
+    sortedDates.forEach(dStr => {
+      const dateOrders = orders.filter(o => o.Fecha_Creacion === dStr);
+      const q = dateOrders.length;
+      if (q === 0) return;
+      
+      const expCount = dateOrders.filter(o => o.Tipo_Despacho_Detalle === 'EXPRESS' || o.Tipo_Despacho_Detalle === 'EXPRES').length;
+      const storeCount = dateOrders.filter(o => o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA' || o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA (PICKUP)').length;
+      const multiCount = dateOrders.filter(o => o.Multilinea === 'SI').length;
+      
+      const delivCount = dateOrders.filter(o => o.Estado_T === 'Entregado').length;
+      const activeCount = dateOrders.filter(o => o.Estado_T === 'Entregado' && o.EOC_Estado === 'CERRADAS').length;
+      
+      tQ += q;
+      tExpCount += expCount;
+      tStoreCount += storeCount;
+      tMultiCount += multiCount;
+      tActiveCount += activeCount;
+      tDelivCount += delivCount;
+      
+      const pctExp = q > 0 ? ((expCount / q) * 100).toFixed(0) + "%" : "0%";
+      const pctStore = q > 0 ? ((storeCount / q) * 100).toFixed(0) + "%" : "0%";
+      const pctMulti = q > 0 ? ((multiCount / q) * 100).toFixed(0) + "%" : "0%";
+      const pctActive = delivCount > 0 ? ((activeCount / delivCount) * 100).toFixed(0) + "%" : "0%";
+      const pctDeliv = q > 0 ? ((delivCount / q) * 100).toFixed(0) + "%" : "0%";
+      
+      // Heatmap styles for % ENTREGA
+      let heatBg = "transparent";
+      const pctDelivVal = q > 0 ? (delivCount / q) * 100 : 0;
+      if (pctDelivVal >= 80) heatBg = "rgba(34, 197, 94, 0.15)";
+      else if (pctDelivVal >= 65) heatBg = "rgba(234, 179, 8, 0.15)";
+      else heatBg = "rgba(239, 68, 68, 0.15)";
+      
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td style="font-weight: 600;">${dStr}</td>
+        <td style="text-align:center; font-weight:700;">${q}</td>
+        <td style="text-align:center;">${pctExp}</td>
+        <td style="text-align:center;">${pctStore}</td>
+        <td style="text-align:center;">${pctMulti}</td>
+        <td style="text-align:center;">${activeCount}</td>
+        <td style="text-align:center; font-weight:600;">${pctActive}</td>
+        <td style="text-align:center;">${delivCount}</td>
+        <td style="text-align:center; font-weight:700; background-color:${heatBg};">${pctDeliv}</td>
+      `;
+      dailyTbody.appendChild(row);
+    });
+    
+    // Total Row
+    const pctExpTotal = tQ > 0 ? ((tExpCount / tQ) * 100).toFixed(0) + "%" : "0%";
+    const pctStoreTotal = tQ > 0 ? ((tStoreCount / tQ) * 100).toFixed(0) + "%" : "0%";
+    const pctMultiTotal = tQ > 0 ? ((tMultiCount / tQ) * 100).toFixed(0) + "%" : "0%";
+    const pctActiveTotal = tDelivCount > 0 ? ((tActiveCount / tDelivCount) * 100).toFixed(0) + "%" : "0%";
+    const pctDelivTotal = tQ > 0 ? ((tDelivCount / tQ) * 100).toFixed(0) + "%" : "0%";
+    
+    let heatBgTotal = "transparent";
+    const pctDelivTotalVal = tQ > 0 ? (tDelivCount / tQ) * 100 : 0;
+    if (pctDelivTotalVal >= 80) heatBgTotal = "rgba(34, 197, 94, 0.2)";
+    else if (pctDelivTotalVal >= 65) heatBgTotal = "rgba(234, 179, 8, 0.2)";
+    else heatBgTotal = "rgba(239, 68, 68, 0.2)";
+    
+    const totalRow = document.createElement("tr");
+    totalRow.className = "bold-row";
+    totalRow.style.borderTop = "2px solid var(--text-main)";
+    totalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    totalRow.innerHTML = `
+      <td>Total general</td>
+      <td style="text-align:center; font-weight:800;">${tQ}</td>
+      <td style="text-align:center; font-weight:700;">${pctExpTotal}</td>
+      <td style="text-align:center; font-weight:700;">${pctStoreTotal}</td>
+      <td style="text-align:center; font-weight:700;">${pctMultiTotal}</td>
+      <td style="text-align:center; font-weight:700;">${tActiveCount}</td>
+      <td style="text-align:center; font-weight:800;">${pctActiveTotal}</td>
+      <td style="text-align:center; font-weight:700;">${tDelivCount}</td>
+      <td style="text-align:center; font-weight:800; background-color:${heatBgTotal};">${pctDelivTotal}</td>
+    `;
+    dailyTbody.appendChild(totalRow);
+  }
 }
 
 // Global render Looker view function

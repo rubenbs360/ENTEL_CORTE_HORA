@@ -838,7 +838,7 @@ function renderHourlyDashboard() {
       const subGroupId = `group-sup-${coordIdClean}_${supIdClean}`;
 
       const subRow = document.createElement("tr");
-      subRow.className = `supervisor-row collapsed hidden-row ${groupId}`;
+      subRow.className = `supervisor-row collapsed ${groupId}`;
       subRow.setAttribute("onclick", `toggleSupervisorGroup('${subGroupId}', event)`);
       subRow.innerHTML = `
         <td style="padding-left: 1rem;"><span class="toggle-icon-sub" style="margin-right: 6px;">▶</span>${item.sup}</td>
@@ -1501,9 +1501,9 @@ window.toggleTableGroup = function(groupId, event) {
   if (isCollapsed) {
     boldRow.classList.remove("collapsed");
     boldRow.querySelector(".toggle-icon").textContent = "▼";
-    // Only show supervisor rows directly under this coordinator
+    // Show all sub-rows except vendedor-row (lets supervisors show in Table 2, and all child rows show in Table 3, 4, 5)
     subRows.forEach(row => {
-      if (row.classList.contains('supervisor-row')) {
+      if (!row.classList.contains('vendedor-row')) {
         row.classList.remove("hidden-row");
       }
     });

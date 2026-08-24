@@ -838,7 +838,7 @@ function renderHourlyDashboard() {
       const subGroupId = `group-sup-${coordIdClean}_${supIdClean}`;
 
       const subRow = document.createElement("tr");
-      subRow.className = `bold-row supervisor-row collapsed hidden-row ${groupId}`;
+      subRow.className = `supervisor-row collapsed hidden-row ${groupId}`;
       subRow.setAttribute("onclick", `toggleSupervisorGroup('${subGroupId}', event)`);
       subRow.innerHTML = `
         <td style="padding-left: 1rem;"><span class="toggle-icon-sub" style="margin-right: 6px;">▶</span>${item.sup}</td>

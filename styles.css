@@ -609,6 +609,53 @@ body {
   color: var(--accent-cyan);
 }
 
+/* Specific styling for Coordinator rows (Level 1) */
+.bold-row:not(.supervisor-row) {
+  font-size: 0.95rem;
+  background-color: rgba(8, 145, 178, 0.07) !important;
+}
+.bold-row:not(.supervisor-row) td:first-child {
+  font-weight: 800 !important;
+  color: #0369a1 !important; /* Darker blue for coordinator name */
+}
+
+/* Specific styling for Supervisor rows (Level 2) */
+.supervisor-row {
+  font-size: 0.82rem;
+  font-weight: 700;
+  background-color: rgba(248, 250, 252, 0.9) !important; /* Very soft slate gray/white */
+  cursor: pointer;
+  user-select: none;
+}
+.supervisor-row td {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+.supervisor-row td:first-child {
+  font-weight: 700 !important;
+  color: #0d9488 !important; /* Darker teal for supervisor name */
+}
+.supervisor-row:hover {
+  background-color: rgba(241, 245, 249, 1) !important;
+}
+
+/* Specific styling for Vendedor/Asesor rows (Level 3) */
+.vendedor-row {
+  font-size: 0.76rem;
+  font-weight: 500;
+  background-color: #ffffff !important;
+  color: #475569 !important;
+}
+.vendedor-row td {
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+.vendedor-row td:first-child {
+  font-weight: 500 !important;
+  color: #64748b !important;
+}
+.vendedor-row:hover {
+  background-color: #f8fafc !important;
+}
+
 /* Trend Indicators (Semáforos) */
 .trend-container {
   display: inline-flex;
@@ -710,10 +757,18 @@ body {
 }
 
 .toggle-icon {
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   margin-right: 0.5rem;
   display: inline-block;
-  color: var(--accent-cyan);
+  color: #0c4a6e; /* Dark slate blue/cyan (darker for coordinator) */
+  font-weight: bold;
+}
+
+.toggle-icon-sub {
+  font-size: 0.6rem;
+  margin-right: 0.4rem;
+  display: inline-block;
+  color: #8a9ba8; /* Muted gray/cyan (smaller and lighter for supervisor) */
 }
 
 

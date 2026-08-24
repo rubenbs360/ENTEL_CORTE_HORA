@@ -829,14 +829,19 @@ function renderHourlyDashboard() {
         else if (o.Fecha_Creacion === meta.d21_date) supSums.d21++;
         else if (o.Fecha_Creacion === meta.d28_date) supSums.d28++;
       });
-      return { sup, ...supSums };
+      return { sup, ...supSums, ordersList: supOrders };
     }).sort((a, b) => b.hoy - a.hoy || a.sup.localeCompare(b.sup));
     
     supRows.forEach(item => {
+      const coordIdClean = coord.replace(/\s+/g, '_');
+      const supIdClean = item.sup.replace(/\s+/g, '_');
+      const subGroupId = `group-sup-${coordIdClean}_${supIdClean}`;
+
       const subRow = document.createElement("tr");
-      subRow.className = groupId;
+      subRow.className = `bold-row supervisor-row collapsed hidden-row ${groupId}`;
+      subRow.setAttribute("onclick", `toggleSupervisorGroup('${subGroupId}', event)`);
       subRow.innerHTML = `
-        <td style="padding-left: 2rem;">${item.sup}</td>
+        <td style="padding-left: 1rem;"><span class="toggle-icon-sub" style="margin-right: 6px;">▶</span>${item.sup}</td>
         <td>${item.hoy}</td>
         <td style="color:var(--text-muted);">${item.d1}</td>
         <td>${formatVariation(item.hoy, item.d1)}</td>
@@ -850,6 +855,43 @@ function renderHourlyDashboard() {
         <td>${formatVariation(item.hoy, item.d28)}</td>
       `;
       csTbody.appendChild(subRow);
+
+      // Get sellers/vendedores for this supervisor
+      const sellersInSup = [...new Set(item.ordersList.map(o => o.VENDEDOR || "OTROS"))].sort();
+      const sellerRows = sellersInSup.map(seller => {
+        const sellerOrders = item.ordersList.filter(o => (o.VENDEDOR || "OTROS") === seller);
+        const sellerSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+        sellerOrders.forEach(o => {
+          if (o.Fecha_Creacion === meta.hoy_date) sellerSums.hoy++;
+          else if (o.Fecha_Creacion === meta.d1_date) sellerSums.d1++;
+          else if (o.Fecha_Creacion === meta.d7_date) sellerSums.d7++;
+          else if (o.Fecha_Creacion === meta.d14_date) sellerSums.d14++;
+          else if (o.Fecha_Creacion === meta.d21_date) sellerSums.d21++;
+          else if (o.Fecha_Creacion === meta.d28_date) sellerSums.d28++;
+        });
+        return { seller, ...sellerSums };
+      }).sort((a, b) => b.hoy - a.hoy || a.seller.localeCompare(b.seller));
+
+      // Append seller rows
+      sellerRows.forEach(sellerItem => {
+        const sellerRow = document.createElement("tr");
+        sellerRow.className = `vendedor-row hidden-row ${groupId} ${subGroupId}`;
+        sellerRow.innerHTML = `
+          <td style="padding-left: 2.75rem; color: var(--text-muted); font-size: 0.85rem;">${sellerItem.seller}</td>
+          <td>${sellerItem.hoy}</td>
+          <td style="color:var(--text-muted);">${sellerItem.d1}</td>
+          <td>${formatVariation(sellerItem.hoy, sellerItem.d1)}</td>
+          <td style="color:var(--text-muted);">${sellerItem.d7}</td>
+          <td>${formatVariation(sellerItem.hoy, sellerItem.d7)}</td>
+          <td style="color:var(--text-muted);">${sellerItem.d14}</td>
+          <td>${formatVariation(sellerItem.hoy, sellerItem.d14)}</td>
+          <td style="color:var(--text-muted);">${sellerItem.d21}</td>
+          <td>${formatVariation(sellerItem.hoy, sellerItem.d21)}</td>
+          <td style="color:var(--text-muted);">${sellerItem.d28}</td>
+          <td>${formatVariation(sellerItem.hoy, sellerItem.d28)}</td>
+        `;
+        csTbody.appendChild(sellerRow);
+      });
     });
   });
   
@@ -1454,16 +1496,46 @@ function renderHourlyDashboard() {
 window.toggleTableGroup = function(groupId, event) {
   const boldRow = event.currentTarget;
   const isCollapsed = boldRow.classList.contains("collapsed");
-  const subRows = document.querySelectorAll(`.${groupId}`);
+  const subRows = document.querySelectorAll(`tr.${groupId}`);
   
   if (isCollapsed) {
     boldRow.classList.remove("collapsed");
-    subRows.forEach(row => row.classList.remove("hidden-row"));
     boldRow.querySelector(".toggle-icon").textContent = "▼";
+    // Only show supervisor rows directly under this coordinator
+    subRows.forEach(row => {
+      if (row.classList.contains('supervisor-row')) {
+        row.classList.remove("hidden-row");
+      }
+    });
   } else {
     boldRow.classList.add("collapsed");
-    subRows.forEach(row => row.classList.add("hidden-row"));
     boldRow.querySelector(".toggle-icon").textContent = "▶";
+    // Hide all supervisors and their sellers under this coordinator
+    subRows.forEach(row => {
+      row.classList.add("hidden-row");
+      if (row.classList.contains('supervisor-row')) {
+        row.classList.add("collapsed");
+        const subToggle = row.querySelector(".toggle-icon-sub");
+        if (subToggle) subToggle.textContent = "▶";
+      }
+    });
+  }
+};
+
+window.toggleSupervisorGroup = function(subGroupId, event) {
+  event.stopPropagation();
+  const supRow = event.currentTarget;
+  const isCollapsed = supRow.classList.contains("collapsed");
+  const sellerRows = document.querySelectorAll(`tr.${subGroupId}`);
+
+  if (isCollapsed) {
+    supRow.classList.remove("collapsed");
+    supRow.querySelector(".toggle-icon-sub").textContent = "▼";
+    sellerRows.forEach(row => row.classList.remove("hidden-row"));
+  } else {
+    supRow.classList.add("collapsed");
+    supRow.querySelector(".toggle-icon-sub").textContent = "▶";
+    sellerRows.forEach(row => row.classList.add("hidden-row"));
   }
 };
 

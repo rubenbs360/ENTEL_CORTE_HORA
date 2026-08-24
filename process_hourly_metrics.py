@@ -76,7 +76,8 @@ def main():
                 'supervisor': row['SUPERVISOR'],
                 'coordinador': row['COORDINADOR'],
                 'cuartil': row['CUARTIL'],
-                'antiguedad': row['ANTIGÜEDAD']
+                'antiguedad': row['ANTIGÜEDAD'],
+                'vendedor': row['APELLIDOS_NOMBRES']
             }
             
     # 2. Load CSV files
@@ -98,6 +99,7 @@ def main():
         sups = []
         quars = []
         antigs = []
+        vendedors = []
         for val in df['FRM_N_DNI_Asesor']:
             info = nomina_dict.get(val)
             if info:
@@ -105,15 +107,19 @@ def main():
                 sups.append(info['supervisor'])
                 quars.append(info['cuartil'])
                 antigs.append(info['antiguedad'])
+                vendedors.append(info['vendedor'])
             else:
                 coords.append(np.nan)
                 sups.append(np.nan)
                 quars.append(np.nan)
                 antigs.append(np.nan)
+                vendedors.append(np.nan)
         df['COORDINADOR'] = coords
         df['SUPERVISOR'] = sups
         df['CUARTIL'] = quars
         df['ANTIGÜEDAD'] = antigs
+        df['VENDEDOR'] = vendedors
+        df['VENDEDOR'] = df['VENDEDOR'].fillna("OTROS")
         
         # Clean coordinator names
         def clean_coordinator_name(name):
@@ -278,7 +284,7 @@ def main():
         # Keep columns
         cols_to_keep = [
             'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
-            'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
+            'CUARTIL', 'ANTIGÜEDAD', 'VENDEDOR', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
             'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
         ]
         df_march = df_march_raw[cols_to_keep].copy()
@@ -292,7 +298,7 @@ def main():
         
     cols_to_keep = [
         'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
-        'CUARTIL', 'ANTIGÜEDAD', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
+        'CUARTIL', 'ANTIGÜEDAD', 'VENDEDOR', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
         'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
     ]
     df_filtered = df_filtered[cols_to_keep]

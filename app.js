@@ -53,7 +53,7 @@ function parseSpanishDateJS(dateStr) {
 function formatSpanishDateJS(date) {
   const day = date.getDate();
   const year = date.getFullYear();
-  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
   const month = monthNames[date.getMonth()];
   return `${day} ${month} ${year}`;
 }
@@ -2056,7 +2056,7 @@ window.navCal = function(panelId, dir, event) {
 // Check if a specific date contains records in the DB
 function isDateAvailableInDb(year, month, day) {
   const monthsEng = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sept", "oct", "nov", "dic"];
   
   const dateStr = `${day} ${monthsSp[month]} ${year}`;
   return lookerDates.some(d => d.str === dateStr);
@@ -2064,7 +2064,7 @@ function isDateAvailableInDb(year, month, day) {
 
 // Format Spanish Date String from numbers
 function getSpanishDateStr(year, month, day) {
-  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const monthsSp = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sept", "oct", "nov", "dic"];
   return `${day} ${monthsSp[month]} ${year}`;
 }
 

@@ -1111,9 +1111,9 @@ function renderHourlyDashboard() {
     const totalMtdExpressDelivered = totalMtdExpress.filter(o => o.Estado_T === 'Entregado').length;
     const overallExpressMtdAvg = totalMtdExpress.length > 0 ? (totalMtdExpressDelivered / totalMtdExpress.length) * 100 : 0;
 
-    // 2. Semaphoring for EXPRESS (signs only, no cell background colors)
-    function getExpressSign(valStr) {
-      if (valStr === '-') return '';
+    // 2. Semaphoring for EXPRESS (signs only for supervisors, no cell background colors)
+    function getExpressSign(valStr, isCoordinatorRow = false) {
+      if (isCoordinatorRow || valStr === '-') return '';
       const val = parseFloat(valStr);
       if (isNaN(val)) return '';
       
@@ -1126,9 +1126,9 @@ function renderHourlyDashboard() {
       }
     }
 
-    // 3. Semaphoring for TOTAL (soft pastel colors: red, yellow, green)
-    function getTotalStyle(valStr) {
-      if (valStr === '-') return 'style="text-align:center;"';
+    // 3. Semaphoring for TOTAL (soft pastel colors for supervisors: red, yellow, green)
+    function getTotalStyle(valStr, isCoordinatorRow = false) {
+      if (isCoordinatorRow || valStr === '-') return 'style="text-align:center;"';
       const val = parseFloat(valStr);
       if (isNaN(val)) return 'style="text-align:center;"';
       
@@ -1159,10 +1159,10 @@ function renderHourlyDashboard() {
       boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
       boldRow.innerHTML = `
         <td><span class="toggle-icon">▼</span>${coord}</td>
-        <td style="text-align:center;">${getExpressSign(cExpressEff)} ${cExpressEff}</td>
+        <td style="text-align:center;">${cExpressEff}</td>
         <td style="text-align:center;">${cProgEff}</td>
         <td ${getRetiroStyle(cRetiroEff, true)}>${cRetiroEff}</td>
-        <td ${getTotalStyle(cTotalEff)}>${cTotalEff}</td>
+        <td ${getTotalStyle(cTotalEff, true)}>${cTotalEff}</td>
       `;
       effTbody.appendChild(boldRow);
       

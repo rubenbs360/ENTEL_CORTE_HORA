@@ -946,9 +946,9 @@ function renderHourlyDashboard() {
     }
   }
 
-  // Heatmap function for RETIRO EN TIENDA (red shading)
-  function getRetiroStyle(retiroCount, totalCount) {
-    if (totalCount === 0) return 'style="text-align:center;"';
+  // Heatmap function for RETIRO EN TIENDA (red shading for supervisors only)
+  function getRetiroStyle(retiroCount, totalCount, isCoordinatorRow = false) {
+    if (isCoordinatorRow || totalCount === 0) return 'style="text-align:center;"';
     const pct = (retiroCount / totalCount) * 100;
     if (pct > 0) {
       const opacity = Math.min(0.32, (pct / 35) * 0.32);
@@ -980,7 +980,7 @@ function renderHourlyDashboard() {
       <td><span class="toggle-icon">▼</span>${coord}</td>
       <td style="text-align:center;">${formatPercent(cExpress, cTotal)}</td>
       <td style="text-align:center;">${formatPercent(cProg, cTotal)}</td>
-      <td ${getRetiroStyle(cRetiro, cTotal)}>${formatPercent(cRetiro, cTotal)}</td>
+      <td ${getRetiroStyle(cRetiro, cTotal, true)}>${formatPercent(cRetiro, cTotal)}</td>
     `;
     partTbody.appendChild(boldRow);
     

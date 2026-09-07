@@ -128,6 +128,8 @@ def main():
             name = str(name).strip()
             if 'SOLORZANO' in name:
                 return 'JOSÉ SOLORZANO'
+            if 'RIVALDO' in name or 'JACOBO' in name:
+                return 'RIVALDO JACOBO'
             return name
         df['COORDINADOR'] = df['COORDINADOR'].apply(clean_coordinator_name)
         df['SUPERVISOR'] = df['SUPERVISOR'].fillna("OTROS")

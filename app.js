@@ -206,7 +206,7 @@ function initializeFilters() {
   if (!hourlyData || !hourlyData.orders) return;
   
   const orders = hourlyData.orders;
-  const campaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
+  const campaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL', 'RIVALDO JACOBO', 'RIVALDO DONAYRE'];
   const campaignOrders = orders.filter(o => campaignCoords.includes(o.COORDINADOR));
   
   // 0. Unique Dates (Filtered to last 30 days of max date)
@@ -1338,7 +1338,7 @@ function renderHourlyDashboard() {
     });
     
     // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4 or belong to non-campaign leaders)
-    const activeCampaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
+    const activeCampaignCoords = ['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL', 'RIVALDO JACOBO', 'RIVALDO DONAYRE'];
     const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && (!activeCampaignCoords.includes(o.COORDINADOR) || !quartilsList.includes(o.CUARTIL)));
     const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     platOrders.forEach(o => {
@@ -1929,18 +1929,21 @@ function renderLookerComparison() {
   tbody.innerHTML = "";
   
   // Coordinators list
-  const coordsList = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'];
+  const coordsList = ['EVER MALCA', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL', 'RIVALDO JACOBO'];
   
   let tA = 0;
   let tB = 0;
   
   coordsList.forEach(coord => {
-    // Treat 'JOS SOLORZANO' and 'JOSÉ SOLORZANO' as the same
+    // Treat 'JOS SOLORZANO' and 'JOSÉ SOLORZANO' as the same, and RIVALDO variants
     const checkCoord = (oCoord) => {
       if (!oCoord) return false;
       const cUpper = oCoord.toUpperCase();
       if (coord === 'JOSÉ SOLORZANO') {
         return cUpper === 'JOS SOLORZANO' || cUpper === 'JOSÉ SOLORZANO';
+      }
+      if (coord === 'RIVALDO JACOBO') {
+        return cUpper.includes('RIVALDO') || cUpper.includes('JACOBO');
       }
       return cUpper === coord;
     };
@@ -1971,7 +1974,7 @@ function renderLookerComparison() {
   const checkOtros = (oCoord) => {
     if (!oCoord) return true;
     const cUpper = oCoord.toUpperCase();
-    return !['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL'].includes(cUpper);
+    return !['EVER MALCA', 'JOS SOLORZANO', 'JOSÉ SOLORZANO', 'PIERO MEDINA', 'WALTER VILLARREAL', 'RIVALDO JACOBO', 'RIVALDO DONAYRE'].includes(cUpper) && !cUpper.includes('RIVALDO');
   };
   const oA = ordersA.filter(o => checkOtros(o.COORDINADOR)).length;
   const oB = ordersB.filter(o => checkOtros(o.COORDINADOR)).length;

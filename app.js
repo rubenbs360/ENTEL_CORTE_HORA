@@ -978,9 +978,9 @@ function renderHourlyDashboard() {
     boldRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
     boldRow.innerHTML = `
       <td><span class="toggle-icon">▼</span>${coord}</td>
-      <td style="text-align:center;">${formatPercent(cExpress, cTotal)}</td>
-      <td style="text-align:center;">${formatPercent(cProg, cTotal)}</td>
-      <td ${getRetiroStyle(cRetiro, cTotal, true)}>${formatPercent(cRetiro, cTotal)}</td>
+      <td style="text-align:center;">${formatPercent(cExpress, cTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${cExpress})</span></td>
+      <td style="text-align:center;">${formatPercent(cProg, cTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${cProg})</span></td>
+      <td ${getRetiroStyle(cRetiro, cTotal, true)}>${formatPercent(cRetiro, cTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${cRetiro})</span></td>
     `;
     partTbody.appendChild(boldRow);
     
@@ -1006,9 +1006,9 @@ function renderHourlyDashboard() {
       const arrow = getExpressArrow(item.express, item.total);
       subRow.innerHTML = `
         <td style="padding-left: 2rem; white-space: nowrap;">${item.sup}</td>
-        <td style="text-align:center; white-space:nowrap;">${arrow} ${formatPercent(item.express, item.total)}</td>
-        <td style="text-align:center;">${formatPercent(item.programado, item.total)}</td>
-        <td ${getRetiroStyle(item.retiro, item.total)}>${formatPercent(item.retiro, item.total)}</td>
+        <td style="text-align:center; white-space:nowrap;">${arrow} ${formatPercent(item.express, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.express})</span></td>
+        <td style="text-align:center;">${formatPercent(item.programado, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.programado})</span></td>
+        <td ${getRetiroStyle(item.retiro, item.total)}>${formatPercent(item.retiro, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.retiro})</span></td>
       `;
       partTbody.appendChild(subRow);
     });
@@ -1033,9 +1033,9 @@ function renderHourlyDashboard() {
   
   tTotalRow.innerHTML = `
     <td>TOTAL OPERACIÓN</td>
-    <td style="text-align:center;">${formatPercent(tExpress, tTotal)}</td>
-    <td style="text-align:center;">${formatPercent(tProg, tTotal)}</td>
-    <td ${getRetiroStyle(tRetiro, tTotal)}>${formatPercent(tRetiro, tTotal)}</td>
+    <td style="text-align:center;">${formatPercent(tExpress, tTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${tExpress})</span></td>
+    <td style="text-align:center;">${formatPercent(tProg, tTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${tProg})</span></td>
+    <td ${getRetiroStyle(tRetiro, tTotal, true)}>${formatPercent(tRetiro, tTotal)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${tRetiro})</span></td>
   `;
   partTbody.appendChild(tTotalRow);
 

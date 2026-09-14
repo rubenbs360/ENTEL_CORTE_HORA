@@ -1861,7 +1861,184 @@ function renderLookerPanel(panelId) {
     `;
     dailyTbody.appendChild(totalRow);
   }
+
+  // Render Cuartil & Antigüedad Table below daily summary
+  renderLookerCuartilTable(panelId, rangeDates, orders);
 }
+
+// Render Looker Cuartil y Antigüedad Table for Panel A / Panel B
+function renderLookerCuartilTable(panelId, rangeDates, orders) {
+  const tbody = document.getElementById(`looker-cuartil-tbody-${panelId}`);
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (!rangeDates || rangeDates.length === 0) return;
+
+  // Filter orders for the selected date range of this panel
+  const rangeOrders = orders.filter(o => rangeDates.includes(o.Fecha_Creacion));
+
+  // Helper icon generators for summary columns
+  function getExpressIcon(val) {
+    if (isNaN(val)) return "";
+    if (val >= 60) return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">▲</span>`;
+    else if (val >= 56) return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">▶</span>`;
+    else return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">▼</span>`;
+  }
+
+  function getTiendaIcon(val) {
+    if (isNaN(val)) return "";
+    if (val <= 17) return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">●</span>`;
+    else if (val <= 20) return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">●</span>`;
+    else return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">●</span>`;
+  }
+
+  function getMultipedidoIcon(val) {
+    if (isNaN(val)) return "";
+    if (val >= 35) return `<span style="color:var(--success); font-weight:bold; margin-right:4px;">↑</span>`;
+    else if (val >= 32) return `<span style="color:var(--warning); font-weight:bold; margin-right:4px;">→</span>`;
+    else return `<span style="color:var(--danger); font-weight:bold; margin-right:4px;">↓</span>`;
+  }
+
+  function computeMetrics(ordersList) {
+    const q = ordersList.length;
+    const expCount = ordersList.filter(o => o.Tipo_Despacho_Detalle === 'EXPRESS' || o.Tipo_Despacho_Detalle === 'EXPRES').length;
+    const storeCount = ordersList.filter(o => o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA' || o.Tipo_Despacho_Detalle === 'RETIRO EN TIENDA (PICKUP)').length;
+    const multiCount = ordersList.filter(o => o.Multilinea === 'SI').length;
+    const delivCount = ordersList.filter(o => o.Estado_T === 'Entregado').length;
+    const activeCount = ordersList.filter(o => o.Estado_T === 'Entregado' && o.EOC_Estado === 'CERRADAS').length;
+
+    const pctExpVal = q > 0 ? (expCount / q) * 100 : 0;
+    const pctStoreVal = q > 0 ? (storeCount / q) * 100 : 0;
+    const pctMultiVal = q > 0 ? (multiCount / q) * 100 : 0;
+    const pctDelivVal = q > 0 ? (delivCount / q) * 100 : 0;
+
+    const pctExp = q > 0 ? pctExpVal.toFixed(0) + "%" : "0%";
+    const pctStore = q > 0 ? pctStoreVal.toFixed(0) + "%" : "0%";
+    const pctMulti = q > 0 ? pctMultiVal.toFixed(0) + "%" : "0%";
+    const pctActive = delivCount > 0 ? ((activeCount / delivCount) * 100).toFixed(0) + "%" : "0%";
+    const pctDeliv = q > 0 ? pctDelivVal.toFixed(0) + "%" : "0%";
+
+    let heatBg = "transparent";
+    if (pctDelivVal >= 74) heatBg = "rgba(34, 197, 94, 0.15)";
+    else if (pctDelivVal >= 69) heatBg = "rgba(234, 179, 8, 0.15)";
+    else heatBg = "rgba(239, 68, 68, 0.15)";
+
+    return {
+      q, expCount, storeCount, multiCount, delivCount, activeCount,
+      pctExpVal, pctStoreVal, pctMultiVal, pctDelivVal,
+      pctExp, pctStore, pctMulti, pctActive, pctDeliv, heatBg
+    };
+  }
+
+  // Defined order of Cuartiles
+  const cuartilOrder = ['Q1', 'Q2', 'Q3', 'Q4', 'PLATAFORMA', 'OTROS'];
+  const presentCuartiles = [...new Set(rangeOrders.map(o => o.CUARTIL || 'OTROS'))];
+  
+  // Sort cuartiles by standard order
+  const sortedCuartiles = cuartilOrder.filter(c => presentCuartiles.includes(c));
+  presentCuartiles.forEach(c => {
+    if (!sortedCuartiles.includes(c)) sortedCuartiles.push(c);
+  });
+
+  // Antigüedad order
+  const antiguedadOrder = ['0 a 3 meses', '>3 meses', '>6 meses', '>1 año', 'OTROS'];
+
+  sortedCuartiles.forEach(cuartil => {
+    const cuartilOrders = rangeOrders.filter(o => (o.CUARTIL || 'OTROS') === cuartil);
+    if (cuartilOrders.length === 0) return;
+
+    const m = computeMetrics(cuartilOrders);
+    const groupId = `group-lkr-q-${panelId}-${cuartil.replace(/\s+/g, '_')}`;
+
+    // Level 1: Cuartil Row (Collapsible)
+    const boldRow = document.createElement("tr");
+    boldRow.className = "bold-row";
+    boldRow.style.cursor = "pointer";
+    boldRow.setAttribute("onclick", `toggleLookerCuartilGroup('${groupId}', event)`);
+    boldRow.innerHTML = `
+      <td><span class="toggle-icon-sub" style="margin-right: 6px;">▼</span><strong>${cuartil}</strong></td>
+      <td style="text-align:center; font-weight:700;">${m.q}</td>
+      <td style="text-align:center;">${getExpressIcon(m.pctExpVal)} ${m.pctExp}</td>
+      <td style="text-align:center;">${getTiendaIcon(m.pctStoreVal)} ${m.pctStore}</td>
+      <td style="text-align:center;">${getMultipedidoIcon(m.pctMultiVal)} ${m.pctMulti}</td>
+      <td style="text-align:center;">${m.activeCount}</td>
+      <td style="text-align:center; font-weight:600;">${m.pctActive}</td>
+      <td style="text-align:center;">${m.delivCount}</td>
+      <td style="text-align:center; font-weight:700; background-color:${m.heatBg};">${m.pctDeliv}</td>
+    `;
+    tbody.appendChild(boldRow);
+
+    // Level 2: Antigüedad Sub-rows
+    const presentAntigs = [...new Set(cuartilOrders.map(o => o.ANTIGÜEDAD || 'OTROS'))];
+    const sortedAntigs = antiguedadOrder.filter(a => presentAntigs.includes(a));
+    presentAntigs.forEach(a => {
+      if (!sortedAntigs.includes(a)) sortedAntigs.push(a);
+    });
+
+    sortedAntigs.forEach(antig => {
+      const antOrders = cuartilOrders.filter(o => (o.ANTIGÜEDAD || 'OTROS') === antig);
+      if (antOrders.length === 0) return;
+
+      const am = computeMetrics(antOrders);
+
+      const subRow = document.createElement("tr");
+      subRow.className = groupId;
+      subRow.innerHTML = `
+        <td style="padding-left: 2rem; color: var(--text-muted); font-size: 0.8rem;">${antig}</td>
+        <td style="text-align:center;">${am.q}</td>
+        <td style="text-align:center;">${getExpressIcon(am.pctExpVal)} ${am.pctExp}</td>
+        <td style="text-align:center;">${getTiendaIcon(am.pctStoreVal)} ${am.pctStore}</td>
+        <td style="text-align:center;">${getMultipedidoIcon(am.pctMultiVal)} ${am.pctMulti}</td>
+        <td style="text-align:center;">${am.activeCount}</td>
+        <td style="text-align:center;">${am.pctActive}</td>
+        <td style="text-align:center;">${am.delivCount}</td>
+        <td style="text-align:center; background-color:${am.heatBg};">${am.pctDeliv}</td>
+      `;
+      tbody.appendChild(subRow);
+    });
+  });
+
+  // Total General Row
+  if (rangeOrders.length > 0) {
+    const tm = computeMetrics(rangeOrders);
+    const totalRow = document.createElement("tr");
+    totalRow.className = "bold-row";
+    totalRow.style.borderTop = "2px solid var(--text-main)";
+    totalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    totalRow.innerHTML = `
+      <td>Total general</td>
+      <td style="text-align:center; font-weight:800;">${tm.q}</td>
+      <td style="text-align:center; font-weight:700;">${getExpressIcon(tm.pctExpVal)} ${tm.pctExp}</td>
+      <td style="text-align:center; font-weight:700;">${getTiendaIcon(tm.pctStoreVal)} ${tm.pctStore}</td>
+      <td style="text-align:center; font-weight:700;">${getMultipedidoIcon(tm.pctMultiVal)} ${tm.pctMulti}</td>
+      <td style="text-align:center; font-weight:700;">${tm.activeCount}</td>
+      <td style="text-align:center; font-weight:800;">${tm.pctActive}</td>
+      <td style="text-align:center; font-weight:700;">${tm.delivCount}</td>
+      <td style="text-align:center; font-weight:800; background-color:${tm.heatBg};">${tm.pctDeliv}</td>
+    `;
+    tbody.appendChild(totalRow);
+  }
+}
+
+// Toggle function for Looker Cuartil rows
+window.toggleLookerCuartilGroup = function(groupId, event) {
+  const boldRow = event.currentTarget;
+  const isCollapsed = boldRow.classList.contains("collapsed");
+  const subRows = document.querySelectorAll(`tr.${groupId}`);
+
+  if (isCollapsed) {
+    boldRow.classList.remove("collapsed");
+    const icon = boldRow.querySelector(".toggle-icon-sub");
+    if (icon) icon.textContent = "▼";
+    subRows.forEach(row => row.classList.remove("hidden-row"));
+  } else {
+    boldRow.classList.add("collapsed");
+    const icon = boldRow.querySelector(".toggle-icon-sub");
+    if (icon) icon.textContent = "▶";
+    subRows.forEach(row => row.classList.add("hidden-row"));
+  }
+};
 
 // Global render Looker view function
 function renderLookerView() {

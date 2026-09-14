@@ -582,6 +582,63 @@
               </tbody>
             </table>
           </div>
+      </div>
+
+      <!-- Resumen por Cuartil y Antigüedad (Independent Split Container) -->
+      <div class="looker-split-container" style="margin-top: 1.5rem;">
+        
+        <!-- Cuartil Summary A (Left) -->
+        <div class="looker-panel card">
+          <div style="font-size:0.9rem; font-weight:700; color:var(--accent-cyan); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:0.5rem;">
+            <span>📊</span> Resumen por Cuartil y Antigüedad - Panel A
+          </div>
+          <div class="table-wrapper">
+            <table class="executive-table" style="font-size: 0.8rem;">
+              <thead>
+                <tr style="background: rgba(8, 145, 178, 0.05);">
+                  <th>Cuartil / Antigüedad</th>
+                  <th style="text-align:center;">Q</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">% EXPRESS</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">% TIENDA</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">MULTIPEDID</th>
+                  <th style="text-align:center; color: var(--warning);">ACTIVA (u.)</th>
+                  <th style="text-align:center; color: var(--warning);">% ACTIVA</th>
+                  <th style="text-align:center; color: var(--success);">ENTREGAS (u.)</th>
+                  <th style="text-align:center; color: var(--success);">% ENTREGA</th>
+                </tr>
+              </thead>
+              <tbody id="looker-cuartil-tbody-a">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Cuartil Summary B (Right) -->
+        <div class="looker-panel card">
+          <div style="font-size:0.9rem; font-weight:700; color:var(--accent-cyan); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:0.5rem;">
+            <span>📊</span> Resumen por Cuartil y Antigüedad - Panel B
+          </div>
+          <div class="table-wrapper">
+            <table class="executive-table" style="font-size: 0.8rem;">
+              <thead>
+                <tr style="background: rgba(8, 145, 178, 0.05);">
+                  <th>Cuartil / Antigüedad</th>
+                  <th style="text-align:center;">Q</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">% EXPRESS</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">% TIENDA</th>
+                  <th style="text-align:center; color: var(--accent-cyan);">MULTIPEDID</th>
+                  <th style="text-align:center; color: var(--warning);">ACTIVA (u.)</th>
+                  <th style="text-align:center; color: var(--warning);">% ACTIVA</th>
+                  <th style="text-align:center; color: var(--success);">ENTREGAS (u.)</th>
+                  <th style="text-align:center; color: var(--success);">% ENTREGA</th>
+                </tr>
+              </thead>
+              <tbody id="looker-cuartil-tbody-b">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
@@ -640,6 +697,6 @@
   </div>
 
   <!-- App JS -->
-  <script src="app.js?v=20260911_v1"></script>
+  <script src="app.js?v=20260914_v1"></script>
 </body>
 </html>

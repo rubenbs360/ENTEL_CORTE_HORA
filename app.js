@@ -997,20 +997,53 @@ function renderHourlyDashboard() {
         else if (type === 'RETIRO EN TIENDA') retiro++;
       });
       const total = express + programado + retiro;
-      return { sup, express, programado, retiro, total };
+      return { sup, express, programado, retiro, total, supHoyOrders };
     }).sort((a, b) => b.total - a.total || a.sup.localeCompare(b.sup));
     
     supPartRows.forEach(item => {
+      const coordIdClean = coord.replace(/\s+/g, '_');
+      const supIdClean = item.sup.replace(/\s+/g, '_');
+      const subGroupId = `group-sup-part-${coordIdClean}_${supIdClean}`;
+
       const subRow = document.createElement("tr");
-      subRow.className = groupId;
+      subRow.className = `supervisor-row collapsed ${groupId}`;
+      subRow.setAttribute("onclick", `toggleSupervisorGroup('${subGroupId}', event)`);
       const arrow = getExpressArrow(item.express, item.total);
       subRow.innerHTML = `
-        <td style="padding-left: 2rem; white-space: nowrap;">${item.sup}</td>
+        <td style="padding-left: 1rem; white-space: nowrap;"><span class="toggle-icon-sub" style="margin-right: 6px;">▶</span>${item.sup}</td>
         <td style="text-align:center; white-space:nowrap;">${arrow} ${formatPercent(item.express, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.express})</span></td>
         <td style="text-align:center;">${formatPercent(item.programado, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.programado})</span></td>
         <td ${getRetiroStyle(item.retiro, item.total)}>${formatPercent(item.retiro, item.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${item.retiro})</span></td>
       `;
       partTbody.appendChild(subRow);
+
+      // Get sellers/vendedores for this supervisor
+      const sellersInSup = [...new Set(item.supHoyOrders.map(o => o.VENDEDOR || "OTROS"))].sort();
+      const sellerRows = sellersInSup.map(seller => {
+        const sellerOrders = item.supHoyOrders.filter(o => (o.VENDEDOR || "OTROS") === seller);
+        let sExpress = 0, sProg = 0, sRetiro = 0;
+        sellerOrders.forEach(o => {
+          const type = (o.Tipo_Despacho_Detalle || "").toUpperCase();
+          if (type === 'EXPRESS') sExpress++;
+          else if (type === 'PROGRAMADO') sProg++;
+          else if (type === 'RETIRO EN TIENDA') sRetiro++;
+        });
+        const sTotal = sExpress + sProg + sRetiro;
+        return { seller, express: sExpress, programado: sProg, retiro: sRetiro, total: sTotal };
+      }).sort((a, b) => b.total - a.total || a.seller.localeCompare(b.seller));
+
+      // Append seller rows
+      sellerRows.forEach(sellerItem => {
+        const sellerRow = document.createElement("tr");
+        sellerRow.className = `vendedor-row hidden-row ${groupId} ${subGroupId}`;
+        sellerRow.innerHTML = `
+          <td style="padding-left: 2.75rem; color: var(--text-muted); font-size: 0.85rem;">${sellerItem.seller}</td>
+          <td style="text-align:center; white-space:nowrap;">${formatPercent(sellerItem.express, sellerItem.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${sellerItem.express})</span></td>
+          <td style="text-align:center;">${formatPercent(sellerItem.programado, sellerItem.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${sellerItem.programado})</span></td>
+          <td ${getRetiroStyle(sellerItem.retiro, sellerItem.total)}>${formatPercent(sellerItem.retiro, sellerItem.total)} <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">(${sellerItem.retiro})</span></td>
+        `;
+        partTbody.appendChild(sellerRow);
+      });
     });
   });
 

@@ -862,19 +862,35 @@ function renderHourlyDashboard() {
       planesList.forEach(p => {
         const pPost = promPost.plans[p];
         const pPre = promPre.plans[p];
-        const diffPlan = Math.round(pPost - pPre);
-        const sign = diffPlan > 0 ? '+' : '';
-        const color = diffPlan < 0 ? '#ef4444' : (diffPlan > 0 ? '#10b981' : 'var(--text-main)');
-        const bg = diffPlan < 0 ? 'rgba(239, 68, 68, 0.15)' : (diffPlan > 0 ? 'rgba(16, 185, 129, 0.15)' : 'transparent');
+        const diffPlan = pPost - pPre;
+        const diffPlanRound = Math.round(diffPlan);
+        const sign = diffPlanRound > 0 ? '+' : '';
+        const color = diffPlanRound < 0 ? '#ef4444' : (diffPlanRound > 0 ? '#10b981' : 'var(--text-main)');
+        const bg = diffPlanRound < 0 ? 'rgba(239, 68, 68, 0.15)' : (diffPlanRound > 0 ? 'rgba(16, 185, 129, 0.15)' : 'transparent');
 
-        diffHtml += `<td style="text-align:center; font-weight:800; color:${color}; background:${bg};">${sign}${diffPlan}</td>`;
+        // Calculate % caída / incremento vs pPre (100% = pPre)
+        let pctChangeStr = '';
+        if (pPre > 0) {
+          const pctChange = (diffPlan / pPre) * 100;
+          const pctSign = pctChange > 0 ? '+' : '';
+          pctChangeStr = ` <span style="font-size:0.82em; opacity:0.9; font-weight:600;">(${pctSign}${pctChange.toFixed(1)}%)</span>`;
+        }
+
+        diffHtml += `<td style="text-align:center; font-weight:800; color:${color}; background:${bg};">${sign}${diffPlanRound}${pctChangeStr}</td>`;
       });
 
       // Otros Diff
-      const otrosDiff = Math.round(promPost.otros - promPre.otros);
-      const oSign = otrosDiff > 0 ? '+' : '';
-      const oColor = otrosDiff < 0 ? '#ef4444' : (otrosDiff > 0 ? '#10b981' : 'var(--text-main)');
-      diffHtml += `<td style="text-align:center; font-weight:800; color:${oColor};">${oSign}${otrosDiff}</td>`;
+      const otrosDiff = promPost.otros - promPre.otros;
+      const otrosDiffRound = Math.round(otrosDiff);
+      const oSign = otrosDiffRound > 0 ? '+' : '';
+      const oColor = otrosDiffRound < 0 ? '#ef4444' : (otrosDiffRound > 0 ? '#10b981' : 'var(--text-main)');
+      let oPctChangeStr = '';
+      if (promPre.otros > 0) {
+        const oPctChange = (otrosDiff / promPre.otros) * 100;
+        const oPctSign = oPctChange > 0 ? '+' : '';
+        oPctChangeStr = ` <span style="font-size:0.82em; opacity:0.9; font-weight:600;">(${oPctSign}${oPctChange.toFixed(1)}%)</span>`;
+      }
+      diffHtml += `<td style="text-align:center; font-weight:800; color:${oColor};">${oSign}${otrosDiffRound}${oPctChangeStr}</td>`;
 
       // Total Diff + % Impacto
       diffHtml += `<td style="text-align:right; font-weight:800; color:${totalColor}; font-size:0.96rem;">${totalSign}${Math.round(diffTotal)} <span style="font-size:0.85em; opacity:0.9;">(${totalSign}${pctImpact})</span></td>`;
@@ -1462,8 +1478,17 @@ function renderHourlyDashboard() {
       table4Totals.d28 += qSums.d28;
       
       const row = document.createElement("tr");
+      const isQ1 = (q === 'Q1');
+      if (isQ1) {
+        row.className = "bold-row";
+        row.style.cursor = "pointer";
+        row.setAttribute("onclick", "toggleTableGroup('group-q1-leaders', event)");
+      }
+      
+      const qLabelHtml = isQ1 ? `<span class="toggle-icon" style="margin-right:6px;">▼</span>${q}` : q;
+
       row.innerHTML = `
-        <td style="font-weight: 600; padding-left: 1rem;">${q}</td>
+        <td style="font-weight: 600; padding-left: 1rem;">${qLabelHtml}</td>
         <td>${qSums.hoy}</td>
         <td style="color:var(--text-muted);">${qSums.d1}</td>
         <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
@@ -1477,6 +1502,79 @@ function renderHourlyDashboard() {
         <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
       `;
       qTbody.appendChild(row);
+
+      // If Q1, render sub-rows for the 4 Leaders (Ever, Jose, Piero, Rivaldo) and Otros
+      if (isQ1) {
+        const leadersList = [
+          { label: 'Ever Malca', matchKey: 'EVER' },
+          { label: 'Jose Solorzano', matchKey: 'JOS' },
+          { label: 'Piero Medina', matchKey: 'PIERO' },
+          { label: 'Rivaldo Jacobo', matchKey: 'RIVALDO' }
+        ];
+
+        let lSumCombined = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+
+        leadersList.forEach(lObj => {
+          const lOrders = qOrders.filter(o => o.COORDINADOR && o.COORDINADOR.toUpperCase().includes(lObj.matchKey));
+          const lSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+          lOrders.forEach(o => {
+            if (o.Fecha_Creacion === meta.hoy_date) lSums.hoy++;
+            else if (o.Fecha_Creacion === meta.d1_date) lSums.d1++;
+            else if (o.Fecha_Creacion === meta.d7_date) lSums.d7++;
+            else if (o.Fecha_Creacion === meta.d14_date) lSums.d14++;
+            else if (o.Fecha_Creacion === meta.d21_date) lSums.d21++;
+            else if (o.Fecha_Creacion === meta.d28_date) lSums.d28++;
+          });
+
+          Object.keys(lSums).forEach(k => { lSumCombined[k] += lSums[k]; });
+
+          const lRow = document.createElement("tr");
+          lRow.className = "group-q1-leaders";
+          lRow.innerHTML = `
+            <td style="padding-left: 2.25rem; font-size: 0.88rem; color: var(--text-main); font-weight: 500;">${lObj.label}</td>
+            <td>${lSums.hoy}</td>
+            <td style="color:var(--text-muted);">${lSums.d1}</td>
+            <td>${formatVariation(lSums.hoy, lSums.d1)}</td>
+            <td style="color:var(--text-muted);">${lSums.d7}</td>
+            <td>${formatVariation(lSums.hoy, lSums.d7)}</td>
+            <td style="color:var(--text-muted);">${lSums.d14}</td>
+            <td>${formatVariation(lSums.hoy, lSums.d14)}</td>
+            <td style="color:var(--text-muted);">${lSums.d21}</td>
+            <td>${formatVariation(lSums.hoy, lSums.d21)}</td>
+            <td style="color:var(--text-muted);">${lSums.d28}</td>
+            <td>${formatVariation(lSums.hoy, lSums.d28)}</td>
+          `;
+          qTbody.appendChild(lRow);
+        });
+
+        // Sub-row for Otros (Rest of Q1)
+        const otrosQSums = {
+          hoy: qSums.hoy - lSumCombined.hoy,
+          d1: qSums.d1 - lSumCombined.d1,
+          d7: qSums.d7 - lSumCombined.d7,
+          d14: qSums.d14 - lSumCombined.d14,
+          d21: qSums.d21 - lSumCombined.d21,
+          d28: qSums.d28 - lSumCombined.d28
+        };
+
+        const oRow = document.createElement("tr");
+        oRow.className = "group-q1-leaders";
+        oRow.innerHTML = `
+          <td style="padding-left: 2.25rem; font-size: 0.88rem; color: var(--text-muted); font-weight: 500;">Otros</td>
+          <td>${otrosQSums.hoy}</td>
+          <td style="color:var(--text-muted);">${otrosQSums.d1}</td>
+          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d1)}</td>
+          <td style="color:var(--text-muted);">${otrosQSums.d7}</td>
+          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d7)}</td>
+          <td style="color:var(--text-muted);">${otrosQSums.d14}</td>
+          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d14)}</td>
+          <td style="color:var(--text-muted);">${otrosQSums.d21}</td>
+          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d21)}</td>
+          <td style="color:var(--text-muted);">${otrosQSums.d28}</td>
+          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d28)}</td>
+        `;
+        qTbody.appendChild(oRow);
+      }
     });
     
     // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4 or belong to non-campaign leaders)

@@ -53,7 +53,7 @@ function parseSpanishDateJS(dateStr) {
 function formatSpanishDateJS(date) {
   const day = date.getDate();
   const year = date.getFullYear();
-  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
+  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   const month = monthNames[date.getMonth()];
   return `${day} ${month} ${year}`;
 }
@@ -730,25 +730,26 @@ function renderHourlyDashboard() {
       planesList.forEach(p => { daysData[dConf.key].plans[p] = 0; });
     });
 
-    // Compile orders filtered up to maxSelectedHour
+    // Compile orders: for historical days (including Prom 1-22), use full day; for HOY, apply maxSelectedHour
     filteredOrders.forEach(o => {
-      if (o.Hora <= maxSelectedHour) {
-        const plan = o.Plan_Vendido;
-        const isKnownPlan = planesList.includes(plan);
+      const plan = o.Plan_Vendido;
+      const isKnownPlan = planesList.includes(plan);
 
-        // Check if order belongs to 1-22 Sept
-        if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
-          daysData['prom1to22'].total += (1 / daysCount1To22);
-          if (isKnownPlan) {
-            daysData['prom1to22'].plans[plan] += (1 / daysCount1To22);
-          } else {
-            daysData['prom1to22'].otros += (1 / daysCount1To22);
-          }
+      // Check if order belongs to 1-22 Sept (Historical: use all hours of the day for true baseline)
+      if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
+        daysData['prom1to22'].total += (1 / daysCount1To22);
+        if (isKnownPlan) {
+          daysData['prom1to22'].plans[plan] += (1 / daysCount1To22);
+        } else {
+          daysData['prom1to22'].otros += (1 / daysCount1To22);
         }
+      }
 
-        // Match specific dates
-        daysConfig.forEach(dConf => {
-          if (!dConf.isProm && o.Fecha_Creacion === dConf.dateStr) {
+      // Match specific dates
+      daysConfig.forEach(dConf => {
+        if (!dConf.isProm && o.Fecha_Creacion === dConf.dateStr) {
+          // For Hoy, respect maxSelectedHour; for past days, count all hours
+          if (!dConf.isHoy || o.Hora <= maxSelectedHour) {
             daysData[dConf.key].total++;
             if (isKnownPlan) {
               daysData[dConf.key].plans[plan]++;
@@ -756,8 +757,8 @@ function renderHourlyDashboard() {
               daysData[dConf.key].otros++;
             }
           }
-        });
-      }
+        }
+      });
     });
 
     // Helper for formatting N (%) combined cell

@@ -303,11 +303,11 @@ def main():
     if not df_march.empty:
         df_filtered = pd.concat([df_filtered, df_march], ignore_index=True)
         
-    # Clean Plan_Vendido column for regular data
-    if 'FRM_Plan_vendido' in df_filtered.columns:
-        df_filtered['Plan_Vendido'] = df_filtered['FRM_Plan_vendido'].fillna("Otros").astype(str).str.strip()
-    elif 'OBI_Nuevo_plan' in df_filtered.columns:
+    # Clean Plan_Vendido column for regular data (prioritize OBI_Nuevo_plan to match Looker)
+    if 'OBI_Nuevo_plan' in df_filtered.columns:
         df_filtered['Plan_Vendido'] = df_filtered['OBI_Nuevo_plan'].fillna("Otros").astype(str).str.strip()
+    elif 'FRM_Plan_vendido' in df_filtered.columns:
+        df_filtered['Plan_Vendido'] = df_filtered['FRM_Plan_vendido'].fillna("Otros").astype(str).str.strip()
     else:
         df_filtered['Plan_Vendido'] = df_filtered['Plan_Vendido'].fillna("Otros").astype(str).str.strip() if 'Plan_Vendido' in df_filtered.columns else "Otros"
         

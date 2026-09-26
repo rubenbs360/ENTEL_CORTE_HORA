@@ -660,119 +660,119 @@ function renderHourlyDashboard() {
   document.getElementById("camp-pickup-val").textContent = cmpPickup.toFixed(2) + "%";
   document.getElementById("camp-pickup-bar").style.width = cmpPickup.toFixed(2) + "%";
   
-  // 4. Render Table 1: Comparativo Marzo (Hora a Hora)
-  const ccTbody = document.getElementById("comparativo-marzo-tbody");
-  const ccTheadTr = document.getElementById("comparativo-marzo-thead-tr");
-  if (ccTbody && ccTheadTr) {
-    ccTbody.innerHTML = "";
-    ccTheadTr.innerHTML = "";
-    
-    // Determine target day of week based on selectedDate
-    const dt = parseSpanishDateJS(selectedDate || meta.hoy_date);
-    const dayOfWeek = dt ? dt.getDay() : -1;
-    const weekdaysSp = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const dayName = dayOfWeek >= 0 ? weekdaysSp[dayOfWeek] : "Día";
-    
-    // Update the section title
-    const compTitle = document.getElementById("comparativo-marzo-title");
-    if (compTitle) {
-      compTitle.textContent = `Comparativo Marzo (${dayName})`;
-    }
-    
-    // Find all unique dates in March 2026
-    const allMarchOrders = orders.filter(o => o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO.startsWith("2026-03-"));
-    const uniqueMarchDates = [...new Set(allMarchOrders.map(o => o.Fecha_Creacion))];
-    
-    // Filter matching March dates (same day of week)
-    const matchingMarchDates = [];
-    uniqueMarchDates.forEach(dStr => {
-      const mDt = parseSpanishDateJS(dStr);
-      if (mDt && mDt.getDay() === dayOfWeek) {
-        matchingMarchDates.push({ str: dStr, date: mDt });
-      }
-    });
-    
-    // Sort chronologically
-    matchingMarchDates.sort((a, b) => a.date - b.date);
-    
-    // Build Table Header
-    let theadHtml = `<th>Hora</th><th>Hoy</th>`;
-    matchingMarchDates.forEach(md => {
-      const dateParts = md.str.split(" ");
-      const shortLabel = dateParts.length >= 2 ? `${dateParts[0]} ${dateParts[1].substring(0,3)}` : md.str;
-      theadHtml += `
-        <th style="text-align:right; color:var(--text-muted);">${shortLabel} (Q)</th>
-        <th style="text-align:center;">${shortLabel} (%)</th>
-      `;
-    });
-    ccTheadTr.innerHTML = theadHtml;
-    
-    // Define rowsConfig matching "Ingreso por Hora (Detalle)" exactly
-    const rowsConfig = [
-      { label: "00:00 - 08:00 hrs", hours: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
-      { label: "09:00 hrs", hours: [9] },
-      { label: "10:00 hrs", hours: [10] },
-      { label: "11:00 hrs", hours: [11] },
-      { label: "12:00 hrs", hours: [12] },
-      { label: "13:00 hrs", hours: [13] },
-      { label: "14:00 hrs", hours: [14] },
-      { label: "15:00 hrs", hours: [15] },
-      { label: "16:00 hrs", hours: [16] },
-      { label: "17:00 hrs", hours: [17] },
-      { label: "18:00 hrs", hours: [18] },
-      { label: "19:00 hrs", hours: [19] },
-      { label: "20:00 hrs", hours: [20] },
-      { label: "21:00 - 23:00 hrs", hours: [21, 22, 23] }
+  // 4. Render Table: Mix por Plan Tarifario (Resumen)
+  const mixTbody = document.getElementById("hourly-mix-planes-table-body");
+  if (mixTbody) {
+    mixTbody.innerHTML = "";
+    const planesList = [
+      'Power ilim 79.90 SD N',
+      'Power ilim 69.90 N',
+      'Power 59.90 N',
+      'Power 49.90 N',
+      'Power 39.90 N'
     ];
     
-    // Track totals
-    const marchTotals = {};
-    matchingMarchDates.forEach(md => { marchTotals[md.str] = 0; });
-    let hoyTotalVal = 0;
+    const mixTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     
-    // Render rows
-    rowsConfig.forEach(rowConf => {
-      const activeHours = rowConf.hours.filter(h => selectedHours.has(h));
-      if (activeHours.length === 0) return;
-      
-      const hoyOrders = orders.filter(o => o.Fecha_Creacion === (selectedDate || meta.hoy_date) && activeHours.includes(o.Hora));
-      const hoyVal = hoyOrders.length;
-      hoyTotalVal += hoyVal;
-      
-      let rowHtml = `<td style="font-weight: 600; padding-left: 1rem;">${rowConf.label}</td><td>${hoyVal}</td>`;
-      
-      matchingMarchDates.forEach(md => {
-        const mOrders = orders.filter(o => o.Fecha_Creacion === md.str && activeHours.includes(o.Hora));
-        const val = mOrders.length;
-        marchTotals[md.str] += val;
-        
-        rowHtml += `
-          <td style="color:var(--text-muted); text-align:right;">${val}</td>
-          <td style="text-align:center;">${formatVariation(hoyVal, val)}</td>
-        `;
+    // Render top 5 main plans
+    planesList.forEach(planName => {
+      const planOrders = filteredOrders.filter(o => o.Plan_Vendido === planName);
+      const planSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+      planOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) planSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) planSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) planSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) planSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) planSums.d21++;
+        else if (o.Fecha_Creacion === meta.d28_date) planSums.d28++;
       });
       
-      const tr = document.createElement("tr");
-      tr.innerHTML = rowHtml;
-      ccTbody.appendChild(tr);
-    });
-    
-    // Append TOTAL GLOBAL row
-    const ccTotalRow = document.createElement("tr");
-    ccTotalRow.className = "bold-row";
-    ccTotalRow.style.borderTop = "2px solid var(--text-main)";
-    ccTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
-    
-    let totalRowHtml = `<td>TOTAL GLOBAL</td><td>${hoyTotalVal}</td>`;
-    matchingMarchDates.forEach(md => {
-      const val = marchTotals[md.str];
-      totalRowHtml += `
-        <td style="color:var(--text-muted); text-align:right;">${val}</td>
-        <td style="text-align:center;">${formatVariation(hoyTotalVal, val)}</td>
+      mixTotals.hoy += planSums.hoy;
+      mixTotals.d1 += planSums.d1;
+      mixTotals.d7 += planSums.d7;
+      mixTotals.d14 += planSums.d14;
+      mixTotals.d21 += planSums.d21;
+      mixTotals.d28 += planSums.d28;
+      
+      const row = document.createElement("tr");
+      // Highlight 59.90 N if dropped
+      const is59 = planName.includes('59.90');
+      if (is59) {
+        row.style.backgroundColor = "rgba(239, 68, 68, 0.05)";
+      }
+      row.innerHTML = `
+        <td style="font-weight: 600; padding-left: 1rem; ${is59 ? 'color:var(--danger);' : ''}">${planName}</td>
+        <td>${planSums.hoy}</td>
+        <td style="color:var(--text-muted);">${planSums.d1}</td>
+        <td>${formatVariation(planSums.hoy, planSums.d1)}</td>
+        <td style="color:var(--text-muted);">${planSums.d7}</td>
+        <td>${formatVariation(planSums.hoy, planSums.d7)}</td>
+        <td style="color:var(--text-muted);">${planSums.d14}</td>
+        <td>${formatVariation(planSums.hoy, planSums.d14)}</td>
+        <td style="color:var(--text-muted);">${planSums.d21}</td>
+        <td>${formatVariation(planSums.hoy, planSums.d21)}</td>
+        <td style="color:var(--text-muted);">${planSums.d28}</td>
+        <td>${formatVariation(planSums.hoy, planSums.d28)}</td>
       `;
+      mixTbody.appendChild(row);
     });
-    ccTotalRow.innerHTML = totalRowHtml;
-    ccTbody.appendChild(ccTotalRow);
+    
+    // OTROS PLANES row
+    const otrosOrders = filteredOrders.filter(o => !planesList.includes(o.Plan_Vendido));
+    const otrosSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+    otrosOrders.forEach(o => {
+      if (o.Fecha_Creacion === meta.hoy_date) otrosSums.hoy++;
+      else if (o.Fecha_Creacion === meta.d1_date) otrosSums.d1++;
+      else if (o.Fecha_Creacion === meta.d7_date) otrosSums.d7++;
+      else if (o.Fecha_Creacion === meta.d14_date) otrosSums.d14++;
+      else if (o.Fecha_Creacion === meta.d21_date) otrosSums.d21++;
+      else if (o.Fecha_Creacion === meta.d28_date) otrosSums.d28++;
+    });
+    
+    mixTotals.hoy += otrosSums.hoy;
+    mixTotals.d1 += otrosSums.d1;
+    mixTotals.d7 += otrosSums.d7;
+    mixTotals.d14 += otrosSums.d14;
+    mixTotals.d21 += otrosSums.d21;
+    mixTotals.d28 += otrosSums.d28;
+    
+    const otrosRow = document.createElement("tr");
+    otrosRow.innerHTML = `
+      <td style="font-weight: 600; padding-left: 1rem;">OTROS PLANES</td>
+      <td>${otrosSums.hoy}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d1}</td>
+      <td>${formatVariation(otrosSums.hoy, otrosSums.d1)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d7}</td>
+      <td>${formatVariation(otrosSums.hoy, otrosSums.d7)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d14}</td>
+      <td>${formatVariation(otrosSums.hoy, otrosSums.d14)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d21}</td>
+      <td>${formatVariation(otrosSums.hoy, otrosSums.d21)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d28}</td>
+      <td>${formatVariation(otrosSums.hoy, otrosSums.d28)}</td>
+    `;
+    mixTbody.appendChild(otrosRow);
+    
+    // TOTAL GLOBAL row for Mix de Planes
+    const mixTotalRow = document.createElement("tr");
+    mixTotalRow.className = "bold-row";
+    mixTotalRow.style.borderTop = "2px solid var(--text-main)";
+    mixTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
+    mixTotalRow.innerHTML = `
+      <td>TOTAL GLOBAL</td>
+      <td>${mixTotals.hoy}</td>
+      <td style="color:var(--text-muted);">${mixTotals.d1}</td>
+      <td>${formatVariation(mixTotals.hoy, mixTotals.d1)}</td>
+      <td style="color:var(--text-muted);">${mixTotals.d7}</td>
+      <td>${formatVariation(mixTotals.hoy, mixTotals.d7)}</td>
+      <td style="color:var(--text-muted);">${mixTotals.d14}</td>
+      <td>${formatVariation(mixTotals.hoy, mixTotals.d14)}</td>
+      <td style="color:var(--text-muted);">${mixTotals.d21}</td>
+      <td>${formatVariation(mixTotals.hoy, mixTotals.d21)}</td>
+      <td style="color:var(--text-muted);">${mixTotals.d28}</td>
+      <td>${formatVariation(mixTotals.hoy, mixTotals.d28)}</td>
+    `;
+    mixTbody.appendChild(mixTotalRow);
   }
   
   // 5. Render Table 2: Supervisor

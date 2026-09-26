@@ -284,10 +284,15 @@ def main():
         df_march_raw['Piloto'] = df_march_raw['order_clean'].map(pilot_map).fillna("Campaña Regular")
         
         # Keep columns
+        if 'FRM_Plan_vendido' in df_march_raw.columns:
+            df_march_raw['Plan_Vendido'] = df_march_raw['FRM_Plan_vendido'].fillna("Otros").astype(str).str.strip()
+        else:
+            df_march_raw['Plan_Vendido'] = "Otros"
+            
         cols_to_keep = [
             'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
             'CUARTIL', 'ANTIGÜEDAD', 'VENDEDOR', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
-            'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
+            'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto', 'Plan_Vendido'
         ]
         df_march = df_march_raw[cols_to_keep].copy()
         print(f"  Procesados {len(df_march)} registros de Marzo.")
@@ -298,10 +303,18 @@ def main():
     if not df_march.empty:
         df_filtered = pd.concat([df_filtered, df_march], ignore_index=True)
         
+    # Clean Plan_Vendido column for regular data
+    if 'FRM_Plan_vendido' in df_filtered.columns:
+        df_filtered['Plan_Vendido'] = df_filtered['FRM_Plan_vendido'].fillna("Otros").astype(str).str.strip()
+    elif 'OBI_Nuevo_plan' in df_filtered.columns:
+        df_filtered['Plan_Vendido'] = df_filtered['OBI_Nuevo_plan'].fillna("Otros").astype(str).str.strip()
+    else:
+        df_filtered['Plan_Vendido'] = df_filtered['Plan_Vendido'].fillna("Otros").astype(str).str.strip() if 'Plan_Vendido' in df_filtered.columns else "Otros"
+        
     cols_to_keep = [
         'Fecha_Creacion', 'Fecha_Creacion_ISO', 'Hora', 'COORDINADOR', 'SUPERVISOR', 
         'CUARTIL', 'ANTIGÜEDAD', 'VENDEDOR', 'Tipo_Despacho_Detalle', 'Multilinea', 'Cruce_INAR', 
-        'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto'
+        'Fecha_Pactada_ISO', 'Grupo_Canal', 'Estado_T', 'EOC_Estado', 'Piloto', 'Plan_Vendido'
     ]
     df_filtered = df_filtered[cols_to_keep]
     

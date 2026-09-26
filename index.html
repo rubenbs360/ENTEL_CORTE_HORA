@@ -261,17 +261,17 @@
         </section>
       </div>
       
-      <!-- Right: Table 4: Avance por Cuartil (Solo Cuartiles) -->
+      <!-- Right: Mix de Planes Tarifarios (Resumen) -->
       <section class="table-section card top-table-card">
         <div class="table-header">
-          <div class="table-icon">📊</div>
-          <h2>Avance por Cuartil (Resumen)</h2>
+          <div class="table-icon">📱</div>
+          <h2>Mix por Plan Tarifario (Resumen)</h2>
         </div>
         <div class="table-wrapper">
           <table class="executive-table">
             <thead>
               <tr>
-                <th>Cuartil</th>
+                <th>Plan Tarifario</th>
                 <th style="text-align:right;">Hoy</th>
                 <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
                 <th style="text-align:center;">D-1 (%)</th>
@@ -285,7 +285,7 @@
                 <th style="text-align:center;">D-28 (%)</th>
               </tr>
             </thead>
-            <tbody id="hourly-only-cuartiles-table-body">
+            <tbody id="hourly-mix-planes-table-body">
               <!-- Populated by JS -->
             </tbody>
           </table>
@@ -381,21 +381,32 @@
 
         <!-- Right Column -->
         <div class="tables-column">
-          <!-- Table 1: Comparativo Marzo (Hora a Hora) -->
+          <!-- Table: Avance por Cuartil -->
           <section class="table-section card">
             <div class="table-header">
-              <div class="table-icon">📅</div>
-              <h2 id="comparativo-marzo-title">Comparativo Marzo</h2>
+              <div class="table-icon">📊</div>
+              <h2>Avance por Cuartil</h2>
             </div>
             <div class="table-wrapper">
               <table class="executive-table">
                 <thead>
-                  <tr id="comparativo-marzo-thead-tr">
-                    <!-- Generated dynamically by JS -->
+                  <tr>
+                    <th>Cuartil</th>
+                    <th style="text-align:right;">Hoy</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-1 (Q)</th>
+                    <th style="text-align:center;">D-1 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-7 (Q)</th>
+                    <th style="text-align:center;">D-7 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-14 (Q)</th>
+                    <th style="text-align:center;">D-14 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-21 (Q)</th>
+                    <th style="text-align:center;">D-21 (%)</th>
+                    <th style="text-align:right; color:var(--text-muted);">D-28 (Q)</th>
+                    <th style="text-align:center;">D-28 (%)</th>
                   </tr>
                 </thead>
-                <tbody id="comparativo-marzo-tbody">
-                  <!-- Generated dynamically by JS -->
+                <tbody id="hourly-only-cuartiles-table-body">
+                  <!-- Populated by JS -->
                 </tbody>
               </table>
             </div>
@@ -699,6 +710,6 @@
   </div>
 
   <!-- App JS -->
-  <script src="app.js?v=20260917_v1"></script>
+  <script src="app.js?v=20260925_v2"></script>
 </body>
 </html>

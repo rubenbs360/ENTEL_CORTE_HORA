@@ -34,13 +34,14 @@ function parseSpanishDateJS(dateStr) {
   const cleanStr = dateStr.trim().toLowerCase();
   const months = {
     'ene': 0, 'feb': 1, 'mar': 2, 'abr': 3, 'may': 4, 'jun': 5,
-    'jul': 6, 'ago': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dic': 11
+    'jul': 6, 'ago': 7, 'sep': 8, 'sept': 8, 'oct': 9, 'nov': 10, 'dic': 11
   };
   const parts = cleanStr.replace(/[-/]/g, ' ').split(/\s+/);
   if (parts.length >= 3) {
     const day = parseInt(parts[0], 10);
-    const monthStr = parts[1].substring(0, 3);
-    const month = months[monthStr];
+    const monthStr = parts[1].substring(0, 4);
+    const monthKey = months[monthStr] !== undefined ? monthStr : parts[1].substring(0, 3);
+    const month = months[monthKey];
     if (month === undefined) return null;
     let year = parseInt(parts[2], 10);
     if (year < 100) year += 2000;
@@ -53,7 +54,7 @@ function parseSpanishDateJS(dateStr) {
 function formatSpanishDateJS(date) {
   const day = date.getDate();
   const year = date.getFullYear();
-  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
   const month = monthNames[date.getMonth()];
   return `${day} ${month} ${year}`;
 }
@@ -806,48 +807,81 @@ function renderHourlyDashboard() {
       mixTbody.appendChild(row);
     });
 
-    // RENDER DIFF ROWS (DIFF vs Prom 1-22 for 23, 24, Hoy)
-    const promData = daysData['prom1to22'];
+    // RENDER DIFF ROW: Promedio Post-Incidencia (23 sept en adelante) vs Promedio Pre-Incidencia (1-22 sept)
+    const promPre = daysData['prom1to22'];
+    
+    // Calculate Post-Incidence Promedio across post dates (d2: 23 sept, d1: 24 sept, hoy: 25 sept)
+    const postKeys = ['d2', 'd1', 'hoy'].filter(k => daysData[k] && daysData[k].total > 0);
+    const postCount = postKeys.length;
+    
+    if (postCount > 0 && promPre && promPre.total > 0) {
+      const promPost = {
+        plans: {},
+        otros: 0,
+        total: 0
+      };
+      planesList.forEach(p => { promPost.plans[p] = 0; });
+      
+      postKeys.forEach(k => {
+        const d = daysData[k];
+        promPost.total += (d.total / postCount);
+        promPost.otros += (d.otros / postCount);
+        planesList.forEach(p => {
+          promPost.plans[p] += ((d.plans[p] || 0) / postCount);
+        });
+      });
+      
+      // Render Promedio Post Row
+      const postRow = document.createElement("tr");
+      postRow.style.backgroundColor = "rgba(239, 68, 68, 0.06)";
+      postRow.style.fontWeight = "700";
+      let postHtml = `<td style="font-weight: 700; padding-left: 1rem; color: #dc2626;">Prom Post-Incidencia (23+ Sept)</td>`;
+      planesList.forEach(p => {
+        const val = promPost.plans[p];
+        const is59 = p.includes('59.90');
+        postHtml += formatCellCombo(val, promPost.total, is59, true);
+      });
+      postHtml += formatCellCombo(promPost.otros, promPost.total, false, true);
+      postHtml += `<td style="text-align:right; font-weight:800; color: #dc2626;">${promPost.total.toFixed(1)}</td>`;
+      postRow.innerHTML = postHtml;
+      mixTbody.appendChild(postRow);
 
-    ['d2', 'd1', 'hoy'].forEach(dKey => {
-      const curData = daysData[dKey];
-      if (!curData || curData.total === 0) return;
-
+      // Render DIFF Row (Post vs Pre)
       const diffRow = document.createElement("tr");
-      diffRow.style.backgroundColor = "rgba(245, 158, 11, 0.12)";
-      diffRow.style.borderTop = "1px dashed #f59e0b";
-      diffRow.style.fontSize = "0.92rem";
+      diffRow.style.backgroundColor = "rgba(245, 158, 11, 0.14)";
+      diffRow.style.borderTop = "2px solid #f59e0b";
+      diffRow.style.fontSize = "0.93rem";
 
-      const diffTotal = curData.total - promData.total;
-      const pctImpact = promData.total > 0 ? ((diffTotal / promData.total) * 100).toFixed(2) + "%" : "-";
+      const diffTotal = promPost.total - promPre.total;
+      const pctImpact = promPre.total > 0 ? ((diffTotal / promPre.total) * 100).toFixed(2) + "%" : "-";
       const totalSign = diffTotal > 0 ? '+' : '';
       const totalColor = diffTotal < 0 ? '#ef4444' : (diffTotal > 0 ? '#10b981' : 'var(--text-main)');
 
-      let diffHtml = `<td style="font-weight: 800; padding-left: 1rem; color: #b45309;">DIFF ${curData.label.replace(' (Hoy)', '')} vs Prom 1-22</td>`;
+      let diffHtml = `<td style="font-weight: 800; padding-left: 1rem; color: #b45309;">DIFF (Post 23+ vs Pre 1-22)</td>`;
 
       planesList.forEach(p => {
-        const pCur = curData.plans[p];
-        const pProm = promData.plans[p];
-        const diffPlan = Math.round(pCur - pProm);
+        const pPost = promPost.plans[p];
+        const pPre = promPre.plans[p];
+        const diffPlan = Math.round(pPost - pPre);
         const sign = diffPlan > 0 ? '+' : '';
         const color = diffPlan < 0 ? '#ef4444' : (diffPlan > 0 ? '#10b981' : 'var(--text-main)');
-        const bg = diffPlan < 0 ? 'rgba(239, 68, 68, 0.12)' : (diffPlan > 0 ? 'rgba(16, 185, 129, 0.12)' : 'transparent');
+        const bg = diffPlan < 0 ? 'rgba(239, 68, 68, 0.15)' : (diffPlan > 0 ? 'rgba(16, 185, 129, 0.15)' : 'transparent');
 
         diffHtml += `<td style="text-align:center; font-weight:800; color:${color}; background:${bg};">${sign}${diffPlan}</td>`;
       });
 
       // Otros Diff
-      const otrosDiff = Math.round(curData.otros - promData.otros);
+      const otrosDiff = Math.round(promPost.otros - promPre.otros);
       const oSign = otrosDiff > 0 ? '+' : '';
       const oColor = otrosDiff < 0 ? '#ef4444' : (otrosDiff > 0 ? '#10b981' : 'var(--text-main)');
       diffHtml += `<td style="text-align:center; font-weight:800; color:${oColor};">${oSign}${otrosDiff}</td>`;
 
       // Total Diff + % Impacto
-      diffHtml += `<td style="text-align:right; font-weight:800; color:${totalColor}; font-size:0.95rem;">${totalSign}${Math.round(diffTotal)} <span style="font-size:0.85em; opacity:0.9;">(${totalSign}${pctImpact})</span></td>`;
+      diffHtml += `<td style="text-align:right; font-weight:800; color:${totalColor}; font-size:0.96rem;">${totalSign}${Math.round(diffTotal)} <span style="font-size:0.85em; opacity:0.9;">(${totalSign}${pctImpact})</span></td>`;
 
       diffRow.innerHTML = diffHtml;
       mixTbody.appendChild(diffRow);
-    });
+    }
   }
   
   // 5. Render Table 2: Supervisor

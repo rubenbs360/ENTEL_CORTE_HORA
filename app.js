@@ -670,8 +670,44 @@ function renderHourlyDashboard() {
   
   // 4. Render Table: Mix por Plan Tarifario (Resumen)
   const mixTbody = document.getElementById("hourly-mix-planes-table-body");
-  if (mixTbody) {
+  const mixTheadTr = document.getElementById("mix-planes-thead-tr");
+  if (mixTbody && mixTheadTr) {
     mixTbody.innerHTML = "";
+    mixTheadTr.innerHTML = "";
+    
+    // Format date headers with short Spanish date labels (e.g., "24 sept", "23 sept", etc.)
+    function getShortDateLabel(dStr) {
+      if (!dStr) return "-";
+      const parts = dStr.split(" ");
+      if (parts.length >= 2) {
+        return `${parts[0]} ${parts[1].substring(0,3)}`;
+      }
+      return dStr;
+    }
+    
+    const labelHoy = getShortDateLabel(meta.hoy_date);
+    const labelD1 = getShortDateLabel(relativeDates.d1);
+    const labelD2 = getShortDateLabel(relativeDates.d2);
+    const labelD3 = getShortDateLabel(relativeDates.d3);
+    const labelD4 = getShortDateLabel(relativeDates.d4);
+    
+    // Build Header TR
+    mixTheadTr.innerHTML = `
+      <th>Plan Tarifario</th>
+      <th style="text-align:right;">${labelHoy} (Q)</th>
+      <th style="text-align:center;">${labelHoy} (% Part)</th>
+      <th style="text-align:right; color:var(--text-muted);">${labelD1} (Q)</th>
+      <th style="text-align:center;">${labelD1} (% Part)</th>
+      <th style="text-align:right; color:var(--text-muted);">${labelD2} (Q)</th>
+      <th style="text-align:center;">${labelD2} (% Part)</th>
+      <th style="text-align:right; color:var(--text-muted);">${labelD3} (Q)</th>
+      <th style="text-align:center;">${labelD3} (% Part)</th>
+      <th style="text-align:right; color:var(--text-muted);">${labelD4} (Q)</th>
+      <th style="text-align:center;">${labelD4} (% Part)</th>
+      <th style="text-align:right; color:var(--text-muted);">Prom 1-22 (Q/día)</th>
+      <th style="text-align:center;">Prom 1-22 (% Part)</th>
+    `;
+
     const planesList = [
       'Power ilim 79.90 SD N',
       'Power ilim 69.90 N',
@@ -680,8 +716,13 @@ function renderHourlyDashboard() {
       'Power 39.90 N'
     ];
     
-    // Calculate total sales per day across ALL plans (filtered orders up to max selected hour)
-    const dayTotalSales = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+    // Calculate total sales per day across ALL plans up to maxSelectedHour
+    const dayTotalSales = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0 };
+    
+    // Calculate total sales for Days 1 to 22 (September 1 to 22) up to maxSelectedHour
+    let totalSales1To22 = 0;
+    let daysCount1To22 = 22; // 22 days in Sept 1-22
+    
     filteredOrders.forEach(o => {
       if (o.Hora <= maxSelectedHour) {
         if (o.Fecha_Creacion === meta.hoy_date) dayTotalSales.hoy++;
@@ -689,11 +730,15 @@ function renderHourlyDashboard() {
         else if (o.Fecha_Creacion === relativeDates.d2) dayTotalSales.d2++;
         else if (o.Fecha_Creacion === relativeDates.d3) dayTotalSales.d3++;
         else if (o.Fecha_Creacion === relativeDates.d4) dayTotalSales.d4++;
-        else if (o.Fecha_Creacion === relativeDates.d5) dayTotalSales.d5++;
+        
+        // Filter orders created between Sept 1 and Sept 22
+        if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
+          totalSales1To22++;
+        }
       }
     });
 
-    const mixTotals = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+    const avgDailySales1To22 = totalSales1To22 > 0 ? (totalSales1To22 / daysCount1To22) : 0;
     
     // Helper to format percentage of participation within total day sales
     function formatPart(count, totalDayCount) {
@@ -704,22 +749,23 @@ function renderHourlyDashboard() {
     // Render top 5 main plans
     planesList.forEach(planName => {
       const planOrders = filteredOrders.filter(o => o.Plan_Vendido === planName && o.Hora <= maxSelectedHour);
-      const planSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+      const planSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0 };
+      let plan1To22Count = 0;
+      
       planOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) planSums.hoy++;
         else if (o.Fecha_Creacion === relativeDates.d1) planSums.d1++;
         else if (o.Fecha_Creacion === relativeDates.d2) planSums.d2++;
         else if (o.Fecha_Creacion === relativeDates.d3) planSums.d3++;
         else if (o.Fecha_Creacion === relativeDates.d4) planSums.d4++;
-        else if (o.Fecha_Creacion === relativeDates.d5) planSums.d5++;
+        
+        if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
+          plan1To22Count++;
+        }
       });
       
-      mixTotals.hoy += planSums.hoy;
-      mixTotals.d1 += planSums.d1;
-      mixTotals.d2 += planSums.d2;
-      mixTotals.d3 += planSums.d3;
-      mixTotals.d4 += planSums.d4;
-      mixTotals.d5 += planSums.d5;
+      const planAvg1To22 = (plan1To22Count / daysCount1To22);
+      const planPart1To22 = totalSales1To22 > 0 ? ((plan1To22Count / totalSales1To22) * 100).toFixed(2) + "%" : "-";
       
       const row = document.createElement("tr");
       const is59 = planName.includes('59.90');
@@ -738,30 +784,31 @@ function renderHourlyDashboard() {
         <td style="text-align:center;">${formatPart(planSums.d3, dayTotalSales.d3)}</td>
         <td style="color:var(--text-muted);">${planSums.d4}</td>
         <td style="text-align:center;">${formatPart(planSums.d4, dayTotalSales.d4)}</td>
-        <td style="color:var(--text-muted);">${planSums.d5}</td>
-        <td style="text-align:center;">${formatPart(planSums.d5, dayTotalSales.d5)}</td>
+        <td style="color:var(--text-muted); font-weight:600;">${planAvg1To22.toFixed(1)}</td>
+        <td style="text-align:center; font-weight:600;">${planPart1To22}</td>
       `;
       mixTbody.appendChild(row);
     });
     
     // OTROS PLANES row
     const otrosOrders = filteredOrders.filter(o => !planesList.includes(o.Plan_Vendido) && o.Hora <= maxSelectedHour);
-    const otrosSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+    const otrosSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0 };
+    let otros1To22Count = 0;
+    
     otrosOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) otrosSums.hoy++;
       else if (o.Fecha_Creacion === relativeDates.d1) otrosSums.d1++;
       else if (o.Fecha_Creacion === relativeDates.d2) otrosSums.d2++;
       else if (o.Fecha_Creacion === relativeDates.d3) otrosSums.d3++;
       else if (o.Fecha_Creacion === relativeDates.d4) otrosSums.d4++;
-      else if (o.Fecha_Creacion === relativeDates.d5) otrosSums.d5++;
+      
+      if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
+        otros1To22Count++;
+      }
     });
     
-    mixTotals.hoy += otrosSums.hoy;
-    mixTotals.d1 += otrosSums.d1;
-    mixTotals.d2 += otrosSums.d2;
-    mixTotals.d3 += otrosSums.d3;
-    mixTotals.d4 += otrosSums.d4;
-    mixTotals.d5 += otrosSums.d5;
+    const otrosAvg1To22 = (otros1To22Count / daysCount1To22);
+    const otrosPart1To22 = totalSales1To22 > 0 ? ((otros1To22Count / totalSales1To22) * 100).toFixed(2) + "%" : "-";
     
     const otrosRow = document.createElement("tr");
     otrosRow.innerHTML = `
@@ -776,12 +823,12 @@ function renderHourlyDashboard() {
       <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d3, dayTotalSales.d3)}</td>
       <td style="color:var(--text-muted);">${otrosSums.d4}</td>
       <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d4, dayTotalSales.d4)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d5}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d5, dayTotalSales.d5)}</td>
+      <td style="color:var(--text-muted); font-weight:600;">${otrosAvg1To22.toFixed(1)}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosPart1To22}</td>
     `;
     mixTbody.appendChild(otrosRow);
     
-    // TOTAL OPERACIÓN row for Mix de Planes (Must sum to 100%)
+    // TOTAL OPERACIÓN row for Mix de Planes
     const mixTotalRow = document.createElement("tr");
     mixTotalRow.className = "bold-row";
     mixTotalRow.style.borderTop = "2px solid var(--text-main)";
@@ -798,8 +845,8 @@ function renderHourlyDashboard() {
       <td style="text-align:center; font-weight:600;">100.00%</td>
       <td style="color:var(--text-muted);">${dayTotalSales.d4}</td>
       <td style="text-align:center; font-weight:600;">100.00%</td>
-      <td style="color:var(--text-muted);">${dayTotalSales.d5}</td>
-      <td style="text-align:center; font-weight:600;">100.00%</td>
+      <td style="color:var(--text-muted); font-weight:700;">${avgDailySales1To22.toFixed(1)}</td>
+      <td style="text-align:center; font-weight:700;">100.00%</td>
     `;
     mixTbody.appendChild(mixTotalRow);
   }

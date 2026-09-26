@@ -849,29 +849,6 @@ function renderHourlyDashboard() {
       mixTbody.appendChild(diffRow);
     });
   }
-    
-    // TOTAL OPERACIÓN row for Mix de Planes
-    const mixTotalRow = document.createElement("tr");
-    mixTotalRow.className = "bold-row";
-    mixTotalRow.style.borderTop = "2px solid var(--text-main)";
-    mixTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
-    mixTotalRow.innerHTML = `
-      <td>TOTAL OPERACIÓN</td>
-      <td>${dayTotalSales.hoy}</td>
-      <td style="text-align:center; font-weight:700;">100.00%</td>
-      <td style="color:var(--text-muted);">${dayTotalSales.d1}</td>
-      <td style="text-align:center; font-weight:600;">100.00%</td>
-      <td style="color:var(--text-muted);">${dayTotalSales.d2}</td>
-      <td style="text-align:center; font-weight:600;">100.00%</td>
-      <td style="color:var(--text-muted);">${dayTotalSales.d3}</td>
-      <td style="text-align:center; font-weight:600;">100.00%</td>
-      <td style="color:var(--text-muted);">${dayTotalSales.d4}</td>
-      <td style="text-align:center; font-weight:600;">100.00%</td>
-      <td style="color:var(--text-muted); font-weight:700;">${avgDailySales1To22.toFixed(1)}</td>
-      <td style="text-align:center; font-weight:700;">100.00%</td>
-    `;
-    mixTbody.appendChild(mixTotalRow);
-  }
   
   // 5. Render Table 2: Supervisor
   const csTbody = document.getElementById("hourly-supervisor-table-body");

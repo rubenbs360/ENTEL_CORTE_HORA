@@ -163,12 +163,20 @@ function updateRelativeDates(dateStr) {
   if (!dt) return;
   
   const d1 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1);
+  const d2 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 2);
+  const d3 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 3);
+  const d4 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 4);
+  const d5 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 5);
   const d7 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 7);
   const d14 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 14);
   const d21 = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 21);
   
   relativeDates.hoy = dateStr;
   relativeDates.d1 = formatSpanishDateJS(d1);
+  relativeDates.d2 = formatSpanishDateJS(d2);
+  relativeDates.d3 = formatSpanishDateJS(d3);
+  relativeDates.d4 = formatSpanishDateJS(d4);
+  relativeDates.d5 = formatSpanishDateJS(d5);
   relativeDates.d7 = formatSpanishDateJS(d7);
   relativeDates.d14 = formatSpanishDateJS(d14);
   relativeDates.d21 = formatSpanishDateJS(d21);
@@ -672,105 +680,126 @@ function renderHourlyDashboard() {
       'Power 39.90 N'
     ];
     
-    const mixTotals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+    // Calculate total sales per day across ALL plans (filtered orders up to max selected hour)
+    const dayTotalSales = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+    filteredOrders.forEach(o => {
+      if (o.Hora <= maxSelectedHour) {
+        if (o.Fecha_Creacion === meta.hoy_date) dayTotalSales.hoy++;
+        else if (o.Fecha_Creacion === relativeDates.d1) dayTotalSales.d1++;
+        else if (o.Fecha_Creacion === relativeDates.d2) dayTotalSales.d2++;
+        else if (o.Fecha_Creacion === relativeDates.d3) dayTotalSales.d3++;
+        else if (o.Fecha_Creacion === relativeDates.d4) dayTotalSales.d4++;
+        else if (o.Fecha_Creacion === relativeDates.d5) dayTotalSales.d5++;
+      }
+    });
+
+    const mixTotals = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
+    
+    // Helper to format percentage of participation within total day sales
+    function formatPart(count, totalDayCount) {
+      if (!totalDayCount || totalDayCount === 0) return "-";
+      return ((count / totalDayCount) * 100).toFixed(2) + "%";
+    }
     
     // Render top 5 main plans
     planesList.forEach(planName => {
-      const planOrders = filteredOrders.filter(o => o.Plan_Vendido === planName);
-      const planSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+      const planOrders = filteredOrders.filter(o => o.Plan_Vendido === planName && o.Hora <= maxSelectedHour);
+      const planSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
       planOrders.forEach(o => {
         if (o.Fecha_Creacion === meta.hoy_date) planSums.hoy++;
-        else if (o.Fecha_Creacion === meta.d1_date) planSums.d1++;
-        else if (o.Fecha_Creacion === meta.d7_date) planSums.d7++;
-        else if (o.Fecha_Creacion === meta.d14_date) planSums.d14++;
-        else if (o.Fecha_Creacion === meta.d21_date) planSums.d21++;
-        else if (o.Fecha_Creacion === meta.d28_date) planSums.d28++;
+        else if (o.Fecha_Creacion === relativeDates.d1) planSums.d1++;
+        else if (o.Fecha_Creacion === relativeDates.d2) planSums.d2++;
+        else if (o.Fecha_Creacion === relativeDates.d3) planSums.d3++;
+        else if (o.Fecha_Creacion === relativeDates.d4) planSums.d4++;
+        else if (o.Fecha_Creacion === relativeDates.d5) planSums.d5++;
       });
       
       mixTotals.hoy += planSums.hoy;
       mixTotals.d1 += planSums.d1;
-      mixTotals.d7 += planSums.d7;
-      mixTotals.d14 += planSums.d14;
-      mixTotals.d21 += planSums.d21;
-      mixTotals.d28 += planSums.d28;
+      mixTotals.d2 += planSums.d2;
+      mixTotals.d3 += planSums.d3;
+      mixTotals.d4 += planSums.d4;
+      mixTotals.d5 += planSums.d5;
       
       const row = document.createElement("tr");
-      // Highlight 59.90 N if dropped
       const is59 = planName.includes('59.90');
       if (is59) {
         row.style.backgroundColor = "rgba(239, 68, 68, 0.05)";
       }
       row.innerHTML = `
         <td style="font-weight: 600; padding-left: 1rem; ${is59 ? 'color:var(--danger);' : ''}">${planName}</td>
-        <td>${planSums.hoy}</td>
+        <td style="font-weight:700;">${planSums.hoy}</td>
+        <td style="text-align:center; font-weight:600; color:var(--accent-cyan);">${formatPart(planSums.hoy, dayTotalSales.hoy)}</td>
         <td style="color:var(--text-muted);">${planSums.d1}</td>
-        <td>${formatVariation(planSums.hoy, planSums.d1)}</td>
-        <td style="color:var(--text-muted);">${planSums.d7}</td>
-        <td>${formatVariation(planSums.hoy, planSums.d7)}</td>
-        <td style="color:var(--text-muted);">${planSums.d14}</td>
-        <td>${formatVariation(planSums.hoy, planSums.d14)}</td>
-        <td style="color:var(--text-muted);">${planSums.d21}</td>
-        <td>${formatVariation(planSums.hoy, planSums.d21)}</td>
-        <td style="color:var(--text-muted);">${planSums.d28}</td>
-        <td>${formatVariation(planSums.hoy, planSums.d28)}</td>
+        <td style="text-align:center;">${formatPart(planSums.d1, dayTotalSales.d1)}</td>
+        <td style="color:var(--text-muted);">${planSums.d2}</td>
+        <td style="text-align:center;">${formatPart(planSums.d2, dayTotalSales.d2)}</td>
+        <td style="color:var(--text-muted);">${planSums.d3}</td>
+        <td style="text-align:center;">${formatPart(planSums.d3, dayTotalSales.d3)}</td>
+        <td style="color:var(--text-muted);">${planSums.d4}</td>
+        <td style="text-align:center;">${formatPart(planSums.d4, dayTotalSales.d4)}</td>
+        <td style="color:var(--text-muted);">${planSums.d5}</td>
+        <td style="text-align:center;">${formatPart(planSums.d5, dayTotalSales.d5)}</td>
       `;
       mixTbody.appendChild(row);
     });
     
     // OTROS PLANES row
-    const otrosOrders = filteredOrders.filter(o => !planesList.includes(o.Plan_Vendido));
-    const otrosSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+    const otrosOrders = filteredOrders.filter(o => !planesList.includes(o.Plan_Vendido) && o.Hora <= maxSelectedHour);
+    const otrosSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0 };
     otrosOrders.forEach(o => {
       if (o.Fecha_Creacion === meta.hoy_date) otrosSums.hoy++;
-      else if (o.Fecha_Creacion === meta.d1_date) otrosSums.d1++;
-      else if (o.Fecha_Creacion === meta.d7_date) otrosSums.d7++;
-      else if (o.Fecha_Creacion === meta.d14_date) otrosSums.d14++;
-      else if (o.Fecha_Creacion === meta.d21_date) otrosSums.d21++;
-      else if (o.Fecha_Creacion === meta.d28_date) otrosSums.d28++;
+      else if (o.Fecha_Creacion === relativeDates.d1) otrosSums.d1++;
+      else if (o.Fecha_Creacion === relativeDates.d2) otrosSums.d2++;
+      else if (o.Fecha_Creacion === relativeDates.d3) otrosSums.d3++;
+      else if (o.Fecha_Creacion === relativeDates.d4) otrosSums.d4++;
+      else if (o.Fecha_Creacion === relativeDates.d5) otrosSums.d5++;
     });
     
     mixTotals.hoy += otrosSums.hoy;
     mixTotals.d1 += otrosSums.d1;
-    mixTotals.d7 += otrosSums.d7;
-    mixTotals.d14 += otrosSums.d14;
-    mixTotals.d21 += otrosSums.d21;
-    mixTotals.d28 += otrosSums.d28;
+    mixTotals.d2 += otrosSums.d2;
+    mixTotals.d3 += otrosSums.d3;
+    mixTotals.d4 += otrosSums.d4;
+    mixTotals.d5 += otrosSums.d5;
     
     const otrosRow = document.createElement("tr");
     otrosRow.innerHTML = `
       <td style="font-weight: 600; padding-left: 1rem;">OTROS PLANES</td>
-      <td>${otrosSums.hoy}</td>
+      <td style="font-weight:600;">${otrosSums.hoy}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.hoy, dayTotalSales.hoy)}</td>
       <td style="color:var(--text-muted);">${otrosSums.d1}</td>
-      <td>${formatVariation(otrosSums.hoy, otrosSums.d1)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d7}</td>
-      <td>${formatVariation(otrosSums.hoy, otrosSums.d7)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d14}</td>
-      <td>${formatVariation(otrosSums.hoy, otrosSums.d14)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d21}</td>
-      <td>${formatVariation(otrosSums.hoy, otrosSums.d21)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d28}</td>
-      <td>${formatVariation(otrosSums.hoy, otrosSums.d28)}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d1, dayTotalSales.d1)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d2}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d2, dayTotalSales.d2)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d3}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d3, dayTotalSales.d3)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d4}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d4, dayTotalSales.d4)}</td>
+      <td style="color:var(--text-muted);">${otrosSums.d5}</td>
+      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d5, dayTotalSales.d5)}</td>
     `;
     mixTbody.appendChild(otrosRow);
     
-    // TOTAL GLOBAL row for Mix de Planes
+    // TOTAL OPERACIÓN row for Mix de Planes (Must sum to 100%)
     const mixTotalRow = document.createElement("tr");
     mixTotalRow.className = "bold-row";
     mixTotalRow.style.borderTop = "2px solid var(--text-main)";
     mixTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
     mixTotalRow.innerHTML = `
-      <td>TOTAL GLOBAL</td>
-      <td>${mixTotals.hoy}</td>
-      <td style="color:var(--text-muted);">${mixTotals.d1}</td>
-      <td>${formatVariation(mixTotals.hoy, mixTotals.d1)}</td>
-      <td style="color:var(--text-muted);">${mixTotals.d7}</td>
-      <td>${formatVariation(mixTotals.hoy, mixTotals.d7)}</td>
-      <td style="color:var(--text-muted);">${mixTotals.d14}</td>
-      <td>${formatVariation(mixTotals.hoy, mixTotals.d14)}</td>
-      <td style="color:var(--text-muted);">${mixTotals.d21}</td>
-      <td>${formatVariation(mixTotals.hoy, mixTotals.d21)}</td>
-      <td style="color:var(--text-muted);">${mixTotals.d28}</td>
-      <td>${formatVariation(mixTotals.hoy, mixTotals.d28)}</td>
+      <td>TOTAL OPERACIÓN</td>
+      <td>${dayTotalSales.hoy}</td>
+      <td style="text-align:center; font-weight:700;">100.00%</td>
+      <td style="color:var(--text-muted);">${dayTotalSales.d1}</td>
+      <td style="text-align:center; font-weight:600;">100.00%</td>
+      <td style="color:var(--text-muted);">${dayTotalSales.d2}</td>
+      <td style="text-align:center; font-weight:600;">100.00%</td>
+      <td style="color:var(--text-muted);">${dayTotalSales.d3}</td>
+      <td style="text-align:center; font-weight:600;">100.00%</td>
+      <td style="color:var(--text-muted);">${dayTotalSales.d4}</td>
+      <td style="text-align:center; font-weight:600;">100.00%</td>
+      <td style="color:var(--text-muted);">${dayTotalSales.d5}</td>
+      <td style="text-align:center; font-weight:600;">100.00%</td>
     `;
     mixTbody.appendChild(mixTotalRow);
   }

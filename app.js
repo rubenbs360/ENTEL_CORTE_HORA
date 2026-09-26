@@ -745,6 +745,37 @@ function renderHourlyDashboard() {
       if (!totalDayCount || totalDayCount === 0) return "-";
       return ((count / totalDayCount) * 100).toFixed(2) + "%";
     }
+
+    // Helper for vibrant color heatmaps based on % participation shift vs Prom 1-22
+    function getPartColorStyle(partVal, avgPartVal, is59 = false) {
+      if (partVal === '-' || avgPartVal === '-') return '';
+      const p = parseFloat(partVal);
+      const a = parseFloat(avgPartVal);
+      if (isNaN(p) || isNaN(a)) return '';
+      const diff = p - a;
+      
+      if (is59) {
+        // For Power 59.90 N: drop is BAD (Red), increase is Good (Green)
+        if (diff < -5) {
+          const intensity = Math.min(0.4, Math.abs(diff) / 25 * 0.35 + 0.12);
+          return `background-color: rgba(239, 68, 68, ${intensity.toFixed(2)}); font-weight: 700; color: #ef4444;`;
+        } else if (diff > 3) {
+          return `background-color: rgba(16, 185, 129, 0.15); font-weight: 700; color: #10b981;`;
+        }
+      } else {
+        // For 69.90 / 79.90 / others: increase is GOOD (Green)
+        if (diff > 5) {
+          const intensity = Math.min(0.35, diff / 25 * 0.3 + 0.1);
+          return `background-color: rgba(16, 185, 129, ${intensity.toFixed(2)}); font-weight: 700; color: #10b981;`;
+        } else if (diff < -5) {
+          return `background-color: rgba(239, 68, 68, 0.12); font-weight: 600; color: #ef4444;`;
+        }
+      }
+      return '';
+    }
+    
+    // Store daily data for DIFF calculation
+    const planDataMap = {};
     
     // Render top 5 main plans
     planesList.forEach(planName => {
@@ -765,32 +796,51 @@ function renderHourlyDashboard() {
       });
       
       const planAvg1To22 = (plan1To22Count / daysCount1To22);
-      const planPart1To22 = totalSales1To22 > 0 ? ((plan1To22Count / totalSales1To22) * 100).toFixed(2) + "%" : "-";
+      const planPart1To22Pct = totalSales1To22 > 0 ? (plan1To22Count / totalSales1To22) * 100 : 0;
+      const planPart1To22Str = totalSales1To22 > 0 ? planPart1To22Pct.toFixed(2) + "%" : "-";
       
-      const row = document.createElement("tr");
+      planDataMap[planName] = {
+        sums: planSums,
+        avg1To22: planAvg1To22,
+        part1To22Pct: planPart1To22Pct
+      };
+
       const is59 = planName.includes('59.90');
+      const is79 = planName.includes('79.90');
+      const is69 = planName.includes('69.90');
+      
+      const pHoyStr = formatPart(planSums.hoy, dayTotalSales.hoy);
+      const pD1Str = formatPart(planSums.d1, dayTotalSales.d1);
+      const pD2Str = formatPart(planSums.d2, dayTotalSales.d2);
+      const pD3Str = formatPart(planSums.d3, dayTotalSales.d3);
+      const pD4Str = formatPart(planSums.d4, dayTotalSales.d4);
+
+      const row = document.createElement("tr");
       if (is59) {
-        row.style.backgroundColor = "rgba(239, 68, 68, 0.05)";
+        row.style.backgroundColor = "rgba(239, 68, 68, 0.06)";
+      } else if (is79 || is69) {
+        row.style.backgroundColor = "rgba(16, 185, 129, 0.03)";
       }
+
       row.innerHTML = `
-        <td style="font-weight: 600; padding-left: 1rem; ${is59 ? 'color:var(--danger);' : ''}">${planName}</td>
-        <td style="font-weight:700;">${planSums.hoy}</td>
-        <td style="text-align:center; font-weight:600; color:var(--accent-cyan);">${formatPart(planSums.hoy, dayTotalSales.hoy)}</td>
-        <td style="color:var(--text-muted);">${planSums.d1}</td>
-        <td style="text-align:center;">${formatPart(planSums.d1, dayTotalSales.d1)}</td>
-        <td style="color:var(--text-muted);">${planSums.d2}</td>
-        <td style="text-align:center;">${formatPart(planSums.d2, dayTotalSales.d2)}</td>
-        <td style="color:var(--text-muted);">${planSums.d3}</td>
-        <td style="text-align:center;">${formatPart(planSums.d3, dayTotalSales.d3)}</td>
-        <td style="color:var(--text-muted);">${planSums.d4}</td>
-        <td style="text-align:center;">${formatPart(planSums.d4, dayTotalSales.d4)}</td>
-        <td style="color:var(--text-muted); font-weight:600;">${planAvg1To22.toFixed(1)}</td>
-        <td style="text-align:center; font-weight:600;">${planPart1To22}</td>
+        <td style="font-weight: 700; padding-left: 1rem; ${is59 ? 'color:#ef4444;' : (is79 || is69 ? 'color:#10b981;' : '')}">${planName}</td>
+        <td style="font-weight:700; text-align:right;">${planSums.hoy}</td>
+        <td style="text-align:center; ${getPartColorStyle(pHoyStr, planPart1To22Str, is59)}">${pHoyStr}</td>
+        <td style="color:var(--text-muted); text-align:right;">${planSums.d1}</td>
+        <td style="text-align:center; ${getPartColorStyle(pD1Str, planPart1To22Str, is59)}">${pD1Str}</td>
+        <td style="color:var(--text-muted); text-align:right;">${planSums.d2}</td>
+        <td style="text-align:center; ${getPartColorStyle(pD2Str, planPart1To22Str, is59)}">${pD2Str}</td>
+        <td style="color:var(--text-muted); text-align:right;">${planSums.d3}</td>
+        <td style="text-align:center; ${getPartColorStyle(pD3Str, planPart1To22Str, is59)}">${pD3Str}</td>
+        <td style="color:var(--text-muted); text-align:right;">${planSums.d4}</td>
+        <td style="text-align:center; ${getPartColorStyle(pD4Str, planPart1To22Str, is59)}">${pD4Str}</td>
+        <td style="color:var(--text-main); font-weight:700; text-align:right; background:rgba(8, 145, 178, 0.05);">${planAvg1To22.toFixed(1)}</td>
+        <td style="text-align:center; font-weight:700; background:rgba(8, 145, 178, 0.05);">${planPart1To22Str}</td>
       `;
       mixTbody.appendChild(row);
     });
     
-    // OTROS PLANES row
+    // OTROS row (renamed from OTROS PLANES)
     const otrosOrders = filteredOrders.filter(o => !planesList.includes(o.Plan_Vendido) && o.Hora <= maxSelectedHour);
     const otrosSums = { hoy: 0, d1: 0, d2: 0, d3: 0, d4: 0 };
     let otros1To22Count = 0;
@@ -808,25 +858,79 @@ function renderHourlyDashboard() {
     });
     
     const otrosAvg1To22 = (otros1To22Count / daysCount1To22);
-    const otrosPart1To22 = totalSales1To22 > 0 ? ((otros1To22Count / totalSales1To22) * 100).toFixed(2) + "%" : "-";
+    const otrosPart1To22Pct = totalSales1To22 > 0 ? (otros1To22Count / totalSales1To22) * 100 : 0;
+    const otrosPart1To22Str = totalSales1To22 > 0 ? otrosPart1To22Pct.toFixed(2) + "%" : "-";
     
+    planDataMap['OTROS'] = {
+      sums: otrosSums,
+      avg1To22: otrosAvg1To22,
+      part1To22Pct: otrosPart1To22Pct
+    };
+
+    const otrosHoyStr = formatPart(otrosSums.hoy, dayTotalSales.hoy);
+    const otrosD1Str = formatPart(otrosSums.d1, dayTotalSales.d1);
+    const otrosD2Str = formatPart(otrosSums.d2, dayTotalSales.d2);
+    const otrosD3Str = formatPart(otrosSums.d3, dayTotalSales.d3);
+    const otrosD4Str = formatPart(otrosSums.d4, dayTotalSales.d4);
+
     const otrosRow = document.createElement("tr");
+    otrosRow.style.borderBottom = "1px solid var(--border-color)";
     otrosRow.innerHTML = `
-      <td style="font-weight: 600; padding-left: 1rem;">OTROS PLANES</td>
-      <td style="font-weight:600;">${otrosSums.hoy}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.hoy, dayTotalSales.hoy)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d1}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d1, dayTotalSales.d1)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d2}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d2, dayTotalSales.d2)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d3}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d3, dayTotalSales.d3)}</td>
-      <td style="color:var(--text-muted);">${otrosSums.d4}</td>
-      <td style="text-align:center; color:var(--text-muted);">${formatPart(otrosSums.d4, dayTotalSales.d4)}</td>
-      <td style="color:var(--text-muted); font-weight:600;">${otrosAvg1To22.toFixed(1)}</td>
-      <td style="text-align:center; color:var(--text-muted);">${otrosPart1To22}</td>
+      <td style="font-weight: 700; padding-left: 1rem; color: var(--text-main);">OTROS</td>
+      <td style="font-weight:600; text-align:right;">${otrosSums.hoy}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosHoyStr}</td>
+      <td style="color:var(--text-muted); text-align:right;">${otrosSums.d1}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosD1Str}</td>
+      <td style="color:var(--text-muted); text-align:right;">${otrosSums.d2}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosD2Str}</td>
+      <td style="color:var(--text-muted); text-align:right;">${otrosSums.d3}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosD3Str}</td>
+      <td style="color:var(--text-muted); text-align:right;">${otrosSums.d4}</td>
+      <td style="text-align:center; color:var(--text-muted);">${otrosD4Str}</td>
+      <td style="color:var(--text-muted); font-weight:600; text-align:right; background:rgba(8, 145, 178, 0.05);">${otrosAvg1To22.toFixed(1)}</td>
+      <td style="text-align:center; color:var(--text-muted); background:rgba(8, 145, 178, 0.05);">${otrosPart1To22Str}</td>
     `;
     mixTbody.appendChild(otrosRow);
+
+    // DIFF Row (Diferencia de Ingresado vs Promedio 1-22 sin incidencia + % Impacto de caída/ganancia)
+    const diffHoyQ = Math.round(dayTotalSales.hoy - avgDailySales1To22);
+    const diffD1Q = Math.round(dayTotalSales.d1 - avgDailySales1To22);
+    const diffD2Q = Math.round(dayTotalSales.d2 - avgDailySales1To22);
+    const diffD3Q = Math.round(dayTotalSales.d3 - avgDailySales1To22);
+    const diffD4Q = Math.round(dayTotalSales.d4 - avgDailySales1To22);
+
+    const diffHoyPct = avgDailySales1To22 > 0 ? ((dayTotalSales.hoy - avgDailySales1To22) / avgDailySales1To22 * 100).toFixed(2) + "%" : "-";
+    const diffD1Pct = avgDailySales1To22 > 0 ? ((dayTotalSales.d1 - avgDailySales1To22) / avgDailySales1To22 * 100).toFixed(2) + "%" : "-";
+    const diffD2Pct = avgDailySales1To22 > 0 ? ((dayTotalSales.d2 - avgDailySales1To22) / avgDailySales1To22 * 100).toFixed(2) + "%" : "-";
+    const diffD3Pct = avgDailySales1To22 > 0 ? ((dayTotalSales.d3 - avgDailySales1To22) / avgDailySales1To22 * 100).toFixed(2) + "%" : "-";
+    const diffD4Pct = avgDailySales1To22 > 0 ? ((dayTotalSales.d4 - avgDailySales1To22) / avgDailySales1To22 * 100).toFixed(2) + "%" : "-";
+
+    function formatDiffCell(diffVal, pctStr) {
+      if (diffVal === undefined || isNaN(diffVal)) return `<td style="text-align:right;">-</td><td style="text-align:center;">-</td>`;
+      const sign = diffVal > 0 ? '+' : '';
+      const color = diffVal < 0 ? '#ef4444' : (diffVal > 0 ? '#10b981' : 'var(--text-main)');
+      const bg = diffVal < 0 ? 'rgba(239, 68, 68, 0.15)' : (diffVal > 0 ? 'rgba(16, 185, 129, 0.15)' : 'transparent');
+      return `
+        <td style="text-align:right; font-weight:800; color:${color}; font-size:0.95rem;">${sign}${diffVal}</td>
+        <td style="text-align:center; font-weight:800; color:${color}; background:${bg}; font-size:0.92rem;">${sign}${pctStr}</td>
+      `;
+    }
+
+    const diffRow = document.createElement("tr");
+    diffRow.style.backgroundColor = "rgba(245, 158, 11, 0.12)";
+    diffRow.style.borderTop = "2px dashed #f59e0b";
+    diffRow.style.borderBottom = "2px solid #f59e0b";
+    diffRow.innerHTML = `
+      <td style="font-weight: 800; padding-left: 1rem; color: #b45309; font-size:0.92rem;">DIFF vs Prom 1-22 (Impacto)</td>
+      ${formatDiffCell(diffHoyQ, diffHoyPct)}
+      ${formatDiffCell(diffD1Q, diffD1Pct)}
+      ${formatDiffCell(diffD2Q, diffD2Pct)}
+      ${formatDiffCell(diffD3Q, diffD3Pct)}
+      ${formatDiffCell(diffD4Q, diffD4Pct)}
+      <td style="text-align:right; font-weight:800; color:var(--text-muted); background:rgba(8, 145, 178, 0.05);">0</td>
+      <td style="text-align:center; font-weight:800; color:var(--text-muted); background:rgba(8, 145, 178, 0.05);">0.00%</td>
+    `;
+    mixTbody.appendChild(diffRow);
     
     // TOTAL OPERACIÓN row for Mix de Planes
     const mixTotalRow = document.createElement("tr");

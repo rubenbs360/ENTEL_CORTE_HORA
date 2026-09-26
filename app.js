@@ -707,7 +707,7 @@ function renderHourlyDashboard() {
     // Define days list: Promedio 1-22 first, then historical dates up to Hoy
     // Dates to include in rows:
     const daysConfig = [
-      { key: 'prom1to22', label: 'Prom 1-22 (Sin Incidencia)', isProm: true },
+      { key: 'prom1to22', label: 'Prom 1-22 (59.90 con Desc)', isProm: true },
       { key: 'd4', dateStr: relativeDates.d4, label: getShortDateLabel(relativeDates.d4) },
       { key: 'd3', dateStr: relativeDates.d3, label: getShortDateLabel(relativeDates.d3) },
       { key: 'd2', dateStr: relativeDates.d2, label: getShortDateLabel(relativeDates.d2) },
@@ -807,10 +807,10 @@ function renderHourlyDashboard() {
       mixTbody.appendChild(row);
     });
 
-    // RENDER DIFF ROW: Promedio Post-Incidencia (23 sept en adelante) vs Promedio Pre-Incidencia (1-22 sept)
+    // RENDER DIFF ROW: Promedio (23 sept en adelante sin desc 59.90) vs Promedio Pre (1-22 sept con desc 59.90)
     const promPre = daysData['prom1to22'];
     
-    // Calculate Post-Incidence Promedio across post dates (d2: 23 sept, d1: 24 sept, hoy: 25 sept)
+    // Calculate Post Promedio across post dates (d2: 23 sept, d1: 24 sept, hoy: 25 sept)
     const postKeys = ['d2', 'd1', 'hoy'].filter(k => daysData[k] && daysData[k].total > 0);
     const postCount = postKeys.length;
     
@@ -835,7 +835,7 @@ function renderHourlyDashboard() {
       const postRow = document.createElement("tr");
       postRow.style.backgroundColor = "rgba(239, 68, 68, 0.06)";
       postRow.style.fontWeight = "700";
-      let postHtml = `<td style="font-weight: 700; padding-left: 1rem; color: #dc2626;">Prom Post-Incidencia (23+ Sept)</td>`;
+      let postHtml = `<td style="font-weight: 700; padding-left: 1rem; color: #dc2626;">Prom 23+ (59.90 Sin desc)</td>`;
       planesList.forEach(p => {
         const val = promPost.plans[p];
         const is59 = p.includes('59.90');
@@ -846,7 +846,7 @@ function renderHourlyDashboard() {
       postRow.innerHTML = postHtml;
       mixTbody.appendChild(postRow);
 
-      // Render DIFF Row (Post vs Pre)
+      // Render DIFF Row (23+ vs 1-22)
       const diffRow = document.createElement("tr");
       diffRow.style.backgroundColor = "rgba(245, 158, 11, 0.14)";
       diffRow.style.borderTop = "2px solid #f59e0b";
@@ -857,7 +857,7 @@ function renderHourlyDashboard() {
       const totalSign = diffTotal > 0 ? '+' : '';
       const totalColor = diffTotal < 0 ? '#ef4444' : (diffTotal > 0 ? '#10b981' : 'var(--text-main)');
 
-      let diffHtml = `<td style="font-weight: 800; padding-left: 1rem; color: #b45309;">DIFF (Post 23+ vs Pre 1-22)</td>`;
+      let diffHtml = `<td style="font-weight: 800; padding-left: 1rem; color: #b45309;">DIFF (23+ vs Prom 1-22)</td>`;
 
       planesList.forEach(p => {
         const pPost = promPost.plans[p];

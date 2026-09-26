@@ -1450,131 +1450,96 @@ function renderHourlyDashboard() {
     multiTbody.appendChild(totalRow);
   }
 
-  // 7. Render Table 4: Avance por Cuartil (Solo Cuartiles)
+  // 7. Render Table 4: Avance por Cuartil (Líderes arriba, Cuartiles desplegables)
   const quartilsList = ['Q1', 'Q2', 'Q3', 'Q4'];
   const qTbody = document.getElementById("hourly-only-cuartiles-table-body");
   if (qTbody) {
     qTbody.innerHTML = "";
     const table4Totals = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     
-    // Q1 to Q4 rows
-    quartilsList.forEach(q => {
-      const qOrders = filteredOrders.filter(o => o.CUARTIL === q);
-      const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-      qOrders.forEach(o => {
-        if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
-        else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
-        else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
-        else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
-        else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
-        else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
+    // Primary leaders of campaign
+    const leadersList = [
+      { label: 'EVER MALCA', matchKey: 'EVER' },
+      { label: 'JOSE SOLORZANO', matchKey: 'JOS' },
+      { label: 'PIERO MEDINA', matchKey: 'PIERO' },
+      { label: 'RIVALDO JACOBO', matchKey: 'RIVALDO' }
+    ];
+
+    leadersList.forEach(lObj => {
+      const lOrders = filteredOrders.filter(o => o.COORDINADOR && o.COORDINADOR.toUpperCase().includes(lObj.matchKey));
+      if (lOrders.length === 0 && selectedCoordinadores.size > 1) return;
+
+      const lSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+      lOrders.forEach(o => {
+        if (o.Fecha_Creacion === meta.hoy_date) lSums.hoy++;
+        else if (o.Fecha_Creacion === meta.d1_date) lSums.d1++;
+        else if (o.Fecha_Creacion === meta.d7_date) lSums.d7++;
+        else if (o.Fecha_Creacion === meta.d14_date) lSums.d14++;
+        else if (o.Fecha_Creacion === meta.d21_date) lSums.d21++;
+        else if (o.Fecha_Creacion === meta.d28_date) lSums.d28++;
       });
-      
-      table4Totals.hoy += qSums.hoy;
-      table4Totals.d1 += qSums.d1;
-      table4Totals.d7 += qSums.d7;
-      table4Totals.d14 += qSums.d14;
-      table4Totals.d21 += qSums.d21;
-      table4Totals.d28 += qSums.d28;
-      
-      const row = document.createElement("tr");
-      const isQ1 = (q === 'Q1');
-      if (isQ1) {
-        row.className = "bold-row";
-        row.style.cursor = "pointer";
-        row.setAttribute("onclick", "toggleTableGroup('group-q1-leaders', event)");
-      }
-      
-      const qLabelHtml = isQ1 ? `<span class="toggle-icon" style="margin-right:6px;">▼</span>${q}` : q;
 
-      row.innerHTML = `
-        <td style="font-weight: 600; padding-left: 1rem;">${qLabelHtml}</td>
-        <td>${qSums.hoy}</td>
-        <td style="color:var(--text-muted);">${qSums.d1}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
-        <td style="color:var(--text-muted);">${qSums.d7}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d7)}</td>
-        <td style="color:var(--text-muted);">${qSums.d14}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
-        <td style="color:var(--text-muted);">${qSums.d21}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
-        <td style="color:var(--text-muted);">${qSums.d28}</td>
-        <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
+      table4Totals.hoy += lSums.hoy;
+      table4Totals.d1 += lSums.d1;
+      table4Totals.d7 += lSums.d7;
+      table4Totals.d14 += lSums.d14;
+      table4Totals.d21 += lSums.d21;
+      table4Totals.d28 += lSums.d28;
+
+      const groupId = `group-qleader-${lObj.matchKey.toLowerCase()}`;
+
+      // Parent Leader Row
+      const lRow = document.createElement("tr");
+      lRow.className = "bold-row";
+      lRow.style.cursor = "pointer";
+      lRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+      lRow.innerHTML = `
+        <td style="font-weight: 700; padding-left: 1rem;"><span class="toggle-icon" style="margin-right:6px;">▼</span>${lObj.label}</td>
+        <td>${lSums.hoy}</td>
+        <td style="color:var(--text-muted);">${lSums.d1}</td>
+        <td>${formatVariation(lSums.hoy, lSums.d1)}</td>
+        <td style="color:var(--text-muted);">${lSums.d7}</td>
+        <td>${formatVariation(lSums.hoy, lSums.d7)}</td>
+        <td style="color:var(--text-muted);">${lSums.d14}</td>
+        <td>${formatVariation(lSums.hoy, lSums.d14)}</td>
+        <td style="color:var(--text-muted);">${lSums.d21}</td>
+        <td>${formatVariation(lSums.hoy, lSums.d21)}</td>
+        <td style="color:var(--text-muted);">${lSums.d28}</td>
+        <td>${formatVariation(lSums.hoy, lSums.d28)}</td>
       `;
-      qTbody.appendChild(row);
+      qTbody.appendChild(lRow);
 
-      // If Q1, render sub-rows for the 4 Leaders (Ever, Jose, Piero, Rivaldo) and Otros
-      if (isQ1) {
-        const leadersList = [
-          { label: 'Ever Malca', matchKey: 'EVER' },
-          { label: 'Jose Solorzano', matchKey: 'JOS' },
-          { label: 'Piero Medina', matchKey: 'PIERO' },
-          { label: 'Rivaldo Jacobo', matchKey: 'RIVALDO' }
-        ];
-
-        let lSumCombined = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-
-        leadersList.forEach(lObj => {
-          const lOrders = qOrders.filter(o => o.COORDINADOR && o.COORDINADOR.toUpperCase().includes(lObj.matchKey));
-          const lSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-          lOrders.forEach(o => {
-            if (o.Fecha_Creacion === meta.hoy_date) lSums.hoy++;
-            else if (o.Fecha_Creacion === meta.d1_date) lSums.d1++;
-            else if (o.Fecha_Creacion === meta.d7_date) lSums.d7++;
-            else if (o.Fecha_Creacion === meta.d14_date) lSums.d14++;
-            else if (o.Fecha_Creacion === meta.d21_date) lSums.d21++;
-            else if (o.Fecha_Creacion === meta.d28_date) lSums.d28++;
-          });
-
-          Object.keys(lSums).forEach(k => { lSumCombined[k] += lSums[k]; });
-
-          const lRow = document.createElement("tr");
-          lRow.className = "group-q1-leaders";
-          lRow.innerHTML = `
-            <td style="padding-left: 2.25rem; font-size: 0.88rem; color: var(--text-main); font-weight: 500;">${lObj.label}</td>
-            <td>${lSums.hoy}</td>
-            <td style="color:var(--text-muted);">${lSums.d1}</td>
-            <td>${formatVariation(lSums.hoy, lSums.d1)}</td>
-            <td style="color:var(--text-muted);">${lSums.d7}</td>
-            <td>${formatVariation(lSums.hoy, lSums.d7)}</td>
-            <td style="color:var(--text-muted);">${lSums.d14}</td>
-            <td>${formatVariation(lSums.hoy, lSums.d14)}</td>
-            <td style="color:var(--text-muted);">${lSums.d21}</td>
-            <td>${formatVariation(lSums.hoy, lSums.d21)}</td>
-            <td style="color:var(--text-muted);">${lSums.d28}</td>
-            <td>${formatVariation(lSums.hoy, lSums.d28)}</td>
-          `;
-          qTbody.appendChild(lRow);
+      // Quartile Sub-rows under this Leader
+      quartilsList.forEach(q => {
+        const qOrders = lOrders.filter(o => o.CUARTIL === q);
+        const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+        qOrders.forEach(o => {
+          if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
+          else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
+          else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
+          else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
+          else if (o.Fecha_Creacion === meta.d21_date) qSums.d21++;
+          else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
         });
 
-        // Sub-row for Otros (Rest of Q1)
-        const otrosQSums = {
-          hoy: qSums.hoy - lSumCombined.hoy,
-          d1: qSums.d1 - lSumCombined.d1,
-          d7: qSums.d7 - lSumCombined.d7,
-          d14: qSums.d14 - lSumCombined.d14,
-          d21: qSums.d21 - lSumCombined.d21,
-          d28: qSums.d28 - lSumCombined.d28
-        };
-
-        const oRow = document.createElement("tr");
-        oRow.className = "group-q1-leaders";
-        oRow.innerHTML = `
-          <td style="padding-left: 2.25rem; font-size: 0.88rem; color: var(--text-muted); font-weight: 500;">Otros</td>
-          <td>${otrosQSums.hoy}</td>
-          <td style="color:var(--text-muted);">${otrosQSums.d1}</td>
-          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d1)}</td>
-          <td style="color:var(--text-muted);">${otrosQSums.d7}</td>
-          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d7)}</td>
-          <td style="color:var(--text-muted);">${otrosQSums.d14}</td>
-          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d14)}</td>
-          <td style="color:var(--text-muted);">${otrosQSums.d21}</td>
-          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d21)}</td>
-          <td style="color:var(--text-muted);">${otrosQSums.d28}</td>
-          <td>${formatVariation(otrosQSums.hoy, otrosQSums.d28)}</td>
+        const qRow = document.createElement("tr");
+        qRow.className = groupId;
+        qRow.innerHTML = `
+          <td style="padding-left: 2.25rem; font-size: 0.88rem; color: var(--text-main); font-weight: 500;">${q}</td>
+          <td>${qSums.hoy}</td>
+          <td style="color:var(--text-muted);">${qSums.d1}</td>
+          <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
+          <td style="color:var(--text-muted);">${qSums.d7}</td>
+          <td>${formatVariation(qSums.hoy, qSums.d7)}</td>
+          <td style="color:var(--text-muted);">${qSums.d14}</td>
+          <td>${formatVariation(qSums.hoy, qSums.d14)}</td>
+          <td style="color:var(--text-muted);">${qSums.d21}</td>
+          <td>${formatVariation(qSums.hoy, qSums.d21)}</td>
+          <td style="color:var(--text-muted);">${qSums.d28}</td>
+          <td>${formatVariation(qSums.hoy, qSums.d28)}</td>
         `;
-        qTbody.appendChild(oRow);
-      }
+        qTbody.appendChild(qRow);
+      });
     });
     
     // PLATAFORMA row (for orders that are not in Q1, Q2, Q3, Q4 or belong to non-campaign leaders)

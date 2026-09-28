@@ -732,7 +732,7 @@ function renderHourlyDashboard() {
     });
 
     // Compile orders: for historical days (including Prom 1-22), use full day; for HOY, apply maxSelectedHour
-    filteredOrders.forEach(o => {
+    orders.forEach(o => {
       const plan = o.Plan_Vendido;
       const isKnownPlan = planesList.includes(plan);
 

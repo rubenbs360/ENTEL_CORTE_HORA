@@ -53,7 +53,8 @@ body {
 
 /* Containers & Layouts */
 .dashboard-container {
-  max-width: 96%;
+  width: 1720px;
+  max-width: 1720px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -712,10 +713,10 @@ body {
 /* Responsiveness and stacking */
 @media (max-width: 1200px) {
   .top-executive-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
   .kpi-dashboard-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.35fr 1.05fr 0.9fr;
   }
   .col-right {
     grid-column: span 2;
@@ -724,7 +725,7 @@ body {
 
 @media (max-width: 768px) {
   .kpi-dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1.35fr 1.05fr 0.9fr;
   }
   .col-right {
     grid-column: span 1;
@@ -738,7 +739,7 @@ body {
 
 @media (max-width: 1024px) {
   .tables-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 

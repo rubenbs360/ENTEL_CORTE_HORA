@@ -59,28 +59,17 @@ function formatSpanishDateJS(date) {
   return `${day} ${month} ${year}`;
 }
 
-// Auto-scale dashboard to fit any screen while preserving exact layout proportions
+// Scale helper disabled for fluid fitting
 function autoScaleDashboard() {
   const container = document.querySelector(".dashboard-container");
   if (!container) return;
-  const targetWidth = 2150;
-  const availableWidth = window.innerWidth - 30;
-  
-  if (availableWidth < targetWidth) {
-    const scale = availableWidth / targetWidth;
-    container.style.transform = `scale(${scale})`;
-    container.style.transformOrigin = "top left";
-    container.style.width = `${targetWidth}px`;
-  } else {
-    container.style.transform = "none";
-    container.style.width = `${targetWidth}px`;
-  }
+  container.style.transform = "none";
+  container.style.width = "100%";
 }
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
   autoScaleDashboard();
-  window.addEventListener("resize", autoScaleDashboard);
   loadData();
   setupDropdownDismiss();
 });

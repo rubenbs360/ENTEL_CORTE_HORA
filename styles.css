@@ -252,7 +252,7 @@ body {
 /* Redesigned Top Row side-by-side Executive Grid - Split aligned 50/50 with bottom table sections */
 .top-executive-panel {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.5rem;
   margin-bottom: 1.5rem;
   align-items: stretch;
@@ -699,7 +699,7 @@ body {
 /* Responsive Grid styling */
 .tables-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
 }
@@ -713,7 +713,7 @@ body {
 /* Responsiveness and stacking */
 @media (max-width: 1200px) {
   .top-executive-panel {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
   .kpi-dashboard-grid {
     grid-template-columns: 1.35fr 1.05fr 0.9fr;
@@ -739,7 +739,7 @@ body {
 
 @media (max-width: 1024px) {
   .tables-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 

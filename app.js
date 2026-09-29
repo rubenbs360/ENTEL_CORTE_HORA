@@ -63,7 +63,7 @@ function formatSpanishDateJS(date) {
 function autoScaleDashboard() {
   const container = document.querySelector(".dashboard-container");
   if (!container) return;
-  const targetWidth = 1720;
+  const targetWidth = 2150;
   const availableWidth = window.innerWidth - 30;
   
   if (availableWidth < targetWidth) {

@@ -719,7 +719,7 @@ body {
     grid-template-columns: 1.35fr 1.05fr 0.9fr;
   }
   .col-right {
-    grid-column: span 2;
+    grid-column: auto;
   }
 }
 
@@ -728,7 +728,7 @@ body {
     grid-template-columns: 1.35fr 1.05fr 0.9fr;
   }
   .col-right {
-    grid-column: span 1;
+    grid-column: auto;
   }
   .controls-bar {
     flex-direction: column;

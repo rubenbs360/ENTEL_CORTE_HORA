@@ -64,19 +64,16 @@ function autoScaleDashboard() {
   const container = document.querySelector(".dashboard-container");
   if (!container) return;
   const targetWidth = 1720;
-  const padding = 40;
-  const availableWidth = window.innerWidth - padding;
+  const availableWidth = window.innerWidth - 30;
   
   if (availableWidth < targetWidth) {
     const scale = availableWidth / targetWidth;
     container.style.transform = `scale(${scale})`;
     container.style.transformOrigin = "top left";
     container.style.width = `${targetWidth}px`;
-    document.body.style.width = `${availableWidth}px`;
   } else {
     container.style.transform = "none";
     container.style.width = `${targetWidth}px`;
-    document.body.style.width = "auto";
   }
 }
 

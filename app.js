@@ -605,6 +605,8 @@ function renderHourlyDashboard() {
   let cmpActiv = 0;
   let cmpExpress = 0;
   let cmpPickup = 0;
+  let subsetMTDEntregado = 0;
+  let subsetMTDCerradas = 0;
   
   if (sampleHoyOrder && sampleHoyOrder.Fecha_Creacion_ISO) {
     const hoyIso = sampleHoyOrder.Fecha_Creacion_ISO; // e.g. "2026-07-20"
@@ -620,8 +622,6 @@ function renderHourlyDashboard() {
                   
     // Campaign metrics up to Today (Outbound only, pactada <= Hoy, excluding 'No bop')
     let subsetMTDTotal = 0;
-    let subsetMTDEntregado = 0;
-    let subsetMTDCerradas = 0;
     
     // Subset 2: Monthly dispatch share up to selected hour of Hoy (Outbound only)
     let cmpTotalShare = 0;

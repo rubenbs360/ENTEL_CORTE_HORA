@@ -668,9 +668,13 @@ function renderHourlyDashboard() {
   // Render Campaign Metrics
   document.getElementById("camp-efect-val").textContent = cmpEfect.toFixed(2) + "%";
   document.getElementById("camp-efect-bar").style.width = cmpEfect.toFixed(2) + "%";
+  const efectQtyEl = document.getElementById("camp-efect-qty");
+  if (efectQtyEl) efectQtyEl.textContent = `${subsetMTDEntregado} u.`;
   
   document.getElementById("camp-activ-val").textContent = cmpActiv.toFixed(2) + "%";
   document.getElementById("camp-activ-bar").style.width = cmpActiv.toFixed(2) + "%";
+  const activQtyEl = document.getElementById("camp-activ-qty");
+  if (activQtyEl) activQtyEl.textContent = `${subsetMTDCerradas} u.`;
   
   document.getElementById("camp-express-val").textContent = cmpExpress.toFixed(2) + "%";
   document.getElementById("camp-express-bar").style.width = cmpExpress.toFixed(2) + "%";

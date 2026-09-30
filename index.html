@@ -222,7 +222,10 @@
                 <div class="campaign-item">
                   <div class="campaign-info">
                     <span class="camp-label">efect camp (Entrega)</span>
-                    <span class="camp-val" id="camp-efect-val">0.00%</span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                      <span class="camp-val" id="camp-efect-val">0.00%</span>
+                      <span class="camp-subval" id="camp-efect-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
+                    </div>
                   </div>
                   <div class="progress-bar-container">
                     <div class="progress-bar-fill pct-blue" id="camp-efect-bar" style="width: 0%;"></div>
@@ -231,7 +234,10 @@
                 <div class="campaign-item">
                   <div class="campaign-info">
                     <span class="camp-label">activ (% Activas)</span>
-                    <span class="camp-val" id="camp-activ-val">0.00%</span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                      <span class="camp-val" id="camp-activ-val">0.00%</span>
+                      <span class="camp-subval" id="camp-activ-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
+                    </div>
                   </div>
                   <div class="progress-bar-container">
                     <div class="progress-bar-fill pct-green" id="camp-activ-bar" style="width: 0%;"></div>
@@ -699,6 +705,6 @@
   </div>
 
   <!-- App JS -->
-  <script src="app.js?v=20260928_v20"></script>
+  <script src="app.js?v=20260930_v21"></script>
 </body>
 </html>

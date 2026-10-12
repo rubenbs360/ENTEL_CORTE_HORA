@@ -1463,12 +1463,12 @@ function renderHourlyDashboard() {
     multiTbody.appendChild(totalRow);
   }
 
-  // 6.7. Render Table: Resumen General por Cuartil (Sin Líder, con HC y Proyección)
+  // 6.7. Render Table: Resumen General por Cuartil (Sin Líder, con Proyección)
   const qSummaryTbody = document.getElementById("hourly-cuartiles-resumen-table-body");
   if (qSummaryTbody) {
     qSummaryTbody.innerHTML = "";
     const quartilsListDef = ['Q1', 'Q2', 'Q3', 'Q4'];
-    const summaryTotals = { hc: 0, hoy: 0, proy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
+    const summaryTotals = { hoy: 0, proy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
     
     // Update projection column header with current projection hours
     const thProyCuartil = document.getElementById("th-proy-cuartil");
@@ -1490,13 +1490,9 @@ function renderHourlyDashboard() {
     quartilsListDef.forEach(q => {
       const qOrders = orders.filter(o => o.Hora <= maxSelectedHour && o.CUARTIL === q);
       const qSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-      const hoyVendors = new Set();
 
       qOrders.forEach(o => {
-        if (o.Fecha_Creacion === meta.hoy_date) {
-          qSums.hoy++;
-          if (o.VENDEDOR) hoyVendors.add(o.VENDEDOR);
-        }
+        if (o.Fecha_Creacion === meta.hoy_date) qSums.hoy++;
         else if (o.Fecha_Creacion === meta.d1_date) qSums.d1++;
         else if (o.Fecha_Creacion === meta.d7_date) qSums.d7++;
         else if (o.Fecha_Creacion === meta.d14_date) qSums.d14++;
@@ -1504,10 +1500,8 @@ function renderHourlyDashboard() {
         else if (o.Fecha_Creacion === meta.d28_date) qSums.d28++;
       });
 
-      const qHC = hoyVendors.size;
       const qProy = computeProy(qSums.hoy);
 
-      summaryTotals.hc += qHC;
       summaryTotals.hoy += qSums.hoy;
       summaryTotals.proy += qProy;
       summaryTotals.d1 += qSums.d1;
@@ -1519,7 +1513,6 @@ function renderHourlyDashboard() {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td style="font-weight: 700; padding-left: 1rem; color: var(--text-main);">${q}</td>
-        <td style="text-align:center; font-weight: 600; color: var(--accent-cyan);">${qHC}</td>
         <td style="font-weight: 700;">${qSums.hoy}</td>
         <td style="font-weight: 700; color: #a855f7;">${qProy}</td>
         <td style="color:var(--text-muted);">${qSums.d1}</td>
@@ -1539,13 +1532,9 @@ function renderHourlyDashboard() {
     // Row for PLATAFORMA (orders not in Q1..Q4)
     const platOrders = orders.filter(o => o.Hora <= maxSelectedHour && !quartilsListDef.includes(o.CUARTIL));
     const platSums = { hoy: 0, d1: 0, d7: 0, d14: 0, d21: 0, d28: 0 };
-    const platVendors = new Set();
 
     platOrders.forEach(o => {
-      if (o.Fecha_Creacion === meta.hoy_date) {
-        platSums.hoy++;
-        if (o.VENDEDOR) platVendors.add(o.VENDEDOR);
-      }
+      if (o.Fecha_Creacion === meta.hoy_date) platSums.hoy++;
       else if (o.Fecha_Creacion === meta.d1_date) platSums.d1++;
       else if (o.Fecha_Creacion === meta.d7_date) platSums.d7++;
       else if (o.Fecha_Creacion === meta.d14_date) platSums.d14++;
@@ -1553,10 +1542,8 @@ function renderHourlyDashboard() {
       else if (o.Fecha_Creacion === meta.d28_date) platSums.d28++;
     });
 
-    const platHC = platVendors.size;
     const platProy = computeProy(platSums.hoy);
 
-    summaryTotals.hc += platHC;
     summaryTotals.hoy += platSums.hoy;
     summaryTotals.proy += platProy;
     summaryTotals.d1 += platSums.d1;
@@ -1568,7 +1555,6 @@ function renderHourlyDashboard() {
     const platRow = document.createElement("tr");
     platRow.innerHTML = `
       <td style="font-weight: 600; padding-left: 1rem;">PLATAFORMA</td>
-      <td style="text-align:center; font-weight: 600; color: var(--accent-cyan);">${platHC}</td>
       <td style="font-weight: 700;">${platSums.hoy}</td>
       <td style="font-weight: 700; color: #a855f7;">${platProy}</td>
       <td style="color:var(--text-muted);">${platSums.d1}</td>
@@ -1591,7 +1577,6 @@ function renderHourlyDashboard() {
     summaryTotalRow.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
     summaryTotalRow.innerHTML = `
       <td>TOTAL GLOBAL</td>
-      <td style="text-align:center; font-weight: 800; color: var(--accent-cyan);">${summaryTotals.hc}</td>
       <td style="font-weight: 800;">${summaryTotals.hoy}</td>
       <td style="font-weight: 800; color: #a855f7;">${summaryTotals.proy}</td>
       <td style="color:var(--text-muted);">${summaryTotals.d1}</td>

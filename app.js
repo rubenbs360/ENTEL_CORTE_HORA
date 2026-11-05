@@ -722,69 +722,62 @@ function renderHourlyDashboard() {
 
     ncThead.innerHTML = tr1 + tr2;
 
-    // Coordinator & Supervisor Configuration with exact METAs from Excel
-    const televentasConfig = [
-      {
-        coordLabel: "PIERO MEDINA",
-        coordMatch: c => c === "PIERO MEDINA",
-        meta: 295,
-        supervisores: [
-          { key: "JHERICCO MAYTAHUARI", label: "MAYTAHUARI MORI JHERICCO GEAN PIER", meta: 39 },
-          { key: "MARCELO DIAZ", label: "DIAZ JIMENEZ MARCELO ANDRES", meta: 45 },
-          { key: "FRANCO GRIMALDO", label: "Franco Daniel Grimaldo Sosa", meta: 38 },
-          { key: "JUAN IYASHAMA", label: "Juan Luis Iyashama Rojas", meta: 55 },
-          { key: "OLENKA LAVADO", label: "LAVADO SAPO OLENKA OLGA", meta: 55 },
-          { key: "JULIO GARCIA", label: "Garcia Sonco Julio Cesar", meta: 31 },
-          { key: "MARCO YATACO", label: "MARCO ANTONIO YSMAEL YATACO RAMOS", meta: 32 }
-        ]
-      },
-      {
-        coordLabel: "EVER MALCA",
-        coordMatch: c => c === "EVER MALCA",
-        meta: 306,
-        supervisores: [
-          { key: "JEAN ELIAS", label: "ELIAS MUNAYCO JEAN CARLO", meta: 55 },
-          { key: "NICOLLE MATIAS", label: "MATIAS GARCIA PAMELA NICOLLE", meta: 50 },
-          { key: "ANDREA YAURI", label: "YAURI ORIZANO ANDREA", meta: 55 },
-          { key: "VICTORIA CARRILLO", label: "CARRILLO VIVANCO VICTORIA", meta: 55 },
-          { key: "JACKELINE GUEVARA", label: "Jackeline Delicias Guevara Mancilla", meta: 55 },
-          { key: "VICTOR CASTILLO", label: "CASTILLO AGÜERO VICTOR MANUEL", meta: 36 }
-        ]
-      },
-      {
-        coordLabel: "RIVALDO DONAYRE",
-        coordMatch: c => c && c.includes("RIVALDO"),
-        meta: 237,
-        supervisores: [
-          { key: "KIARA RUIZ", label: "Kiara Melissa Ruiz Campos", meta: 50 },
-          { key: "MAURO MACHACA", label: "MACHACA MORALES MAURO FRANCISCO", meta: 50 },
-          { key: "JORGE JUSTO", label: "GARCIA JUSTO JORGE FRANCO", meta: 45 },
-          { key: "KRISTYNA QUISPE", label: "QUISPE MUÑOZ KRISTYNA JAZMIN", meta: 45 },
-          { key: "FIORELLA QUISPE", label: "QUISPE VALENZUELA GLADYS FIORELLA", meta: 45 }
-        ]
-      },
-      {
-        coordLabel: "JOSÉ SOLORZANO",
-        coordMatch: c => c && c.includes("SOLORZANO"),
-        meta: 212,
-        supervisores: [
-          { key: "RENY BARRAZA", label: "BARRAZA YESQUEN RENY MOISES", meta: 60 },
-          { key: "JORDAN CASTILLO", label: "Jordan Luis Castillo Ushiñahua", meta: 60 },
-          { key: "CINTHIA BIELICH", label: "BIELICH RIVERA CINTHIA FRANCESCA", meta: 57 },
-          { key: "ALEX VICENTE", label: "CARLOS ALEXIS VICENTE ATALAYA", meta: 35 }
-        ]
-      }
-    ];
+    // Metas por Coordinador y Supervisor (usando los nombres exactos del Padrón como en Participación)
+    const coordMetasMap = {
+      "PIERO MEDINA": 295,
+      "EVER MALCA": 306,
+      "RIVALDO JACOBO": 237,
+      "RIVALDO DONAYRE": 237,
+      "JOSÉ SOLORZANO": 212,
+      "JOSE SOLORZANO": 212
+    };
 
-    // Orders for Hoy respecting Antiguedad, Coordinator, Supervisor filters,
-    // and ALL hours <= maxSelectedHour (so Avance Nº always includes 00-09 and 19-00 orders)
-    const hoyAllHoursOrders = orders.filter(o =>
-      o.Fecha_Creacion === meta.hoy_date &&
-      o.Hora <= maxSelectedHour &&
-      selectedCoordinadores.has(o.COORDINADOR) &&
-      selectedSupervisores.has(o.SUPERVISOR) &&
-      selectedAntiguedades.has(o.Rango_Antiguedad || "SIN ASIGNAR")
-    );
+    const supMetasMap = {
+      // PIERO MEDINA
+      "JHERICCO MAYTAHUARI": 39,
+      "MARCELO DIAZ": 45,
+      "FRANCO GRIMALDO": 38,
+      "JUAN IYASHAMA": 55,
+      "OLENKA LAVADO": 55,
+      "JULIO GARCIA": 31,
+      "MARCO YATACO": 32,
+      // EVER MALCA
+      "JEAN ELIAS": 55,
+      "NICOLLE MATIAS": 50,
+      "ANDREA YAURI": 55,
+      "VICTORIA CARRILLO": 55,
+      "JACKELINE GUEVARA": 55,
+      "VICTOR CASTILLO": 36,
+      // RIVALDO JACOBO
+      "KIARA RUIZ": 50,
+      "MAURO MACHACA": 50,
+      "JORGE JUSTO": 45,
+      "KRISTYNA QUISPE": 45,
+      "FIORELLA QUISPE": 45,
+      // JOSÉ SOLORZANO
+      "RENY BARRAZA": 60,
+      "JORDAN CASTILLO": 60,
+      "CINTHIA BIELICH": 57,
+      "ALEX VICENTE": 35
+    };
+
+    const defaultSupsByCoord = {
+      "PIERO MEDINA": ["JHERICCO MAYTAHUARI", "MARCELO DIAZ", "FRANCO GRIMALDO", "JUAN IYASHAMA", "OLENKA LAVADO", "JULIO GARCIA", "MARCO YATACO"],
+      "EVER MALCA": ["JEAN ELIAS", "NICOLLE MATIAS", "ANDREA YAURI", "VICTORIA CARRILLO", "JACKELINE GUEVARA", "VICTOR CASTILLO"],
+      "RIVALDO JACOBO": ["KIARA RUIZ", "MAURO MACHACA", "JORGE JUSTO", "KRISTYNA QUISPE", "FIORELLA QUISPE"],
+      "JOSÉ SOLORZANO": ["RENY BARRAZA", "JORDAN CASTILLO", "CINTHIA BIELICH", "ALEX VICENTE"]
+    };
+
+    // Ordenamos los coordinadores poniendo primero los 4 líderes principales y luego cualquier otro del Padrón
+    const priorityOrder = ["PIERO MEDINA", "EVER MALCA", "RIVALDO JACOBO", "JOSÉ SOLORZANO"];
+    const sortedCoordsForTable = [...coordinatorsList].sort((a, b) => {
+      const idxA = priorityOrder.indexOf(a);
+      const idxB = priorityOrder.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    });
 
     const endHourProy = 9 + projectionHours;
     const calcProyecc = (avanceVal) => {
@@ -795,67 +788,66 @@ function renderHourlyDashboard() {
       return avanceVal;
     };
 
-    // Pre-compute stats to determine max Avance Nº for proportional blue data bars
+    // Pre-compute stats using filteredOrders (exactamente igual que en Participación)
     let maxSupAvance = 1;
     const computedBlocks = [];
 
-    televentasConfig.forEach(cfg => {
-      // Check if coordinator is active in filter
-      const matchingCoords = [...selectedCoordinadores].filter(cfg.coordMatch);
-      if (matchingCoords.length === 0 && selectedCoordinadores.size < coordinatorsList.length) return;
+    sortedCoordsForTable.forEach(coord => {
+      const coordHoyOrders = filteredOrders.filter(o => o.COORDINADOR === coord && o.Fecha_Creacion === meta.hoy_date);
+      const coordMeta = coordMetasMap[coord] || 0;
 
-      const coordOrders = hoyAllHoursOrders.filter(o => cfg.coordMatch(o.COORDINADOR));
+      // Si es un coordinador secundario (ej. WALTER VILLARREAL) sin órdenes hoy y sin meta fija, omitir si hay varios seleccionados
+      if (coordHoyOrders.length === 0 && coordMeta === 0 && selectedCoordinadores.size > 1) return;
 
-      // Map configured supervisors + any additional active supervisor under this coordinator
-      const configuredKeys = new Set(cfg.supervisores.map(s => s.key));
-      const supList = [...cfg.supervisores];
+      // Obtener supervisores del Padrón (tanto los que tienen órdenes en el mes/hoy como los configurados del líder)
+      const allCoordOrdersInDataset = orders.filter(o => o.COORDINADOR === coord);
+      const supsSet = new Set([
+        ...(defaultSupsByCoord[coord] || []),
+        ...allCoordOrdersInDataset.map(o => o.SUPERVISOR),
+        ...coordHoyOrders.map(o => o.SUPERVISOR)
+      ]);
+      const supsInCoord = [...supsSet].filter(s => s && selectedSupervisores.has(s));
 
-      const extraSups = [...new Set(coordOrders.map(o => o.SUPERVISOR))]
-        .filter(s => s && !configuredKeys.has(s) && selectedSupervisores.has(s));
-      extraSups.forEach(s => {
-        supList.push({ key: s, label: s, meta: 0 });
-      });
-
-      const supStats = [];
-      supList.forEach(supCfg => {
-        if (!selectedSupervisores.has(supCfg.key) && selectedSupervisores.size < supervisoresList.length) return;
-        const sOrders = coordOrders.filter(o => o.SUPERVISOR === supCfg.key);
+      const supStats = supsInCoord.map(sup => {
+        const sOrders = coordHoyOrders.filter(o => o.SUPERVISOR === sup);
         const byHour = {};
         visibleHours.forEach(h => { byHour[h] = 0; });
         sOrders.forEach(o => {
           if (byHour[o.Hora] !== undefined) byHour[o.Hora]++;
         });
-        const avanceN = sOrders.length; // Total including (00-9) and (19-00)
+        const avanceN = sOrders.length; // Total del día hasta la hora de corte (incluye 00-09 y 19-00)
         if (avanceN > maxSupAvance) maxSupAvance = avanceN;
+        const supMeta = supMetasMap[sup] || 0;
         const proyN = calcProyecc(avanceN);
-        const avancePct = supCfg.meta > 0 ? Math.round((avanceN / supCfg.meta) * 100) : 0;
-        const proyPct = supCfg.meta > 0 ? Math.round((proyN / supCfg.meta) * 100) : 0;
+        const avancePct = supMeta > 0 ? Math.round((avanceN / supMeta) * 100) : 0;
+        const proyPct = supMeta > 0 ? Math.round((proyN / supMeta) * 100) : 0;
 
-        supStats.push({
-          label: supCfg.label,
-          meta: supCfg.meta,
+        return {
+          label: sup,
+          meta: supMeta,
           byHour,
           avanceN,
           avancePct,
           proyN,
           proyPct
-        });
-      });
+        };
+      }).filter(item => item.meta > 0 || item.avanceN > 0)
+        .sort((a, b) => b.avanceN - a.avanceN || a.label.localeCompare(b.label));
 
-      // Coordinator totals (from all coordOrders so off-hour / unassigned supervisor orders are included)
+      // Totales del coordinador (todas las órdenes de hoy del coordinador hasta la hora de corte)
       const coordByHour = {};
       visibleHours.forEach(h => { coordByHour[h] = 0; });
-      coordOrders.forEach(o => {
+      coordHoyOrders.forEach(o => {
         if (coordByHour[o.Hora] !== undefined) coordByHour[o.Hora]++;
       });
-      const coordAvanceN = coordOrders.length;
+      const coordAvanceN = coordHoyOrders.length;
       const coordProyN = calcProyecc(coordAvanceN);
-      const coordAvancePct = cfg.meta > 0 ? Math.round((coordAvanceN / cfg.meta) * 100) : 0;
-      const coordProyPct = cfg.meta > 0 ? Math.round((coordProyN / cfg.meta) * 100) : 0;
+      const coordAvancePct = coordMeta > 0 ? Math.round((coordAvanceN / coordMeta) * 100) : 0;
+      const coordProyPct = coordMeta > 0 ? Math.round((coordProyN / coordMeta) * 100) : 0;
 
       computedBlocks.push({
-        coordLabel: cfg.coordLabel,
-        meta: cfg.meta,
+        coordLabel: coord,
+        meta: coordMeta,
         byHour: coordByHour,
         avanceN: coordAvanceN,
         avancePct: coordAvancePct,

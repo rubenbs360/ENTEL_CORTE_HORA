@@ -117,177 +117,6 @@
       </div>
     </section>
 
-    <!-- Top Executive Grid (Redesigned Unified Layout) -->
-    <section class="top-executive-panel">
-      <!-- Left: Consolidated KPI Block -->
-      <div class="kpi-panel-card card">
-        <section class="kpi-dashboard-grid">
-          <!-- Left Column: Hoy & Participaciones -->
-          <div class="kpi-column col-left">
-            <div class="kpi-main-card">
-              <div class="kpi-main-left">
-                <div class="kpi-label">Ingresos Hoy</div>
-                <div class="kpi-value-large" id="kpi-hoy">0</div>
-                <div class="kpi-date-sub" id="kpi-date-hoy">Fecha: -</div>
-              </div>
-              <div class="kpi-alert-badge hidden" id="kpi-bop-alert"></div>
-              <div class="kpi-main-right">
-                <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.25rem; text-transform:uppercase; letter-spacing:0.05em;">Ventas Pilotos</div>
-                <div class="pilot-item">
-                  <span class="pilot-label">Ruc 10:</span>
-                  <span class="pilot-val" id="pilot-ruc10-val">0 u.</span>
-                </div>
-                <div class="pilot-item">
-                  <span class="pilot-label">WhatsApp:</span>
-                  <span class="pilot-val" id="pilot-whatsapp-val">0 u.</span>
-                </div>
-                <div class="pilot-item">
-                  <span class="pilot-label">Bot Maker:</span>
-                  <span class="pilot-val" id="pilot-bot-val">0 u.</span>
-                </div>
-              </div>
-            </div>
-            <div class="kpi-subcard">
-              <div class="subcard-header">
-                <span class="kpi-label">D-1 (Ayer)</span>
-                <span class="kpi-trend" id="kpi-var-d1">-</span>
-              </div>
-              <div class="subcard-val" id="kpi-d1">0</div>
-              <div class="subcard-date" id="kpi-date-d1">-</div>
-            </div>
-            <div class="kpi-mini-grid">
-              <div class="kpi-mini-box">
-                <span class="mini-label">Multipedido</span>
-                <span class="mini-val" id="mini-multipedido-pct">0.00%</span>
-                <span class="mini-pct" id="mini-multipedido-val">0</span>
-              </div>
-              <div class="kpi-mini-box">
-                <span class="mini-label">Express</span>
-                <span class="mini-val" id="mini-express-pct">0.00%</span>
-                <span class="mini-pct" id="mini-express-val">0</span>
-              </div>
-              <div class="kpi-mini-box">
-                <span class="mini-label">Pickup</span>
-                <span class="mini-val" id="mini-pickup-pct">0.00%</span>
-                <span class="mini-pct" id="mini-pickup-val">0</span>
-              </div>
-              <div class="kpi-mini-box highlight">
-                <span class="mini-label" id="proj-label">Proyecc</span>
-                <span class="mini-val" id="mini-proyecc-val">0</span>
-                <span class="mini-pct">Día Estimado</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="kpi-column col-middle">
-            <div class="kpi-subcard">
-              <div class="subcard-header">
-                <span class="kpi-label">D-7 (Sem. Anterior)</span>
-                <span class="kpi-trend" id="kpi-var-d7">-</span>
-              </div>
-              <div class="subcard-val" id="kpi-d7">0</div>
-              <div class="subcard-date" id="kpi-date-d7">-</div>
-            </div>
-            <div class="kpi-subcard">
-              <div class="subcard-header">
-                <span class="kpi-label">D-14 (2 Sem. Antes)</span>
-                <span class="kpi-trend" id="kpi-var-d14">-</span>
-              </div>
-              <div class="subcard-val" id="kpi-d14">0</div>
-              <div class="subcard-date" id="kpi-date-d14">-</div>
-            </div>
-            <div class="kpi-subcard">
-              <div class="subcard-header">
-                <span class="kpi-label">D-21 (3 Sem. Antes)</span>
-                <span class="kpi-trend" id="kpi-var-d21">-</span>
-              </div>
-              <div class="subcard-val" id="kpi-d21">0</div>
-              <div class="subcard-date" id="kpi-date-d21">-</div>
-            </div>
-            <div class="kpi-subcard">
-              <div class="subcard-header">
-                <span class="kpi-label">D-28 (4 Sem. Antes)</span>
-                <span class="kpi-trend" id="kpi-var-d28">-</span>
-              </div>
-              <div class="subcard-val" id="kpi-d28">0</div>
-              <div class="subcard-date" id="kpi-date-d28">-</div>
-            </div>
-          </div>
-          
-          <!-- Right Column: Campaña MTD -->
-          <div class="kpi-column col-right">
-            <div class="kpi-campaign-card">
-              <div class="campaign-header">Campaña Mes en Curso (MTD)</div>
-              <div class="campaign-metrics-list">
-                <div class="campaign-item">
-                  <div class="campaign-info">
-                    <span class="camp-label">efect camp (Entrega)</span>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
-                      <span class="camp-val" id="camp-efect-val">0.00%</span>
-                      <span class="camp-subval" id="camp-efect-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
-                    </div>
-                  </div>
-                  <div class="progress-bar-container">
-                    <div class="progress-bar-fill pct-blue" id="camp-efect-bar" style="width: 0%;"></div>
-                  </div>
-                </div>
-                <div class="campaign-item">
-                  <div class="campaign-info">
-                    <span class="camp-label">activ (% Activas)</span>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
-                      <span class="camp-val" id="camp-activ-val">0.00%</span>
-                      <span class="camp-subval" id="camp-activ-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
-                    </div>
-                  </div>
-                  <div class="progress-bar-container">
-                    <div class="progress-bar-fill pct-green" id="camp-activ-bar" style="width: 0%;"></div>
-                  </div>
-                </div>
-                <div class="campaign-item">
-                  <div class="campaign-info">
-                    <span class="camp-label">Part Express (Mes)</span>
-                    <span class="camp-val" id="camp-express-val">0.00%</span>
-                  </div>
-                  <div class="progress-bar-container">
-                    <div class="progress-bar-fill pct-cyan" id="camp-express-bar" style="width: 0%;"></div>
-                  </div>
-                </div>
-                <div class="campaign-item">
-                  <div class="campaign-info">
-                    <span class="camp-label">Part Pickup (Mes)</span>
-                    <span class="camp-val" id="camp-pickup-val">0.00%</span>
-                  </div>
-                  <div class="progress-bar-container">
-                    <div class="progress-bar-fill pct-purple" id="camp-pickup-bar" style="width: 0%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      
-      <!-- Right: Mix de Planes Tarifarios (Resumen) -->
-      <section class="table-section card top-table-card">
-        <div class="table-header">
-          <div class="table-icon">📱</div>
-          <h2>Mix por Plan Tarifario (Resumen)</h2>
-        </div>
-        <div class="table-wrapper">
-          <table class="executive-table">
-            <thead>
-              <tr id="mix-planes-thead-tr">
-                <!-- Populated dynamically by JS -->
-              </tr>
-            </thead>
-            <tbody id="hourly-mix-planes-table-body">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </section>
-    
     <!-- Main Dashboard Body -->
     <main class="dashboard-body">
       
@@ -296,6 +125,154 @@
         
         <!-- Left Column -->
         <div class="tables-column">
+          <!-- Consolidated KPI Block -->
+          <div class="kpi-panel-card card">
+            <section class="kpi-dashboard-grid">
+              <!-- Left Column: Hoy & Participaciones -->
+              <div class="kpi-column col-left">
+                <div class="kpi-main-card">
+                  <div class="kpi-main-left">
+                    <div class="kpi-label">Ingresos Hoy</div>
+                    <div class="kpi-value-large" id="kpi-hoy">0</div>
+                    <div class="kpi-date-sub" id="kpi-date-hoy">Fecha: -</div>
+                  </div>
+                  <div class="kpi-alert-badge hidden" id="kpi-bop-alert"></div>
+                  <div class="kpi-main-right">
+                    <div style="font-size:0.75rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.25rem; text-transform:uppercase; letter-spacing:0.05em;">Ventas Pilotos</div>
+                    <div class="pilot-item">
+                      <span class="pilot-label">Ruc 10:</span>
+                      <span class="pilot-val" id="pilot-ruc10-val">0 u.</span>
+                    </div>
+                    <div class="pilot-item">
+                      <span class="pilot-label">WhatsApp:</span>
+                      <span class="pilot-val" id="pilot-whatsapp-val">0 u.</span>
+                    </div>
+                    <div class="pilot-item">
+                      <span class="pilot-label">Bot Maker:</span>
+                      <span class="pilot-val" id="pilot-bot-val">0 u.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="kpi-subcard">
+                  <div class="subcard-header">
+                    <span class="kpi-label">D-1 (Ayer)</span>
+                    <span class="kpi-trend" id="kpi-var-d1">-</span>
+                  </div>
+                  <div class="subcard-val" id="kpi-d1">0</div>
+                  <div class="subcard-date" id="kpi-date-d1">-</div>
+                </div>
+                <div class="kpi-mini-grid">
+                  <div class="kpi-mini-box">
+                    <span class="mini-label">Multipedido</span>
+                    <span class="mini-val" id="mini-multipedido-pct">0.00%</span>
+                    <span class="mini-pct" id="mini-multipedido-val">0</span>
+                  </div>
+                  <div class="kpi-mini-box">
+                    <span class="mini-label">Express</span>
+                    <span class="mini-val" id="mini-express-pct">0.00%</span>
+                    <span class="mini-pct" id="mini-express-val">0</span>
+                  </div>
+                  <div class="kpi-mini-box">
+                    <span class="mini-label">Pickup</span>
+                    <span class="mini-val" id="mini-pickup-pct">0.00%</span>
+                    <span class="mini-pct" id="mini-pickup-val">0</span>
+                  </div>
+                  <div class="kpi-mini-box highlight">
+                    <span class="mini-label" id="proj-label">Proyecc</span>
+                    <span class="mini-val" id="mini-proyecc-val">0</span>
+                    <span class="mini-pct">Día Estimado</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="kpi-column col-middle">
+                <div class="kpi-subcard">
+                  <div class="subcard-header">
+                    <span class="kpi-label">D-7 (Sem. Anterior)</span>
+                    <span class="kpi-trend" id="kpi-var-d7">-</span>
+                  </div>
+                  <div class="subcard-val" id="kpi-d7">0</div>
+                  <div class="subcard-date" id="kpi-date-d7">-</div>
+                </div>
+                <div class="kpi-subcard">
+                  <div class="subcard-header">
+                    <span class="kpi-label">D-14 (2 Sem. Antes)</span>
+                    <span class="kpi-trend" id="kpi-var-d14">-</span>
+                  </div>
+                  <div class="subcard-val" id="kpi-d14">0</div>
+                  <div class="subcard-date" id="kpi-date-d14">-</div>
+                </div>
+                <div class="kpi-subcard">
+                  <div class="subcard-header">
+                    <span class="kpi-label">D-21 (3 Sem. Antes)</span>
+                    <span class="kpi-trend" id="kpi-var-d21">-</span>
+                  </div>
+                  <div class="subcard-val" id="kpi-d21">0</div>
+                  <div class="subcard-date" id="kpi-date-d21">-</div>
+                </div>
+                <div class="kpi-subcard">
+                  <div class="subcard-header">
+                    <span class="kpi-label">D-28 (4 Sem. Antes)</span>
+                    <span class="kpi-trend" id="kpi-var-d28">-</span>
+                  </div>
+                  <div class="subcard-val" id="kpi-d28">0</div>
+                  <div class="subcard-date" id="kpi-date-d28">-</div>
+                </div>
+              </div>
+              
+              <!-- Right Column: Campaña MTD -->
+              <div class="kpi-column col-right">
+                <div class="kpi-campaign-card">
+                  <div class="campaign-header">Campaña Mes en Curso (MTD)</div>
+                  <div class="campaign-metrics-list">
+                    <div class="campaign-item">
+                      <div class="campaign-info">
+                        <span class="camp-label">efect camp (Entrega)</span>
+                        <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                          <span class="camp-val" id="camp-efect-val">0.00%</span>
+                          <span class="camp-subval" id="camp-efect-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
+                        </div>
+                      </div>
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill pct-blue" id="camp-efect-bar" style="width: 0%;"></div>
+                      </div>
+                    </div>
+                    <div class="campaign-item">
+                      <div class="campaign-info">
+                        <span class="camp-label">activ (% Activas)</span>
+                        <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                          <span class="camp-val" id="camp-activ-val">0.00%</span>
+                          <span class="camp-subval" id="camp-activ-qty" style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">0 u.</span>
+                        </div>
+                      </div>
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill pct-green" id="camp-activ-bar" style="width: 0%;"></div>
+                      </div>
+                    </div>
+                    <div class="campaign-item">
+                      <div class="campaign-info">
+                        <span class="camp-label">Part Express (Mes)</span>
+                        <span class="camp-val" id="camp-express-val">0.00%</span>
+                      </div>
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill pct-cyan" id="camp-express-bar" style="width: 0%;"></div>
+                      </div>
+                    </div>
+                    <div class="campaign-item">
+                      <div class="campaign-info">
+                        <span class="camp-label">Part Pickup (Mes)</span>
+                        <span class="camp-val" id="camp-pickup-val">0.00%</span>
+                      </div>
+                      <div class="progress-bar-container">
+                        <div class="progress-bar-fill pct-purple" id="camp-pickup-bar" style="width: 0%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
           <!-- Table 5: Ingreso por Hora -->
           <section class="table-section card">
             <div class="table-header">
@@ -376,6 +353,24 @@
 
         <!-- Right Column -->
         <div class="tables-column">
+          <!-- Table: NetCall Outbound Televentas (Corte por Hora y Metas) -->
+          <section class="table-section card">
+            <div class="table-header">
+              <div class="table-icon">📞</div>
+              <h2>NetCall Outbound Televentas (Corte por Hora y Metas)</h2>
+            </div>
+            <div class="table-wrapper">
+              <table class="executive-table netcall-televentas-table" id="netcall-televentas-table">
+                <thead id="netcall-televentas-thead">
+                  <!-- Populated dynamically by JS -->
+                </thead>
+                <tbody id="netcall-televentas-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <!-- Table: Resumen por Cuartil (Sin Líder) -->
           <section class="table-section card">
             <div class="table-header">

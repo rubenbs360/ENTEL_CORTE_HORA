@@ -682,235 +682,297 @@ function renderHourlyDashboard() {
   document.getElementById("camp-pickup-val").textContent = cmpPickup.toFixed(2) + "%";
   document.getElementById("camp-pickup-bar").style.width = cmpPickup.toFixed(2) + "%";
   
-  // 4. Render Table: Mix por Plan Tarifario (Resumen) - Ejes invertidos
-  const mixTbody = document.getElementById("hourly-mix-planes-table-body");
-  const mixTheadTr = document.getElementById("mix-planes-thead-tr");
-  if (mixTbody && mixTheadTr) {
-    mixTbody.innerHTML = "";
-    mixTheadTr.innerHTML = "";
-    
-    // Format date headers with short Spanish date labels (e.g., "24 sept", "23 sept", etc.)
-    function getShortDateLabel(dStr) {
-      if (!dStr) return "-";
-      const parts = dStr.split(" ");
-      if (parts.length >= 2) {
-        return `${parts[0]} ${parts[1].substring(0,3)}`;
-      }
-      return dStr;
-    }
-    
-    const planesList = [
-      'Power 39.90 N',
-      'Power 49.90 N',
-      'Power 59.90 N',
-      'Power ilim 69.90 N',
-      'Power ilim 79.90 SD N'
-    ];
-    
-    // Build Header TR: Fecha / Día | Power 39.90 N (%) | Power 49.90 N (%) | ... | OTROS (%) | TOTAL OPERACIÓN
-    let headerHtml = `<th>Día / Fecha</th>`;
-    planesList.forEach(p => {
-      const is59 = p.includes('59.90');
-      headerHtml += `<th style="text-align:center; ${is59 ? 'color:#ef4444;' : ''}">${p} <span style="font-size:0.85em; font-weight:normal; opacity:0.8;">N(%)</span></th>`;
-    });
-    headerHtml += `<th style="text-align:center;">OTROS <span style="font-size:0.85em; font-weight:normal; opacity:0.8;">N(%)</span></th>`;
-    headerHtml += `<th style="text-align:right;">TOTAL OPERACIÓN</th>`;
-    mixTheadTr.innerHTML = headerHtml;
+  // 4. Render Table: NetCall Outbound Televentas (Corte por Hora y Metas)
+  const ncThead = document.getElementById("netcall-televentas-thead");
+  const ncTbody = document.getElementById("netcall-televentas-tbody");
+  if (ncThead && ncTbody) {
+    ncThead.innerHTML = "";
+    ncTbody.innerHTML = "";
 
-    // Define days list: Promedio 1-22 first, then historical dates up to Hoy
-    // Dates to include in rows:
-    const daysConfig = [
-      { key: 'prom1to22', label: 'Prom 1-22 (59.90 con Desc)', isProm: true },
-      { key: 'd4', dateStr: relativeDates.d4, label: getShortDateLabel(relativeDates.d4) },
-      { key: 'd3', dateStr: relativeDates.d3, label: getShortDateLabel(relativeDates.d3) },
-      { key: 'd2', dateStr: relativeDates.d2, label: getShortDateLabel(relativeDates.d2) },
-      { key: 'd1', dateStr: relativeDates.d1, label: getShortDateLabel(relativeDates.d1) },
-      { key: 'hoy', dateStr: meta.hoy_date, label: `${getShortDateLabel(meta.hoy_date)} (Hoy)`, isHoy: true }
-    ];
-
-    // Pre-calculate sales data for each day config and plan
-    const daysData = {};
-    const daysCount1To22 = 22;
-
-    daysConfig.forEach(dConf => {
-      daysData[dConf.key] = {
-        label: dConf.label,
-        isProm: dConf.isProm,
-        isHoy: dConf.isHoy,
-        plans: {},
-        otros: 0,
-        total: 0
-      };
-      planesList.forEach(p => { daysData[dConf.key].plans[p] = 0; });
-    });
-
-    // Compile orders: for historical days (including Prom 1-22), use full day; for HOY, apply maxSelectedHour
-    orders.forEach(o => {
-      const plan = o.Plan_Vendido;
-      const isKnownPlan = planesList.includes(plan);
-
-      // Check if order belongs to 1-22 Sept (Historical: use all hours of the day for true baseline)
-      if (o.Fecha_Creacion_ISO && o.Fecha_Creacion_ISO >= '2026-09-01' && o.Fecha_Creacion_ISO <= '2026-09-22') {
-        daysData['prom1to22'].total += (1 / daysCount1To22);
-        if (isKnownPlan) {
-          daysData['prom1to22'].plans[plan] += (1 / daysCount1To22);
-        } else {
-          daysData['prom1to22'].otros += (1 / daysCount1To22);
-        }
-      }
-
-      // Match specific dates
-      daysConfig.forEach(dConf => {
-        if (!dConf.isProm && o.Fecha_Creacion === dConf.dateStr) {
-          // For Hoy, respect maxSelectedHour; for past days, count all hours
-          if (!dConf.isHoy || o.Hora <= maxSelectedHour) {
-            daysData[dConf.key].total++;
-            if (isKnownPlan) {
-              daysData[dConf.key].plans[plan]++;
-            } else {
-              daysData[dConf.key].otros++;
-            }
-          }
-        }
-      });
-    });
-
-    // Helper for formatting N (%) combined cell
-    function formatCellCombo(val, totalVal, is59 = false, isProm = false) {
-      if (!totalVal || totalVal === 0) return `<td style="text-align:center;">-</td>`;
-      const numStr = isProm ? val.toFixed(1) : Math.round(val).toString();
-      const pctStr = ((val / totalVal) * 100).toFixed(2) + "%";
-      
-      let style = '';
-      if (is59) {
-        style = 'background-color: rgba(239, 68, 68, 0.08); font-weight:700; color:#ef4444;';
-      }
-      return `<td style="text-align:center; ${style}">${numStr} <span style="font-size:0.85em; opacity:0.85; font-weight:normal;">(${pctStr})</span></td>`;
+    // Operational hours from 9 to 19 (intervals 9/10 up to 18/19, plus 19/20 if hour 19 is selected)
+    // Filter by selectedHours and <= maxSelectedHour within 9..18 (so 9..19 range headers are 9/10 .. 18/19)
+    const allOpHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    let visibleHours = allOpHours.filter(h => selectedHours.has(h) && h <= maxSelectedHour);
+    if (visibleHours.length === 0) {
+      visibleHours = [9];
     }
 
-    // Render Rows for Days (Prom 1-22 first, then d4, d3, d2, d1, hoy)
-    daysConfig.forEach(dConf => {
-      const data = daysData[dConf.key];
-      const row = document.createElement("tr");
+    // Build 2-row Header matching Excel layout (without Multilínea)
+    let tr1 = `<tr>
+      <th rowspan="2" class="nc-th-title">NetCall Outbound Televentas</th>
+      <th rowspan="2">META</th>`;
+    visibleHours.forEach(h => {
+      tr1 += `<th class="nc-th-hour">${h}</th>`;
+    });
+    tr1 += `
+      <th colspan="2">Avance</th>
+      <th colspan="2">Proyecc.</th>
+    </tr>`;
 
-      if (dConf.isProm) {
-        row.style.backgroundColor = "rgba(8, 145, 178, 0.08)";
-        row.style.fontWeight = "700";
-      } else if (dConf.isHoy) {
-        row.style.backgroundColor = "rgba(16, 185, 129, 0.06)";
-        row.style.fontWeight = "700";
+    let tr2 = `<tr>`;
+    visibleHours.forEach(h => {
+      tr2 += `<th class="nc-th-hour">${h + 1}</th>`;
+    });
+    tr2 += `
+      <th class="nc-th-sub">Nº</th>
+      <th class="nc-th-sub">%</th>
+      <th class="nc-th-sub">Nº</th>
+      <th class="nc-th-sub">%</th>
+    </tr>`;
+
+    ncThead.innerHTML = tr1 + tr2;
+
+    // Coordinator & Supervisor Configuration with exact METAs from Excel
+    const televentasConfig = [
+      {
+        coordLabel: "PIERO MEDINA",
+        coordMatch: c => c === "PIERO MEDINA",
+        meta: 295,
+        supervisores: [
+          { key: "JHERICCO MAYTAHUARI", label: "MAYTAHUARI MORI JHERICCO GEAN PIER", meta: 39 },
+          { key: "MARCELO DIAZ", label: "DIAZ JIMENEZ MARCELO ANDRES", meta: 45 },
+          { key: "FRANCO GRIMALDO", label: "Franco Daniel Grimaldo Sosa", meta: 38 },
+          { key: "JUAN IYASHAMA", label: "Juan Luis Iyashama Rojas", meta: 55 },
+          { key: "OLENKA LAVADO", label: "LAVADO SAPO OLENKA OLGA", meta: 55 },
+          { key: "JULIO GARCIA", label: "Garcia Sonco Julio Cesar", meta: 31 },
+          { key: "MARCO YATACO", label: "MARCO ANTONIO YSMAEL YATACO RAMOS", meta: 32 }
+        ]
+      },
+      {
+        coordLabel: "EVER MALCA",
+        coordMatch: c => c === "EVER MALCA",
+        meta: 306,
+        supervisores: [
+          { key: "JEAN ELIAS", label: "ELIAS MUNAYCO JEAN CARLO", meta: 55 },
+          { key: "NICOLLE MATIAS", label: "MATIAS GARCIA PAMELA NICOLLE", meta: 50 },
+          { key: "ANDREA YAURI", label: "YAURI ORIZANO ANDREA", meta: 55 },
+          { key: "VICTORIA CARRILLO", label: "CARRILLO VIVANCO VICTORIA", meta: 55 },
+          { key: "JACKELINE GUEVARA", label: "Jackeline Delicias Guevara Mancilla", meta: 55 },
+          { key: "VICTOR CASTILLO", label: "CASTILLO AGÜERO VICTOR MANUEL", meta: 36 }
+        ]
+      },
+      {
+        coordLabel: "RIVALDO DONAYRE",
+        coordMatch: c => c && c.includes("RIVALDO"),
+        meta: 237,
+        supervisores: [
+          { key: "KIARA RUIZ", label: "Kiara Melissa Ruiz Campos", meta: 50 },
+          { key: "MAURO MACHACA", label: "MACHACA MORALES MAURO FRANCISCO", meta: 50 },
+          { key: "JORGE JUSTO", label: "GARCIA JUSTO JORGE FRANCO", meta: 45 },
+          { key: "KRISTYNA QUISPE", label: "QUISPE MUÑOZ KRISTYNA JAZMIN", meta: 45 },
+          { key: "FIORELLA QUISPE", label: "QUISPE VALENZUELA GLADYS FIORELLA", meta: 45 }
+        ]
+      },
+      {
+        coordLabel: "JOSÉ SOLORZANO",
+        coordMatch: c => c && c.includes("SOLORZANO"),
+        meta: 212,
+        supervisores: [
+          { key: "RENY BARRAZA", label: "BARRAZA YESQUEN RENY MOISES", meta: 60 },
+          { key: "JORDAN CASTILLO", label: "Jordan Luis Castillo Ushiñahua", meta: 60 },
+          { key: "CINTHIA BIELICH", label: "BIELICH RIVERA CINTHIA FRANCESCA", meta: 57 },
+          { key: "ALEX VICENTE", label: "CARLOS ALEXIS VICENTE ATALAYA", meta: 35 }
+        ]
       }
+    ];
 
-      let rowHtml = `<td style="font-weight: 700; padding-left: 1rem;">${data.label}</td>`;
-      
-      planesList.forEach(p => {
-        const val = data.plans[p];
-        const is59 = p.includes('59.90');
-        rowHtml += formatCellCombo(val, data.total, is59, dConf.isProm);
+    // Orders for Hoy respecting Antiguedad, Coordinator, Supervisor filters,
+    // and ALL hours <= maxSelectedHour (so Avance Nº always includes 00-09 and 19-00 orders)
+    const hoyAllHoursOrders = orders.filter(o =>
+      o.Fecha_Creacion === meta.hoy_date &&
+      o.Hora <= maxSelectedHour &&
+      selectedCoordinadores.has(o.COORDINADOR) &&
+      selectedSupervisores.has(o.SUPERVISOR) &&
+      selectedAntiguedades.has(o.Rango_Antiguedad || "SIN ASIGNAR")
+    );
+
+    const endHourProy = 9 + projectionHours;
+    const calcProyecc = (avanceVal) => {
+      if (maxSelectedHour >= 9 && maxSelectedHour < endHourProy) {
+        const horasTrabajadas = Math.max(1, maxSelectedHour - 9 + 1);
+        return Math.round((avanceVal / horasTrabajadas) * projectionHours);
+      }
+      return avanceVal;
+    };
+
+    // Pre-compute stats to determine max Avance Nº for proportional blue data bars
+    let maxSupAvance = 1;
+    const computedBlocks = [];
+
+    televentasConfig.forEach(cfg => {
+      // Check if coordinator is active in filter
+      const matchingCoords = [...selectedCoordinadores].filter(cfg.coordMatch);
+      if (matchingCoords.length === 0 && selectedCoordinadores.size < coordinatorsList.length) return;
+
+      const coordOrders = hoyAllHoursOrders.filter(o => cfg.coordMatch(o.COORDINADOR));
+
+      // Map configured supervisors + any additional active supervisor under this coordinator
+      const configuredKeys = new Set(cfg.supervisores.map(s => s.key));
+      const supList = [...cfg.supervisores];
+
+      const extraSups = [...new Set(coordOrders.map(o => o.SUPERVISOR))]
+        .filter(s => s && !configuredKeys.has(s) && selectedSupervisores.has(s));
+      extraSups.forEach(s => {
+        supList.push({ key: s, label: s, meta: 0 });
       });
 
-      // Otros
-      rowHtml += formatCellCombo(data.otros, data.total, false, dConf.isProm);
+      const supStats = [];
+      supList.forEach(supCfg => {
+        if (!selectedSupervisores.has(supCfg.key) && selectedSupervisores.size < supervisoresList.length) return;
+        const sOrders = coordOrders.filter(o => o.SUPERVISOR === supCfg.key);
+        const byHour = {};
+        visibleHours.forEach(h => { byHour[h] = 0; });
+        sOrders.forEach(o => {
+          if (byHour[o.Hora] !== undefined) byHour[o.Hora]++;
+        });
+        const avanceN = sOrders.length; // Total including (00-9) and (19-00)
+        if (avanceN > maxSupAvance) maxSupAvance = avanceN;
+        const proyN = calcProyecc(avanceN);
+        const avancePct = supCfg.meta > 0 ? Math.round((avanceN / supCfg.meta) * 100) : 0;
+        const proyPct = supCfg.meta > 0 ? Math.round((proyN / supCfg.meta) * 100) : 0;
 
-      // Total Operación
-      const totalStr = dConf.isProm ? data.total.toFixed(1) : Math.round(data.total).toString();
-      rowHtml += `<td style="text-align:right; font-weight:800;">${totalStr}</td>`;
-
-      row.innerHTML = rowHtml;
-      mixTbody.appendChild(row);
-    });
-
-    // RENDER DIFF ROW: Promedio (23 sept en adelante sin desc 59.90) vs Promedio Pre (1-22 sept con desc 59.90)
-    const promPre = daysData['prom1to22'];
-    
-    // Calculate Post Promedio across post dates (d2: 23 sept, d1: 24 sept, hoy: 25 sept)
-    const postKeys = ['d2', 'd1', 'hoy'].filter(k => daysData[k] && daysData[k].total > 0);
-    const postCount = postKeys.length;
-    
-    if (postCount > 0 && promPre && promPre.total > 0) {
-      const promPost = {
-        plans: {},
-        otros: 0,
-        total: 0
-      };
-      planesList.forEach(p => { promPost.plans[p] = 0; });
-      
-      postKeys.forEach(k => {
-        const d = daysData[k];
-        promPost.total += (d.total / postCount);
-        promPost.otros += (d.otros / postCount);
-        planesList.forEach(p => {
-          promPost.plans[p] += ((d.plans[p] || 0) / postCount);
+        supStats.push({
+          label: supCfg.label,
+          meta: supCfg.meta,
+          byHour,
+          avanceN,
+          avancePct,
+          proyN,
+          proyPct
         });
       });
-      
-      // Render Promedio Post Row
-      const postRow = document.createElement("tr");
-      postRow.style.backgroundColor = "rgba(239, 68, 68, 0.06)";
-      postRow.style.fontWeight = "700";
-      let postHtml = `<td style="font-weight: 700; padding-left: 1rem; color: #dc2626;">Prom 23+ (59.90 Sin desc)</td>`;
-      planesList.forEach(p => {
-        const val = promPost.plans[p];
-        const is59 = p.includes('59.90');
-        postHtml += formatCellCombo(val, promPost.total, is59, true);
+
+      // Coordinator totals (from all coordOrders so off-hour / unassigned supervisor orders are included)
+      const coordByHour = {};
+      visibleHours.forEach(h => { coordByHour[h] = 0; });
+      coordOrders.forEach(o => {
+        if (coordByHour[o.Hora] !== undefined) coordByHour[o.Hora]++;
       });
-      postHtml += formatCellCombo(promPost.otros, promPost.total, false, true);
-      postHtml += `<td style="text-align:right; font-weight:800; color: #dc2626;">${promPost.total.toFixed(1)}</td>`;
-      postRow.innerHTML = postHtml;
-      mixTbody.appendChild(postRow);
+      const coordAvanceN = coordOrders.length;
+      const coordProyN = calcProyecc(coordAvanceN);
+      const coordAvancePct = cfg.meta > 0 ? Math.round((coordAvanceN / cfg.meta) * 100) : 0;
+      const coordProyPct = cfg.meta > 0 ? Math.round((coordProyN / cfg.meta) * 100) : 0;
 
-      // Render DIFF Row (23+ vs 1-22)
-      const diffRow = document.createElement("tr");
-      diffRow.style.backgroundColor = "rgba(245, 158, 11, 0.14)";
-      diffRow.style.borderTop = "2px solid #f59e0b";
-      diffRow.style.fontSize = "0.93rem";
-
-      const diffTotal = promPost.total - promPre.total;
-      const pctImpact = promPre.total > 0 ? ((diffTotal / promPre.total) * 100).toFixed(2) + "%" : "-";
-      const totalSign = diffTotal > 0 ? '+' : '';
-      const totalColor = diffTotal < 0 ? '#ef4444' : (diffTotal > 0 ? '#10b981' : 'var(--text-main)');
-
-      let diffHtml = `<td style="font-weight: 800; padding-left: 1rem; color: #b45309;">DIFF (23+ vs Prom 1-22)</td>`;
-
-      planesList.forEach(p => {
-        const pPost = promPost.plans[p];
-        const pPre = promPre.plans[p];
-        const diffPlan = pPost - pPre;
-        const diffPlanRound = Math.round(diffPlan);
-        const sign = diffPlanRound > 0 ? '+' : '';
-        const color = diffPlanRound < 0 ? '#ef4444' : (diffPlanRound > 0 ? '#10b981' : 'var(--text-main)');
-        const bg = diffPlanRound < 0 ? 'rgba(239, 68, 68, 0.15)' : (diffPlanRound > 0 ? 'rgba(16, 185, 129, 0.15)' : 'transparent');
-
-        // Calculate % caída / incremento vs pPre (100% = pPre)
-        let pctChangeStr = '';
-        if (pPre > 0) {
-          const pctChange = (diffPlan / pPre) * 100;
-          const pctSign = pctChange > 0 ? '+' : '';
-          pctChangeStr = ` <span style="font-size:0.82em; opacity:0.9; font-weight:600;">(${pctSign}${pctChange.toFixed(1)}%)</span>`;
-        }
-
-        diffHtml += `<td style="text-align:center; font-weight:800; color:${color}; background:${bg};">${sign}${diffPlanRound}${pctChangeStr}</td>`;
+      computedBlocks.push({
+        coordLabel: cfg.coordLabel,
+        meta: cfg.meta,
+        byHour: coordByHour,
+        avanceN: coordAvanceN,
+        avancePct: coordAvancePct,
+        proyN: coordProyN,
+        proyPct: coordProyPct,
+        supStats
       });
+    });
 
-      // Otros Diff
-      const otrosDiff = promPost.otros - promPre.otros;
-      const otrosDiffRound = Math.round(otrosDiff);
-      const oSign = otrosDiffRound > 0 ? '+' : '';
-      const oColor = otrosDiffRound < 0 ? '#ef4444' : (otrosDiffRound > 0 ? '#10b981' : 'var(--text-main)');
-      let oPctChangeStr = '';
-      if (promPre.otros > 0) {
-        const oPctChange = (otrosDiff / promPre.otros) * 100;
-        const oPctSign = oPctChange > 0 ? '+' : '';
-        oPctChangeStr = ` <span style="font-size:0.82em; opacity:0.9; font-weight:600;">(${oPctSign}${oPctChange.toFixed(1)}%)</span>`;
+    const getCoordArrow = (pct, isProy = false) => {
+      if (isProy) {
+        if (pct >= 100) return `<span class="nc-arrow-up">⬆</span>`;
+        if (pct >= 90) return `<span class="nc-arrow-mid">➡</span>`;
+        return `<span class="nc-arrow-down">⬇</span>`;
+      } else {
+        if (pct >= 40) return `<span class="nc-arrow-up">⬆</span>`;
+        return `<span class="nc-arrow-down">⬇</span>`;
       }
-      diffHtml += `<td style="text-align:center; font-weight:800; color:${oColor};">${oSign}${otrosDiffRound}${oPctChangeStr}</td>`;
+    };
 
-      // Total Diff + % Impacto
-      diffHtml += `<td style="text-align:right; font-weight:800; color:${totalColor}; font-size:0.96rem;">${totalSign}${Math.round(diffTotal)} <span style="font-size:0.85em; opacity:0.9;">(${totalSign}${pctImpact})</span></td>`;
+    const totalByHour = {};
+    visibleHours.forEach(h => { totalByHour[h] = 0; });
+    let totalMeta = 0;
+    let totalAvanceN = 0;
 
-      diffRow.innerHTML = diffHtml;
-      mixTbody.appendChild(diffRow);
-    }
+    computedBlocks.forEach((block, idx) => {
+      const groupId = `nc-group-${idx}`;
+      totalMeta += block.meta;
+      totalAvanceN += block.avanceN;
+      visibleHours.forEach(h => {
+        totalByHour[h] += block.byHour[h];
+      });
+
+      // Render Coordinator Row
+      const cRow = document.createElement("tr");
+      cRow.className = "nc-coord-row";
+      cRow.setAttribute("onclick", `toggleTableGroup('${groupId}', event)`);
+
+      let cHtml = `
+        <td class="nc-col-name"><span class="toggle-icon" style="float:left; margin-left:4px;">▼</span>${block.coordLabel}</td>
+        <td class="nc-col-meta">${block.meta}</td>`;
+      visibleHours.forEach(h => {
+        cHtml += `<td>${block.byHour[h]}</td>`;
+      });
+      cHtml += `
+        <td>${block.avanceN}</td>
+        <td><span class="nc-coord-pct">${getCoordArrow(block.avancePct, false)}${block.avancePct} %</span></td>
+        <td>${block.proyN}</td>
+        <td><span class="nc-coord-pct">${getCoordArrow(block.proyPct, true)}${block.proyPct} %</span></td>`;
+      cRow.innerHTML = cHtml;
+      ncTbody.appendChild(cRow);
+
+      // Render Supervisor Rows (expanded by default like the Excel screenshot)
+      block.supStats.forEach(sup => {
+        const sRow = document.createElement("tr");
+        sRow.className = `nc-sup-row ${groupId}`;
+
+        let sHtml = `
+          <td class="nc-col-name">${sup.label}</td>
+          <td class="nc-col-meta">${sup.meta || "-"}</td>`;
+
+        visibleHours.forEach(h => {
+          const val = sup.byHour[h];
+          const zeroClass = val === 0 ? ' class="nc-zero-cell"' : '';
+          sHtml += `<td${zeroClass}>${val}</td>`;
+        });
+
+        const blueWidth = Math.min(100, Math.round((sup.avanceN / maxSupAvance) * 100));
+        const amberWidth = Math.min(100, Math.max(0, sup.avancePct));
+        const greenWidth = Math.min(100, Math.max(0, Math.round((sup.proyPct / 130) * 100)));
+
+        sHtml += `
+          <td class="nc-bar-cell">
+            <div class="nc-bar-wrap">
+              <div class="nc-bar-fill bar-blue" style="width:${blueWidth}%;"></div>
+              <span class="nc-bar-text">${sup.avanceN}</span>
+            </div>
+          </td>
+          <td class="nc-bar-cell">
+            <div class="nc-bar-wrap">
+              <div class="nc-bar-fill bar-amber" style="width:${amberWidth}%;"></div>
+              <span class="nc-bar-text">${sup.avancePct} %</span>
+            </div>
+          </td>
+          <td>${sup.proyN}</td>
+          <td class="nc-bar-cell">
+            <div class="nc-bar-wrap">
+              <div class="nc-bar-fill bar-green" style="width:${greenWidth}%;"></div>
+              <span class="nc-bar-text">${sup.proyPct} %</span>
+            </div>
+          </td>`;
+
+        sRow.innerHTML = sHtml;
+        ncTbody.appendChild(sRow);
+      });
+    });
+
+    // Render TOTAL Row
+    const totalProyN = calcProyecc(totalAvanceN);
+    const totalAvancePct = totalMeta > 0 ? Math.round((totalAvanceN / totalMeta) * 100) : 0;
+    const totalProyPct = totalMeta > 0 ? Math.round((totalProyN / totalMeta) * 100) : 0;
+
+    const tRow = document.createElement("tr");
+    tRow.className = "nc-total-row";
+    let tHtml = `
+      <td class="nc-col-name">TOTAL</td>
+      <td>${totalMeta}</td>`;
+    visibleHours.forEach(h => {
+      tHtml += `<td>${totalByHour[h]}</td>`;
+    });
+    tHtml += `
+      <td>${totalAvanceN}</td>
+      <td>${totalAvancePct} %</td>
+      <td>${totalProyN}</td>
+      <td>${totalProyPct} %</td>`;
+    tRow.innerHTML = tHtml;
+    ncTbody.appendChild(tRow);
   }
   
   // 5. Render Table 2: Supervisor

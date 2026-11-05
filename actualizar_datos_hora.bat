@@ -28,6 +28,13 @@ if errorlevel 1 goto noremote
 
 git pull origin main --rebase
 git push origin main
+if errorlevel 1 (
+    echo [AVISO] Reintentando subida a GitHub en 3 segundos...
+    timeout /t 3 /nobreak >nul
+    git fetch origin main
+    git pull origin main --rebase
+    git push origin main
+)
 goto endremote
 
 :noremote

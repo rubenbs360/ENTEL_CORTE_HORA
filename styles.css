@@ -1,22 +1,30 @@
-/* Clean Executive Theme Variables */
+/* Clean Executive Theme Variables (Paleta Corporativa Netcall) */
 :root {
-  --bg-main: #f1f5f9;
+  --corp-madison: #0E2E67;      /* Azul Corporativo Principal */
+  --corp-trinidad: #E64A00;     /* Naranja Acento */
+  --corp-snow-drift: #F7F9F8;   /* Gris de Fondo */
+  --corp-denim: #0D6ABF;        /* Azul Complementario 1 */
+  --corp-picton: #41A4FF;       /* Azul Complementario 2 */
+  --corp-san-marino: #3B5E96;   /* Azul Complementario 3 */
+  --corp-polo-blue: #627EAB;    /* Azul Complementario 4 */
+
+  --bg-main: #F7F9F8;
   --bg-card: #ffffff;
   --bg-input: #ffffff;
-  --bg-table-header: #e2e8f0;
-  --bg-bold-row: rgba(8, 145, 178, 0.05);
-  --border-color: #cbd5e1;
-  --text-main: #0f172a;
-  --text-muted: #334155;
-  --accent-cyan: #0891b2;
-  --accent-purple: #6d28d9;
+  --bg-table-header: #0E2E67;
+  --bg-bold-row: rgba(13, 106, 191, 0.06);
+  --border-color: #d6e0ea;
+  --text-main: #0E2E67;
+  --text-muted: #3B5E96;
+  --accent-cyan: #0D6ABF;
+  --accent-purple: #E64A00;
   --success: #059669;
   --danger: #dc2626;
   --warning: #d97706;
   --font-family: 'Outfit', sans-serif;
   --transition-fast: 0.2s ease;
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-premium: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  --shadow-premium: 0 10px 25px -5px rgba(14, 46, 103, 0.07), 0 8px 10px -6px rgba(14, 46, 103, 0.05);
 }
 
 /* Global Reset */
@@ -72,13 +80,16 @@ body {
   padding: 1.5rem;
 }
 
-/* Top Header */
+/* Top Header (Madison Corporate Navy Banner) */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1rem;
+  background: linear-gradient(135deg, #0E2E67 0%, #163d82 100%);
+  border: 1px solid #0E2E67;
+  border-radius: 16px;
+  padding: 0.9rem 1.5rem;
+  box-shadow: 0 8px 20px rgba(14, 46, 103, 0.18);
 }
 
 .header-brand {
@@ -88,40 +99,42 @@ body {
 }
 
 .logo-circle {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-  color: #000000;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: #E64A00;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 1.25rem;
-  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.35);
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(230, 74, 0, 0.4);
 }
 
 .brand-info h1 {
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--text-main), var(--accent-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .brand-info .subtitle {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  color: rgba(247, 249, 248, 0.8);
 }
 
 .update-badge {
   font-size: 0.8rem;
-  background: rgba(0, 242, 254, 0.08);
-  color: var(--accent-cyan);
-  border: 1px solid rgba(0, 242, 254, 0.18);
-  padding: 0.4rem 0.8rem;
+  background: #E64A00;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.45rem 0.9rem;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(230, 74, 0, 0.35);
 }
 
 /* Top Controls Bar */
@@ -300,7 +313,7 @@ body {
   box-shadow: var(--shadow-premium);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--bg-card) 60%, rgba(8, 145, 178, 0.05) 100%);
+  background: linear-gradient(135deg, var(--bg-card) 60%, rgba(13, 106, 191, 0.05) 100%);
 }
 
 .kpi-main-card::before {
@@ -308,15 +321,15 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width: 5px;
   height: 100%;
-  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+  background: #0E2E67;
 }
 
 .kpi-value-large {
   font-size: 2.75rem;
   font-weight: 800;
-  color: var(--text-main);
+  color: #0E2E67;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -336,6 +349,7 @@ body {
 .kpi-mini-box {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
+  border-top: 3px solid #0D6ABF;
   border-radius: 12px;
   padding: 0.8rem 1rem;
   display: flex;
@@ -347,19 +361,20 @@ body {
 
 .kpi-mini-box:hover {
   transform: translateY(-2px);
-  border-color: rgba(8, 145, 178, 0.4);
-  box-shadow: 0 4px 15px rgba(8, 145, 178, 0.08);
+  border-color: #41A4FF;
+  box-shadow: 0 4px 15px rgba(13, 106, 191, 0.12);
 }
 
 .kpi-mini-box.highlight {
-  border: 1.5px solid var(--accent-purple) !important;
-  box-shadow: 0 0 12px rgba(109, 40, 217, 0.15) !important;
-  background: linear-gradient(135deg, var(--bg-card) 70%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1.5px solid #E64A00 !important;
+  border-top: 4px solid #E64A00 !important;
+  box-shadow: 0 0 12px rgba(230, 74, 0, 0.14) !important;
+  background: linear-gradient(135deg, var(--bg-card) 70%, rgba(230, 74, 0, 0.06) 100%);
 }
 
 .kpi-mini-box.highlight:hover {
-  border-color: var(--accent-purple);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25) !important;
+  border-color: #E64A00;
+  box-shadow: 0 4px 15px rgba(230, 74, 0, 0.22) !important;
 }
 
 .mini-label {
@@ -371,30 +386,31 @@ body {
 }
 
 #proj-label {
-  color: var(--accent-purple) !important;
+  color: #E64A00 !important;
   font-weight: 800;
 }
 
 .mini-val {
   font-size: 1.35rem;
   font-weight: 800;
-  color: var(--text-main);
+  color: #0E2E67;
 }
 
 .mini-pct {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--accent-cyan);
+  color: #0D6ABF;
 }
 
 .kpi-mini-box.highlight .mini-pct {
-  color: var(--accent-purple);
+  color: #E64A00;
 }
 
 /* Middle Column: D-x Cards */
 .kpi-subcard {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
+  border-top: 3px solid #3B5E96;
   border-radius: 12px;
   padding: 0.75rem 1rem;
   display: flex;
@@ -481,8 +497,8 @@ body {
 }
 
 .progress-bar-container {
-  background: rgba(255, 255, 255, 0.06);
-  height: 6px;
+  background: #e2e8f0;
+  height: 7px;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -495,23 +511,23 @@ body {
 }
 
 .pct-blue {
-  background: linear-gradient(90deg, #2563eb, #06b6d4);
-  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+  background: linear-gradient(90deg, #0E2E67, #0D6ABF);
+  box-shadow: 0 0 8px rgba(13, 106, 191, 0.35);
 }
 
 .pct-green {
-  background: linear-gradient(90deg, #059669, #10b981);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(90deg, #0D6ABF, #41A4FF);
+  box-shadow: 0 0 8px rgba(65, 164, 255, 0.35);
 }
 
 .pct-cyan {
-  background: linear-gradient(90deg, #0891b2, #06b6d4);
-  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+  background: linear-gradient(90deg, #3B5E96, #627EAB);
+  box-shadow: 0 0 8px rgba(59, 94, 150, 0.3);
 }
 
 .pct-purple {
-  background: linear-gradient(90deg, #7c3aed, #a855f7);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(90deg, #E64A00, #ff6a24);
+  box-shadow: 0 0 8px rgba(230, 74, 0, 0.3);
 }
 
 /* Table Section styles */
@@ -531,7 +547,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid #0E2E67;
   padding-bottom: 0.75rem;
 }
 
@@ -541,8 +557,8 @@ body {
 
 .table-header h2 {
   font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-main);
+  font-weight: 800;
+  color: #0E2E67;
 }
 
 .table-wrapper {
@@ -560,11 +576,11 @@ body {
 }
 
 .executive-table th {
-  background: var(--bg-table-header);
-  border-bottom: 2px solid var(--border-color);
-  padding: 0.5rem 0.5rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  background: #0E2E67;
+  border-bottom: 2px solid #0D6ABF;
+  padding: 0.55rem 0.55rem;
+  font-weight: 700;
+  color: #ffffff !important;
   text-align: right;
   white-space: nowrap;
 }
@@ -592,7 +608,7 @@ body {
 }
 
 .executive-table tbody tr:hover {
-  background: rgba(15, 23, 42, 0.02);
+  background: rgba(13, 106, 191, 0.04);
 }
 
 /* Bold/Total rows */
@@ -607,24 +623,24 @@ body {
 
 .bold-row td:first-child {
   font-weight: 700 !important;
-  color: var(--accent-cyan);
+  color: #0E2E67;
 }
 
 /* Specific styling for Coordinator rows (Level 1) */
 .bold-row:not(.supervisor-row) {
-  font-size: 0.95rem;
-  background-color: rgba(8, 145, 178, 0.07) !important;
+  font-size: 0.92rem;
+  background-color: rgba(13, 106, 191, 0.08) !important;
 }
 .bold-row:not(.supervisor-row) td:first-child {
   font-weight: 800 !important;
-  color: #0369a1 !important; /* Darker blue for coordinator name */
+  color: #0E2E67 !important; /* Madison Corporate Navy */
 }
 
 /* Specific styling for Supervisor rows (Level 2) */
 .supervisor-row {
   font-size: 0.82rem;
   font-weight: 700;
-  background-color: rgba(248, 250, 252, 0.9) !important; /* Very soft slate gray/white */
+  background-color: #F7F9F8 !important; /* Snow Drift */
   cursor: pointer;
   user-select: none;
 }
@@ -633,10 +649,10 @@ body {
 }
 .supervisor-row td:first-child {
   font-weight: 700 !important;
-  color: #0d9488 !important; /* Darker teal for supervisor name */
+  color: #0D6ABF !important; /* Denim Blue for supervisor name */
 }
 .supervisor-row:hover {
-  background-color: rgba(241, 245, 249, 1) !important;
+  background-color: rgba(65, 164, 255, 0.08) !important;
 }
 
 /* Specific styling for Vendedor/Asesor rows (Level 3) */
@@ -644,14 +660,14 @@ body {
   font-size: 0.76rem;
   font-weight: 500;
   background-color: #ffffff !important;
-  color: #475569 !important;
+  color: #3B5E96 !important;
 }
 .vendedor-row td {
   border-bottom: 1px solid #f1f5f9 !important;
 }
 .vendedor-row td:first-child {
   font-weight: 500 !important;
-  color: #64748b !important;
+  color: #627EAB !important;
 }
 .vendedor-row:hover {
   background-color: #f8fafc !important;
@@ -761,7 +777,7 @@ body {
   font-size: 0.85rem;
   margin-right: 0.5rem;
   display: inline-block;
-  color: #0c4a6e; /* Dark slate blue/cyan (darker for coordinator) */
+  color: #0E2E67; /* Madison Corporate Navy */
   font-weight: bold;
 }
 
@@ -769,41 +785,41 @@ body {
   font-size: 0.6rem;
   margin-right: 0.4rem;
   display: inline-block;
-  color: #8a9ba8; /* Muted gray/cyan (smaller and lighter for supervisor) */
+  color: #627EAB; /* Polo Blue */
 }
 
 
 
-/* Tab Navigation Styles */
+/* Tab Navigation Styles (Inside Madison Navy Header) */
 .header-tabs {
   display: flex;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.12);
   padding: 0.25rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   margin: 0 1rem;
 }
 .tab-btn {
   background: transparent;
   border: none;
-  color: var(--text-muted);
-  padding: 0.5rem 1.2rem;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 0.48rem 1.25rem;
   font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.84rem;
+  font-weight: 700;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .tab-btn:hover {
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 .tab-btn.active {
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-  box-shadow: 0 2px 8px rgba(8, 145, 178, 0.3);
+  color: #0E2E67;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .tab-content {
@@ -935,10 +951,10 @@ body {
   transition: all 0.15s ease;
 }
 .heat-lvl-0 { background: transparent; color: var(--text-muted); }
-.heat-lvl-1 { background: rgba(8, 145, 178, 0.1) !important; color: var(--text-main) !important; }
-.heat-lvl-2 { background: rgba(8, 145, 178, 0.25) !important; color: var(--text-main) !important; }
-.heat-lvl-3 { background: rgba(14, 116, 144, 0.5) !important; color: #fff !important; font-weight: 600; }
-.heat-lvl-4 { background: rgba(14, 116, 144, 0.8) !important; color: #fff !important; font-weight: 700; }
+.heat-lvl-1 { background: rgba(65, 164, 255, 0.15) !important; color: #0E2E67 !important; }
+.heat-lvl-2 { background: rgba(13, 106, 191, 0.30) !important; color: #0E2E67 !important; font-weight: 600; }
+.heat-lvl-3 { background: #0D6ABF !important; color: #fff !important; font-weight: 600; }
+.heat-lvl-4 { background: #0E2E67 !important; color: #fff !important; font-weight: 700; }
 
 /* Sticky columns background fixes */
 .looker-table th:first-child {
@@ -1251,7 +1267,7 @@ body {
 }
 
 /* =========================================================================
-   NetCall Outbound Televentas (Corte por Hora y Metas - Estilo Reporte Excel)
+   NetCall Outbound Televentas (Corte por Hora y Metas - Paleta Corporativa)
    ========================================================================= */
 .netcall-televentas-table {
   width: 100%;
@@ -1260,12 +1276,12 @@ body {
 }
 
 .netcall-televentas-table thead th {
-  background: #2f3b4c;
+  background: #0E2E67;
   color: #ffffff;
   font-weight: 700;
   text-align: center !important;
   padding: 0.35rem 0.45rem;
-  border: 1px solid #475569;
+  border: 1px solid #3B5E96;
   vertical-align: middle;
   line-height: 1.15;
 }
@@ -1277,8 +1293,8 @@ body {
 }
 
 .netcall-televentas-table thead th.nc-th-hour {
-  background: #3f6212;
-  border-color: #65a30d;
+  background: #0D6ABF;
+  border-color: #41A4FF;
   color: #ffffff;
   min-width: 30px;
   padding: 0.25rem 0.3rem;
@@ -1286,7 +1302,7 @@ body {
 }
 
 .netcall-televentas-table thead th.nc-th-sub {
-  background: #374151;
+  background: #3B5E96;
   font-size: 0.74rem;
   padding: 0.25rem 0.4rem;
 }
@@ -1296,37 +1312,37 @@ body {
   border: 1px solid #e2e8f0;
   text-align: center;
   font-weight: 600;
-  color: #1e293b;
+  color: #0E2E67;
 }
 
 /* Coordinator Row */
 .netcall-televentas-table tr.nc-coord-row {
-  background-color: #dbeafe;
+  background-color: rgba(65, 164, 255, 0.16);
   cursor: pointer;
   user-select: none;
 }
 
 .netcall-televentas-table tr.nc-coord-row:hover {
-  background-color: #bfdbfe !important;
+  background-color: rgba(65, 164, 255, 0.26) !important;
 }
 
 .netcall-televentas-table tr.nc-coord-row td {
   font-weight: 800;
-  color: #0f172a;
-  border-top: 1.5px solid #94a3b8;
-  border-bottom: 1.5px solid #94a3b8;
+  color: #0E2E67;
+  border-top: 1.5px solid #627EAB;
+  border-bottom: 1.5px solid #627EAB;
   padding: 0.34rem 0.45rem;
   font-size: 0.82rem;
 }
 
 .netcall-televentas-table tr.nc-coord-row td.nc-col-name {
   text-align: center !important;
-  color: #1e3a8a !important;
+  color: #0E2E67 !important;
   letter-spacing: 0.02em;
 }
 
 .netcall-televentas-table tr.nc-coord-row td.nc-col-meta {
-  background-color: #7c90a6;
+  background-color: #3B5E96;
   color: #ffffff;
   font-weight: 800;
 }
@@ -1337,28 +1353,27 @@ body {
 }
 
 .netcall-televentas-table tr.nc-sup-row:hover {
-  background-color: #f8fafc !important;
+  background-color: #F7F9F8 !important;
 }
 
 .netcall-televentas-table tr.nc-sup-row td.nc-col-name {
   text-align: left !important;
   padding-left: 0.65rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #0E2E67;
   font-size: 0.76rem;
 }
 
 .netcall-televentas-table tr.nc-sup-row td.nc-col-meta {
-  background-color: #cbd5e1;
+  background-color: #627EAB;
   color: #ffffff;
   font-weight: 700;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-/* Zero-hour alert cell (pink highlight like Excel) */
+/* Zero-hour alert cell (soft Trinidad Orange / Rose highlight) */
 .netcall-televentas-table td.nc-zero-cell {
-  background-color: #fecdd3 !important;
-  color: #be123c !important;
+  background-color: rgba(230, 74, 0, 0.12) !important;
+  color: #E64A00 !important;
   font-weight: 800;
 }
 
@@ -1379,7 +1394,7 @@ body {
   padding: 0 5px;
   border-radius: 3px;
   overflow: hidden;
-  background: rgba(241, 245, 249, 0.6);
+  background: #F7F9F8;
 }
 
 .nc-bar-fill {
@@ -1393,25 +1408,25 @@ body {
 }
 
 .nc-bar-fill.bar-blue {
-  background: linear-gradient(90deg, #60a5fa, #93c5fd);
-  border: 1px solid #3b82f6;
+  background: linear-gradient(90deg, rgba(13, 106, 191, 0.38), rgba(65, 164, 255, 0.52));
+  border: 1px solid #0D6ABF;
 }
 
 .nc-bar-fill.bar-amber {
-  background: linear-gradient(90deg, #fbbf24, #fde68a);
-  border: 1px solid #f59e0b;
+  background: linear-gradient(90deg, rgba(230, 74, 0, 0.28), rgba(230, 74, 0, 0.45));
+  border: 1px solid #E64A00;
 }
 
 .nc-bar-fill.bar-green {
   background: linear-gradient(90deg, #4ade80, #86efac);
-  border: 1px solid #22c55e;
+  border: 1px solid #16a34a;
 }
 
 .nc-bar-text {
   position: relative;
   z-index: 2;
   font-weight: 700;
-  color: #0f172a;
+  color: #0E2E67;
   font-size: 0.76rem;
   line-height: 1;
 }
@@ -1431,7 +1446,7 @@ body {
 }
 
 .nc-arrow-mid {
-  color: #d97706;
+  color: #E64A00;
   font-size: 0.85rem;
 }
 
@@ -1442,16 +1457,16 @@ body {
 
 /* Total Row */
 .netcall-televentas-table tr.nc-total-row {
-  background-color: #2f3b4c !important;
+  background-color: #0E2E67 !important;
 }
 
 .netcall-televentas-table tr.nc-total-row td {
-  background-color: #2f3b4c !important;
+  background-color: #0E2E67 !important;
   color: #ffffff !important;
   font-weight: 800 !important;
   font-size: 0.84rem;
   padding: 0.42rem 0.45rem;
-  border-color: #475569;
+  border-color: #3B5E96;
 }
 
 .netcall-televentas-table tr.nc-total-row td.nc-col-name {

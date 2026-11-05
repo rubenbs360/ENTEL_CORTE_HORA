@@ -1568,7 +1568,7 @@ function renderHourlyDashboard() {
       row.innerHTML = `
         <td style="font-weight: 700; padding-left: 1rem; color: var(--text-main);">${q}</td>
         <td style="font-weight: 700;">${qSums.hoy}</td>
-        <td style="font-weight: 700; color: #a855f7;">${qProy}</td>
+        <td style="font-weight: 700; color: #E64A00;">${qProy}</td>
         <td style="color:var(--text-muted);">${qSums.d1}</td>
         <td>${formatVariation(qSums.hoy, qSums.d1)}</td>
         <td style="color:var(--text-muted);">${qSums.d7}</td>
@@ -1610,7 +1610,7 @@ function renderHourlyDashboard() {
     platRow.innerHTML = `
       <td style="font-weight: 600; padding-left: 1rem;">PLATAFORMA</td>
       <td style="font-weight: 700;">${platSums.hoy}</td>
-      <td style="font-weight: 700; color: #a855f7;">${platProy}</td>
+      <td style="font-weight: 700; color: #E64A00;">${platProy}</td>
       <td style="color:var(--text-muted);">${platSums.d1}</td>
       <td>${formatVariation(platSums.hoy, platSums.d1)}</td>
       <td style="color:var(--text-muted);">${platSums.d7}</td>
@@ -1632,7 +1632,7 @@ function renderHourlyDashboard() {
     summaryTotalRow.innerHTML = `
       <td>TOTAL GLOBAL</td>
       <td style="font-weight: 800;">${summaryTotals.hoy}</td>
-      <td style="font-weight: 800; color: #a855f7;">${summaryTotals.proy}</td>
+      <td style="font-weight: 800; color: #E64A00;">${summaryTotals.proy}</td>
       <td style="color:var(--text-muted);">${summaryTotals.d1}</td>
       <td>${formatVariation(summaryTotals.hoy, summaryTotals.d1)}</td>
       <td style="color:var(--text-muted);">${summaryTotals.d7}</td>
